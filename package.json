@@ -2,7 +2,7 @@
   "name": "accuextension",
   "displayName": "AccuExtension",
   "description": "Extension personalizada para Accusys Technology con acceso rapido a AST-Activities Manager y TFS",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -28,15 +28,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/accusys/accuextension"
+    "url": "https://github.com/VRodriguezValentin/AccuExtension"
   },
   "publisher": "accusys-technology",
   "license": "MIT",
   "author": {
     "name": "Accusys Technology"
   },
-  "homepage": "https://github.com/accusys/accuextension#readme",
+  "homepage": "https://github.com/VRodriguezValentin/AccuExtension#readme",
   "bugs": {
-    "url": "https://github.com/accusys/accuextension/issues"
-  }
+    "url": "https://github.com/VRodriguezValentin/AccuExtension/issues"
+  },
+  "icon": "media/accusys-isotipo.png"
 } 
