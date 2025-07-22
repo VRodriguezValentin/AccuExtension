@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AccuExtension</title>
+    <!-- Font Awesome para iconos profesionales -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="${stylesUri}">
+</head>
+<body>
+    <div class="container">
+        <h1>
+            <i class="fas fa-star welcome-icon"></i>
+            <span>Bienvenido a AccuExtension</span>
+        </h1>
+        <img src="${imageSrc}" alt="Accusys Logo">
+        
+        <div class="section">
+            <div class="reminder">
+                <i class="fas fa-clock reminder-icon"></i>
+                <span>No olvides cargar las horas de trabajo</span>
+            </div>
+            <button class="button" onclick="openAST()">
+                <i class="fas fa-chart-line"></i>
+                Abrir AST
+            </button>
+        </div>
+        
+        <div class="section" style="margin-top: 20px;">
+            <div class="tfs-title">
+                <i class="fas fa-tasks tfs-icon"></i>
+                <span>Acceso a TFS</span>
+            </div>
+            
+            <div class="select-container">
+                <div class="select-group">
+                    <label for="area">Area</label>
+                    <select id="area" onchange="updateEquipos()">
+                        <option value="">Selecciona un area</option>
+                        <option value="Pasivas">Pasivas</option>
+                        <option value="Activas">Activas</option>
+                    </select>
+                </div>
+                
+                <div class="select-group">
+                    <label for="equipo">Equipo</label>
+                    <select id="equipo" disabled>
+                        <option value="">Primero selecciona un area</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button class="button" onclick="openTFSLink()" id="tfsButton" style="margin-top: 20px;" disabled>
+                <i class="fas fa-external-link-alt"></i>
+                Abrir TFS
+            </button>
+            
+            <div class="section-divider"></div>
+            
+            <div class="search-section">
+                <div class="search-container">
+                    <div class="select-group">
+                        <label for="featureNumber">Numero AST</label>
+                        <input 
+                            type="number" 
+                            id="featureNumber" 
+                            placeholder="Ej: 12345"
+                            oninput="checkSearchButtonStatus()"
+                        />
+                    </div>
+                    
+                    <button class="button" onclick="searchASTLink()" id="searchButton" disabled>
+                        <i class="fas fa-search"></i>
+                        Buscar AST
+                    </button>
+                </div>
+                
+                <div class="section-divider"></div>
+                
+                <div class="advanced-search-section">
+                    <div class="advanced-search-container">
+                        <div class="select-group">
+                            <label for="searchText">Archivo/Tabla/Codigo</label>
+                            <input 
+                                type="text" 
+                                id="searchText" 
+                                placeholder="Ej: sp_ente"
+                                oninput="checkAdvancedSearchStatus()"
+                            />
+                        </div>
+                        
+                        <div class="select-group">
+                            <label for="extSelect">ext:</label>
+                            <select id="extSelect" onchange="handleExtSelectChange()">
+                                <option value="">Ninguno</option>
+                                <option value="sp">sp</option>
+                                <option value="sql">sql</option>
+                                <option value="sqr">sqr</option>
+                                <option value="sh">sh</option>
+                                <option value="cs">cs</option>
+                                <option value="otro">Otro</option>
+                            </select>
+                        </div>
+                        
+                        <div class="select-group" id="customExtGroup" style="display: none;">
+                            <label for="customExt">Extension:</label>
+                            <input 
+                                type="text" 
+                                id="customExt" 
+                                placeholder="Ej: java"
+                                oninput="checkAdvancedSearchStatus()"
+                            />
+                        </div>
+                        
+                        <div class="checkbox-group">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="literalCheck" value="literal" onchange="checkAdvancedSearchStatus()">
+                                <span>Literal</span>
+                            </label>
+                            <input type="checkbox" id="codeCheck" value="code" style="display: none;">
+                        </div>
+                        
+                        <button class="button" onclick="advancedSearchLink()" id="advancedSearchButton" disabled>
+                            <i class="fas fa-search"></i>
+                            Buscar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="${scriptUri}"></script>
+</body>
+</html> 

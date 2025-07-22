@@ -1,0 +1,516 @@
+:root {
+    /* Paleta de colores Accusys */
+    --accusys-black: #000000;
+    --accusys-white: #FFFFFF;
+    --accusys-blue: #0053D8;
+    --accusys-blue-hover: #0053D7;
+    --accusys-blue-active: #0053D9;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--vscode-editor-background);
+    font-family: var(--vscode-font-family);
+}
+
+.container {
+    text-align: center;
+    max-width: 600px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: var(--vscode-editor-foreground);
+    font-family: var(--vscode-font-family);
+    margin-bottom: 20px;
+    font-size: 32px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.welcome-icon {
+    font-size: 36px;
+    color: var(--accusys-blue);
+    display: inline-block;
+    animation: wave 2.5s ease-in-out infinite;
+}
+
+@keyframes wave {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-20deg); }
+    75% { transform: rotate(20deg); }
+}
+
+.section {
+    margin-top: 30px;
+    padding: 30px;
+    background-color: var(--vscode-editor-inactiveSelectionBackground);
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border: 2px solid var(--accusys-blue);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Decoracion con gradiente azul */
+.section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accusys-blue-hover), var(--accusys-blue), var(--accusys-blue-active));
+}
+
+.reminder {
+    color: var(--vscode-editor-foreground);
+    font-size: 18px;
+    margin-bottom: 24px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.reminder-icon {
+    color: var(--accusys-blue);
+    font-size: 26px;
+}
+
+.button {
+    background-color: var(--accusys-blue);
+    color: var(--accusys-white);
+    border: none;
+    padding: 14px 24px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: var(--vscode-font-family);
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+
+.button:hover {
+    background-color: var(--accusys-blue-hover);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 83, 216, 0.3);
+}
+
+.button:active {
+    background-color: var(--accusys-blue-active);
+    transform: translateY(0);
+}
+
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.button:disabled:hover {
+    background-color: var(--accusys-blue);
+    transform: none;
+    box-shadow: none;
+}
+
+/* Centrar botones independientes */
+.section > .button {
+    display: inline-flex;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.button i {
+    font-size: 18px;
+}
+
+/* Estilos para selectores */
+.select-container {
+    margin: 20px auto;
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 450px;
+}
+
+.select-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    flex: 1;
+}
+
+label {
+    color: var(--vscode-editor-foreground);
+    font-weight: 500;
+    font-size: 14px;
+    text-align: left;
+    margin-bottom: 4px;
+}
+
+select {
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 1px solid var(--vscode-input-border);
+    background-color: var(--vscode-input-background);
+    color: var(--vscode-input-foreground);
+    font-family: var(--vscode-font-family);
+    font-size: 14px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+select:hover {
+    border-color: var(--accusys-blue);
+}
+
+select:focus {
+    outline: none;
+    border-color: var(--accusys-blue);
+    box-shadow: 0 0 0 2px rgba(0, 83, 216, 0.2);
+}
+
+input[type="number"] {
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 1px solid var(--vscode-input-border);
+    background-color: var(--vscode-input-background);
+    color: var(--vscode-input-foreground);
+    font-family: var(--vscode-font-family);
+    font-size: 14px;
+    width: 100%;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+input[type="number"]:hover {
+    border-color: var(--accusys-blue);
+}
+
+input[type="number"]:focus {
+    outline: none;
+    border-color: var(--accusys-blue);
+    box-shadow: 0 0 0 2px rgba(0, 83, 216, 0.2);
+}
+
+/* Remover las flechas del input number en Chrome/Safari */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Remover las flechas del input number en Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+    appearance: textfield;
+}
+
+.tfs-title {
+    color: var(--vscode-editor-foreground);
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.tfs-icon {
+    color: var(--accusys-blue);
+    font-size: 24px;
+}
+
+/* Animacion sutil para el icono del reloj */
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.2); opacity: 0.8; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+.reminder-icon {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Tema oscuro - ajustes */
+@media (prefers-color-scheme: dark) {
+    .section {
+        background-color: rgba(0, 83, 216, 0.1);
+    }
+    
+    .section-divider {
+        opacity: 0.4;
+        background: linear-gradient(
+            to right, 
+            transparent, 
+            var(--vscode-widget-border) 15%, 
+            var(--vscode-widget-border) 85%, 
+            transparent
+        );
+    }
+}
+
+/* Estilos adicionales para la seccion de busqueda */
+.search-section {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+/* Divisores visuales para las secciones */
+.section-divider {
+    margin: 20px auto;
+    width: 90%;
+    height: 1px;
+    background: linear-gradient(
+        to right, 
+        transparent, 
+        var(--vscode-widget-border) 20%, 
+        var(--vscode-widget-border) 80%, 
+        transparent
+    );
+    opacity: 0.6;
+    position: relative;
+}
+
+/* Efecto de brillo sutil en el centro */
+.section-divider::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 1px;
+    background: linear-gradient(
+        to right,
+        transparent,
+        var(--accusys-blue),
+        transparent
+    );
+    opacity: 0.3;
+    transition: all 0.3s ease;
+}
+
+/* Efecto hover en las líneas divisorias */
+.section:hover .section-divider::after {
+    width: 150px;
+    opacity: 0.5;
+}
+
+.search-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 20px;
+    justify-content: center;
+    margin: 10px auto 0;
+    padding: 0 20px;
+    width: 100%;
+    max-width: 500px;
+}
+
+/* Subtitulos para las secciones */
+.section-subtitle {
+    color: var(--vscode-descriptionForeground);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    opacity: 0.7;
+}
+
+.search-container .select-group {
+    flex: 0 1 auto;
+    min-width: 180px;
+    max-width: 250px;
+}
+
+.search-container .button {
+    flex: 0 0 auto;
+    margin-bottom: 0;
+    padding: 10px 20px;
+    font-size: 14px;
+    height: fit-content;
+}
+
+.search-container input[type="number"] {
+    width: 100%;
+    min-width: 150px;
+}
+
+/* Estilos para busqueda avanzada */
+.advanced-search-section {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+.advanced-search-container {
+    display: flex;
+    align-items: flex-end;
+    gap: 15px;
+    justify-content: center;
+    margin: 10px auto 0;
+    padding: 0 20px;
+    width: 100%;
+    max-width: 700px;
+    flex-wrap: wrap;
+}
+
+.advanced-search-container .select-group {
+    flex: 0 1 auto;
+}
+
+.advanced-search-container .select-group:first-child {
+    flex: 1 1 250px;
+    min-width: 200px;
+}
+
+.advanced-search-container .select-group:nth-child(2) {
+    flex: 0 0 100px;
+}
+
+.advanced-search-container #customExtGroup {
+    flex: 0 0 120px;
+}
+
+.advanced-search-container select {
+    min-height: 38px;
+}
+
+.advanced-search-container #customExt {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 1px solid var(--vscode-input-border);
+    background-color: var(--vscode-input-background);
+    color: var(--vscode-input-foreground);
+    font-family: var(--vscode-font-family);
+    font-size: 14px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.advanced-search-container #customExt:hover {
+    border-color: var(--accusys-blue);
+}
+
+.advanced-search-container #customExt:focus {
+    outline: none;
+    border-color: var(--accusys-blue);
+    box-shadow: 0 0 0 2px rgba(0, 83, 216, 0.2);
+}
+
+.advanced-search-container input[type="text"] {
+    width: 100%;
+    padding: 10px 15px;
+    border-radius: 6px;
+    border: 1px solid var(--vscode-input-border);
+    background-color: var(--vscode-input-background);
+    color: var(--vscode-input-foreground);
+    font-family: var(--vscode-font-family);
+    font-size: 14px;
+    transition: all 0.2s ease;
+    box-sizing: border-box;
+}
+
+.advanced-search-container input[type="text"]:hover {
+    border-color: var(--accusys-blue);
+}
+
+.advanced-search-container input[type="text"]:focus {
+    outline: none;
+    border-color: var(--accusys-blue);
+    box-shadow: 0 0 0 2px rgba(0, 83, 216, 0.2);
+}
+
+.checkbox-group {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    margin-bottom: 0;
+    flex: 0 0 auto;
+    min-height: 38px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    color: var(--vscode-editor-foreground);
+    font-size: 14px;
+}
+
+.checkbox-label input[type="checkbox"] {
+    cursor: pointer;
+    margin: 0;
+    accent-color: var(--accusys-blue);
+}
+
+.checkbox-label span {
+    user-select: none;
+}
+
+.checkbox-label:hover span {
+    color: var(--accusys-blue);
+}
+
+.advanced-search-container .button {
+    flex: 0 0 auto;
+    margin-bottom: 0;
+    padding: 10px 20px;
+    font-size: 14px;
+}
+
+/* Responsive para busqueda avanzada */
+@media (max-width: 768px) {
+    .advanced-search-container {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 15px;
+    }
+    
+    .advanced-search-container .select-group {
+        width: 100%;
+    }
+    
+    .checkbox-group {
+        justify-content: center;
+        margin: 10px 0;
+    }
+    
+    .advanced-search-container .button {
+        width: 100%;
+    }
+} 
