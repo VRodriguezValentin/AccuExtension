@@ -5,6 +5,36 @@ const equiposPorArea = {
     'Activas': ['Rojo', 'Blanco', 'Violeta']
 };
 
+// Función para abrir herramientas
+function openTool(toolName) {
+    const toolPaths = {
+        'putty': 'C:\\Program Files\\PuTTY\\putty.exe',
+        'winscp': 'C:\\Program Files (x86)\\WinSCP\\WinSCP.exe',
+        'soapui': 'C:\\Program Files\\SmartBear\\SoapUI-5.7.2\\bin\\SoapUI-5.7.2.exe',
+        'isqlw': 'C:\\Program Files (x86)\\ISQL\\MSSQL\\BINN\\ISQLW.EXE',
+        'cobis': 'C:\\ProgramData\\COBIS\\COBISExplorer\\COBISCorp.eCOBIS.COBISExplorer.Shell.exe'
+    };
+
+    const toolNames = {
+        'putty': 'PuTTY',
+        'winscp': 'WinSCP',
+        'soapui': 'SoapUI',
+        'isqlw': 'ISQLW',
+        'cobis': 'CobisExplorer'
+    };
+
+    const path = toolPaths[toolName];
+    const name = toolNames[toolName];
+
+    // Verificar si el archivo existe antes de intentar abrirlo
+    vscode.postMessage({
+        command: 'checkAndOpenTool',
+        path: path,
+        name: name,
+        toolName: toolName
+    });
+}
+
 function openAST() {
     vscode.postMessage({
         command: 'openAST'

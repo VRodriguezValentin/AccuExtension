@@ -2,13 +2,15 @@
   "name": "accuextension",
   "displayName": "AccuExtension",
   "description": "Extension personalizada para Accusys Technology con acceso rapido a AST-Activities Manager y TFS",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "engines": {
     "vscode": "^1.74.0"
   },
   "categories": ["Other"],
   "keywords": ["accusys", "tfs", "ast", "activities", "manager", "productivity"],
-  "activationEvents": [],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "main": "./src/extension.js",
   "contributes": {
     "commands": [

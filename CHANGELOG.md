@@ -2,6 +2,25 @@
 
 Todos los cambios notables de este proyecto serán documentados en este archivo.
 
+## [1.0.2] - 2025-01-22
+
+### Agregado
+- Botón de StatusBar para acceso rápido a la extensión
+- Menú de herramientas con 5 aplicaciones: PuTTY, WinSCP, SoapUI, ISQLW, CobisExplorer
+- Enlace "Abrir AST Web" para acceso directo al time report
+- Tooltip explicativo en el checkbox "Literal" de búsqueda avanzada
+- Manejo de errores mejorado para herramientas no instaladas
+- Verificación de existencia de archivos antes de ejecutar herramientas
+
+### Mejorado
+- Interfaz de usuario más limpia y organizada
+- Prevención de múltiples paneles webview (elimina titileo de pantalla)
+- Activación automática de la extensión al iniciar VS Code/Cursor
+
+### Corregido
+- Problema de titileo de pantalla al abrir la extensión
+- Manejo de errores para herramientas con rutas específicas
+
 ## [1.0.1] - 2025-01-22
 
 ### Agregado

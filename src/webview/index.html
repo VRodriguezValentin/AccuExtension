@@ -16,6 +16,34 @@
         </h1>
         <img src="${imageSrc}" alt="Accusys Logo">
         
+        <!-- Menú de herramientas -->
+        <div class="tools-menu">
+            <div class="tool-item" onclick="openTool('putty')">
+                <img src="${puttyImage}" alt="PuTTY" class="tool-icon">
+                <span class="tool-name">PuTTY</span>
+            </div>
+            <div class="tool-divider"></div>
+            <div class="tool-item" onclick="openTool('winscp')">
+                <img src="${winscpImage}" alt="WinSCP" class="tool-icon">
+                <span class="tool-name">WinSCP</span>
+            </div>
+            <div class="tool-divider"></div>
+            <div class="tool-item" onclick="openTool('soapui')">
+                <img src="${soapuiImage}" alt="SoapUI" class="tool-icon">
+                <span class="tool-name">SoapUI</span>
+            </div>
+            <div class="tool-divider"></div>
+            <div class="tool-item" onclick="openTool('isqlw')">
+                <img src="${isqlwImage}" alt="ISQL" class="tool-icon">
+                <span class="tool-name">ISQL</span>
+            </div>
+            <div class="tool-divider"></div>
+            <div class="tool-item" onclick="openTool('cobis')">
+                <img src="${cobisImage}" alt="CobisExplorer" class="tool-icon">
+                <span class="tool-name">CobisExplorer</span>
+            </div>
+        </div>
+        
         <div class="section">
             <div class="reminder">
                 <i class="fas fa-clock reminder-icon"></i>
@@ -25,6 +53,10 @@
                 <i class="fas fa-chart-line"></i>
                 Abrir AST
             </button>
+            <a href="https://timereport.accusys.com.ar/web/login.aspx" target="_blank" class="ast-web-link">
+                <i class="fas fa-globe"></i>
+                Abrir AST Web
+            </a>
         </div>
         
         <div class="section" style="margin-top: 20px;">
@@ -114,7 +146,7 @@
                         </div>
                         
                         <div class="checkbox-group">
-                            <label class="checkbox-label">
+                            <label class="checkbox-label" title="Agrega &quot; &quot; a la busqueda, para que coincida exactamente con lo que se busca.">
                                 <input type="checkbox" id="literalCheck" value="literal" onchange="checkAdvancedSearchStatus()">
                                 <span>Literal</span>
                             </label>
