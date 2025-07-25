@@ -1,8 +1,8 @@
 {
   "name": "accuextension",
   "displayName": "AccuExtension",
-  "description": "Extension personalizada para Accusys Technology con acceso rapido a AST-Activities Manager y TFS",
-  "version": "1.0.2",
+  "description": "Extensión personalizada para desarrolladores de Accusys Technology",
+  "version": "1.0.3",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -17,8 +17,47 @@
       {
         "command": "accuextension.showImage",
         "title": "AccuExtension: Inicio"
+      },
+      {
+        "command": "accuextension.openSettings",
+        "title": "AccuExtension: Configurar Rutas de Herramientas"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "AccuExtension",
+      "properties": {
+        "accuextension.tools.putty": {
+          "type": "string",
+          "default": "C:\\Program Files\\PuTTY\\putty.exe",
+          "description": "Ruta al ejecutable de PuTTY"
+        },
+        "accuextension.tools.winscp": {
+          "type": "string",
+          "default": "C:\\Program Files (x86)\\WinSCP\\WinSCP.exe",
+          "description": "Ruta al ejecutable de WinSCP"
+        },
+        "accuextension.tools.soapui": {
+          "type": "string",
+          "default": "C:\\Program Files\\SmartBear\\SoapUI-5.7.2\\bin\\SoapUI-5.7.2.exe",
+          "description": "Ruta al ejecutable de SoapUI"
+        },
+        "accuextension.tools.isqlw": {
+          "type": "string",
+          "default": "C:\\Program Files (x86)\\ISQL\\MSSQL\\BINN\\ISQLW.EXE",
+          "description": "Ruta al ejecutable de ISQLW"
+        },
+        "accuextension.tools.cobis": {
+          "type": "string",
+          "default": "C:\\ProgramData\\COBIS\\COBISExplorer\\COBISCorp.eCOBIS.COBISExplorer.Shell.exe",
+          "description": "Ruta al ejecutable de CobisExplorer"
+        },
+        "accuextension.tools.ast": {
+          "type": "string",
+          "default": "C:\\Accusys Technology\\AST-Activities Manager\\ejecutable\\Administrador.exe",
+          "description": "Ruta al ejecutable de AST-Activities Manager"
+        }
+      }
+    }
   },
   "scripts": {
     "vscode:prepublish": "echo 'Extension ready for publishing'",

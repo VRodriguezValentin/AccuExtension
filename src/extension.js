@@ -6,6 +6,60 @@ const { exec } = require('child_process');
 // Variable global para rastrear si el panel ya está abierto
 let currentPanel = undefined;
 
+// Función para obtener las rutas de las herramientas desde la configuración
+function getToolPaths() {
+    const config = vscode.workspace.getConfiguration('accuextension.tools');
+    return {
+        putty: config.get('putty'),
+        winscp: config.get('winscp'),
+        soapui: config.get('soapui'),
+        isqlw: config.get('isqlw'),
+        cobis: config.get('cobis'),
+        ast: config.get('ast')
+    };
+}
+
+// Función para detectar automáticamente rutas de herramientas
+function detectToolPaths() {
+    const commonPaths = {
+        putty: [
+            'C:\\Program Files\\PuTTY\\putty.exe',
+            'C:\\Program Files (x86)\\PuTTY\\putty.exe'
+        ],
+        winscp: [
+            'C:\\Program Files\\WinSCP\\WinSCP.exe',
+            'C:\\Program Files (x86)\\WinSCP\\WinSCP.exe'
+        ],
+        soapui: [
+            'C:\\Program Files\\SmartBear\\SoapUI-5.7.2\\bin\\SoapUI-5.7.2.exe',
+            'C:\\Program Files (x86)\\SmartBear\\SoapUI-5.7.2\\bin\\SoapUI-5.7.2.exe'
+        ],
+        isqlw: [
+            'C:\\Program Files (x86)\\ISQL\\MSSQL\\BINN\\ISQLW.EXE',
+            'C:\\Program Files\\ISQL\\MSSQL\\BINN\\ISQLW.EXE'
+        ],
+        cobis: [
+            'C:\\ProgramData\\COBIS\\COBISExplorer\\COBISCorp.eCOBIS.COBISExplorer.Shell.exe'
+        ],
+        ast: [
+            'C:\\Accusys Technology\\AST-Activities Manager\\ejecutable\\Administrador.exe'
+        ]
+    };
+
+    const detectedPaths = {};
+    
+    for (const [tool, paths] of Object.entries(commonPaths)) {
+        for (const toolPath of paths) {
+            if (fs.existsSync(toolPath)) {
+                detectedPaths[tool] = toolPath;
+                break;
+            }
+        }
+    }
+    
+    return detectedPaths;
+}
+
 /**
  * @param {vscode.ExtensionContext} context
  */
@@ -124,6 +178,15 @@ function activate(context) {
                     case 'checkAndOpenTool':
                         checkAndOpenTool(message.path, message.name, message.toolName);
                         return;
+                    case 'getToolPath':
+                        handleGetToolPath(panel, message.toolName);
+                        return;
+                    case 'showError':
+                        vscode.window.showErrorMessage(message.message);
+                        return;
+                    case 'openSettings':
+                        vscode.commands.executeCommand('workbench.action.openSettings', 'accuextension.tools');
+                        return;
                 }
             },
             undefined,
@@ -131,7 +194,13 @@ function activate(context) {
         );
     });
 
+    // Registrar el comando de configuración
+    let settingsDisposable = vscode.commands.registerCommand('accuextension.openSettings', () => {
+        vscode.commands.executeCommand('workbench.action.openSettings', 'accuextension.tools');
+    });
+
     context.subscriptions.push(disposable);
+    context.subscriptions.push(settingsDisposable);
 
     // Crear el botón en la StatusBar
     const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
@@ -144,11 +213,17 @@ function activate(context) {
 }
 
 function openASTManager() {
-    const astPath = 'C:\\Accusys Technology\\AST-Activities Manager\\ejecutable\\Administrador.exe';
+    const toolPaths = getToolPaths();
+    const astPath = toolPaths.ast;
+    
+    if (!astPath) {
+        vscode.window.showErrorMessage('Ruta de AST no configurada. Ve a Configuración > AccuExtension para configurar la ruta.');
+        return;
+    }
     
     exec(`"${astPath}"`, (error) => {
         if (error) {
-            vscode.window.showErrorMessage('No se pudo abrir AST-Activities Manager. Verifica que este instalado en: ' + astPath);
+            vscode.window.showErrorMessage(`No se pudo abrir AST-Activities Manager. Verifica la ruta en Configuración > AccuExtension: ${astPath}`);
             console.error('Error al abrir AST:', error);
         } else {
             vscode.window.showInformationMessage('AST-Activities Manager abierto correctamente');
@@ -162,9 +237,14 @@ function openTFS(url) {
 }
 
 function openTool(path, name) {
+    if (!path) {
+        vscode.window.showErrorMessage(`Ruta de ${name} no configurada. Ve a Configuración > AccuExtension para configurar la ruta.`);
+        return;
+    }
+    
     exec(`"${path}"`, (error) => {
         if (error) {
-            vscode.window.showErrorMessage(`Error al abrir ${name}: ${error.message}`);
+            vscode.window.showErrorMessage(`Error al abrir ${name}: ${error.message}. Verifica la ruta en Configuración > AccuExtension.`);
         } else {
             console.log(`${name} abierto correctamente.`);
         }
@@ -172,10 +252,26 @@ function openTool(path, name) {
 }
 
 function checkAndOpenTool(path, name, toolName) {
+    if (!path) {
+        vscode.window.showErrorMessage(`Ruta de ${name} no configurada. Ve a Configuración > AccuExtension para configurar la ruta.`);
+        return;
+    }
+    
     if (fs.existsSync(path)) {
         openTool(path, name);
     } else {
-        vscode.window.showErrorMessage(`El archivo ${name} no existe en: ${path}`);
+        vscode.window.showErrorMessage(`El archivo ${name} no existe en: ${path}. Verifica la ruta en Configuración > AccuExtension.`);
+    }
+}
+
+function handleGetToolPath(panel, toolName) {
+    const toolPaths = getToolPaths();
+    const path = toolPaths[toolName];
+
+    if (path) {
+        panel.webview.postMessage({ command: 'toolPath', path: path });
+    } else {
+        panel.webview.postMessage({ command: 'toolPath', path: null });
     }
 }
 

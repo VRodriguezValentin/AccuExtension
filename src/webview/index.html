@@ -18,6 +18,11 @@
         
         <!-- Menú de herramientas -->
         <div class="tools-menu">
+            <!-- Botón de configuración en la esquina superior derecha -->
+            <button class="config-button-small" onclick="openSettings()" title="Configurar Rutas de Herramientas">
+                <i class="fas fa-cog"></i>
+            </button>
+            
             <div class="tool-item" onclick="openTool('putty')">
                 <img src="${puttyImage}" alt="PuTTY" class="tool-icon">
                 <span class="tool-name">PuTTY</span>
@@ -34,8 +39,8 @@
             </div>
             <div class="tool-divider"></div>
             <div class="tool-item" onclick="openTool('isqlw')">
-                <img src="${isqlwImage}" alt="ISQL" class="tool-icon">
-                <span class="tool-name">ISQL</span>
+                <img src="${isqlwImage}" alt="ISQLW" class="tool-icon">
+                <span class="tool-name">ISQLW</span>
             </div>
             <div class="tool-divider"></div>
             <div class="tool-item" onclick="openTool('cobis')">

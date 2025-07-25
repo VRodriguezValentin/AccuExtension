@@ -1,43 +1,73 @@
-# Changelog
+ï»¿# ğŸ“ Changelog
 
-Todos los cambios notables de este proyecto serán documentados en este archivo.
+Todos los cambios notables de este proyecto serÃ¡n documentados en este archivo.
+
+---
+
+## [1.0.3] - 2025-01-22
+
+### âœ¨ Agregado
+- **BotÃ³n de configuraciÃ³n de rutas de herramientas** integrado en el menÃº de herramientas (esquina superior derecha)
+- **Comando dedicado** para abrir configuraciÃ³n: "AccuExtension: Configurar Rutas de Herramientas"
+
+### ğŸ”§ Mejorado
+- **Flexibilidad** para diferentes configuraciones de sistema
+
+### ğŸ› Corregido
+- **Rutas hardcodeadas** reemplazadas por configuraciÃ³n dinÃ¡mica
+
+---
 
 ## [1.0.2] - 2025-01-22
 
-### Agregado
-- Botón de StatusBar para acceso rápido a la extensión
-- Menú de herramientas con 5 aplicaciones: PuTTY, WinSCP, SoapUI, ISQLW, CobisExplorer
-- Enlace "Abrir AST Web" para acceso directo al time report
-- Tooltip explicativo en el checkbox "Literal" de búsqueda avanzada
-- Manejo de errores mejorado para herramientas no instaladas
-- Verificación de existencia de archivos antes de ejecutar herramientas
+### âœ¨ Agregado
+- **BotÃ³n de StatusBar** para acceso rÃ¡pido a la extensiÃ³n
+- **MenÃº de herramientas** con 5 aplicaciones: PuTTY, WinSCP, SoapUI, ISQLW, CobisExplorer
+- **Enlace "Abrir AST Web"** para acceso directo al time report
+- **Tooltip explicativo** en el checkbox "Literal" de bÃºsqueda avanzada
+- **Manejo de errores** mejorado para herramientas no instaladas
+- **VerificaciÃ³n de existencia** de archivos antes de ejecutar herramientas
 
-### Mejorado
-- Interfaz de usuario más limpia y organizada
-- Prevención de múltiples paneles webview (elimina titileo de pantalla)
-- Activación automática de la extensión al iniciar VS Code/Cursor
+### ğŸ”§ Mejorado
+- **Interfaz de usuario** mÃ¡s limpia y organizada
+- **PrevenciÃ³n de mÃºltiples paneles** webview (elimina titileo de pantalla)
+- **ActivaciÃ³n automÃ¡tica** de la extensiÃ³n al iniciar VS Code/Cursor
 
-### Corregido
-- Problema de titileo de pantalla al abrir la extensión
-- Manejo de errores para herramientas con rutas específicas
+### ğŸ› Corregido
+- **Problema de titileo** de pantalla al abrir la extensiÃ³n
+- **Manejo de errores** para herramientas con rutas especÃ­ficas
+
+---
 
 ## [1.0.1] - 2025-01-22
 
-### Agregado
-- Icono de la extensión usando el logo de Accusys
+### âœ¨ Agregado
+- **Icono de la extensiÃ³n** usando el logo de Accusys
 
-### Corregido
-- URL del repositorio actualizada a: https://github.com/VRodriguezValentin/AccuExtension
-- URLs de homepage y bugs corregidas
+### ğŸ› Corregido
+- **URL del repositorio** actualizada a: https://github.com/VRodriguezValentin/AccuExtension
+- **URLs de homepage y bugs** corregidas
+
+---
 
 ## [1.0.0] - 2025-01-22
 
-### Agregado
-- Funcionalidad básica de AccuExtension
-- Acceso rápido a AST-Activities Manager
-- Búsqueda de elementos AST por número
-- Búsqueda avanzada en TFS con filtros
-- Interfaz moderna con colores corporativos de Accusys
-- Líneas divisorias para mejor organización visual
-- Soporte para extensiones de archivo personalizadas
-- Checkbox "Literal" para búsquedas exactas 
+### âœ¨ Agregado
+- **Funcionalidad bÃ¡sica** de AccuExtension
+- **Acceso rÃ¡pido** a AST-Activities Manager
+- **BÃºsqueda de elementos AST** por nÃºmero
+- **BÃºsqueda avanzada** en TFS con filtros
+- **Interfaz moderna** con colores corporativos de Accusys
+- **LÃ­neas divisorias** para mejor organizaciÃ³n visual
+- **Soporte para extensiones** de archivo personalizadas
+- **Checkbox "Literal"** para bÃºsquedas exactas
+
+---
+
+## ğŸ”— Enlaces
+
+- [GitHub Repository](https://github.com/VRodriguezValentin/AccuExtension)
+- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=valentin.rodriguez.accuextension)
+- [Issues](https://github.com/VRodriguezValentin/AccuExtension/issues)
+
+---

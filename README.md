@@ -1,105 +1,108 @@
-# ?? AccuExtension
+﻿# 🚀 AccuExtension
 
-**AccuExtension** es una extensi�n personalizada para desarrolladores de **Accusys Technology**, pensada para integrarse con **Cursor** o **Visual Studio Code** y mejorar tu flujo de trabajo diario.
+**AccuExtension** es una extensión personalizada para desarrolladores de **Accusys Technology**, diseñada para integrarse con **Visual Studio Code** y **Cursor** para mejorar tu flujo de trabajo diario.
 
----
-
-## ? Funcionalidades
-
-- ?? **Acceso r�pido a AST-Activities Manager**
-- ?? **Integraci�n con TFS** para acceder f�cilmente a tus **backlogs** y realizar b�squedas sin salir del editor
+[![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)](https://marketplace.visualstudio.com/items?itemName=valentin.rodriguez.accuextension)
+[![VS Code](https://img.shields.io/badge/VS%20Code-1.60+-blue.svg)](https://code.visualstudio.com/)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
 
-## ?? Estructura del proyecto
+## ✨ Características
 
+### 🔧 **Herramientas de Desarrollo**
+- **PuTTY**
+- **WinSCP**
+- **SoapUI**
+- **ISQLW**
+- **CobisExplorer**
+
+### 📋 **Gestión de Proyectos**
+- **AST-Activities Manager** - Acceso directo al gestor de actividades
+- **AST Web** - Enlace directo al time report
+- **TFS Integration** - Búsqueda y acceso a backlogs de TFS
+
+---
+
+
+## 📖 Uso
+
+### Acceso Rápido
+- **Botón de StatusBar**: Haz clic en el ícono `🚀AccuExtension` en la barra de estado
+- **Comando Paleta**: `Ctrl+Shift+P` → "AccuExtension: Inicio"
+
+### Configuración de Herramientas
+1. Abre la extensión
+2. Haz clic en el ícono ⚙️ en la esquina superior derecha del menú de herramientas
+3. Configura las rutas de las herramientas según tu instalación
+
+### Búsqueda en TFS
+- Selecciona el equipo y área
+- Ingresa el número de AST → Buscar AST
+- Usa ext: para definir el tipo de archivo
+- Usa "Literal" para búsquedas exactas
+- Escribe por ejemplo nombres de archivos, tablas o lineas de codigo → "Buscar" 
+
+---
+
+## ⚙️ Configuración
+
+### Rutas Predeterminadas
+```json
+{
+  "accuextension.tools.putty": "C:\\Program Files\\PuTTY\\putty.exe",
+  "accuextension.tools.winscp": "C:\\Program Files (x86)\\WinSCP\\WinSCP.exe",
+  "accuextension.tools.soapui": "C:\\Program Files\\SmartBear\\SoapUI-5.7.2\\bin\\SoapUI-5.7.2.exe",
+  "accuextension.tools.isqlw": "C:\\Program Files (x86)\\ISQL\\MSSQL\\BINN\\ISQLW.EXE",
+  "accuextension.tools.cobis": "C:\\ProgramData\\COBIS\\COBISExplorer\\COBISCorp.eCOBIS.COBISExplorer.Shell.exe",
+  "accuextension.tools.ast": "C:\\Accusys Technology\\AST-Activities Manager\\ejecutable\\Administrador.exe"
+}
 ```
-accuextension/
-??? media/
-?   ??? accusys-isotipo.png
-?   ??? accusys-logo.png
-??? src/
-?   ??? extension.js         # L�gica principal de la extensi�n
-?   ??? webview/
-?       ??? index.html       # Estructura HTML del panel webview
-?       ??? styles.css       # Estilos personalizados
-?       ??? script.js        # Comportamiento del webview
-??? CHANGELOG.md
-??? package.json
-??? README.md
+
+### Personalización
+`Ctrl+Shift+P` → "AccuExtension: Configurar Rutas de Herramientas"
+
+---
+
+## 🛠️ Desarrollo
+
+### Requisitos
+- Node.js 14+
+- VS Code Extension Development Host
+
+### Configuración del entorno
+```bash
+# Clonar el repositorio
+git clone https://github.com/VRodriguezValentin/AccuExtension.git
+cd AccuExtension
+
+# Instalar dependencias
+npm install
+
+# Ejecutar en modo desarrollo
+F5
+```
+
+### Estructura del proyecto
+```
+AccuExtension/
+├── src/
+│   ├── extension.js         # Lógica principal
+│   └── webview/
+│       ├── index.html       # Interfaz HTML
+│       ├── styles.css       # Estilos CSS
+│       └── script.js        # Lógica del webview
+├── media/                   # Imágenes y recursos
+├── package.json            # Configuración de la extensión
+└── README.md
 ```
 
 ---
 
-## ?? �C�mo se usa?
+## 👨‍💻 Contacto
 
-1. Presion� `Ctrl+Shift+P` (o `Cmd+Shift+P` en Mac)
-2. Escrib�: `AccuExtension: Inicio`
-3. Presion� `Enter` y listo, �ya est�s dentro!
-
----
-
-## ??? Modo desarrollo
-
-- Presion� `F5` para lanzar la extensi�n en modo debug.
-- Los archivos del `webview` est�n separados para facilitar la edici�n y el mantenimiento.
+**Valentín Rodríguez**
+- GitHub: [@VRodriguezValentin](https://github.com/VRodriguezValentin)
+- Mail Corporativo: [valentin.rodriguez@accusys.com.ar](mailto:valentin.rodriguez@accusys.com.ar)
 
 ---
-
-## ?? Requisitos
-
-Para que funcione correctamente el acceso al AST:
-
-?? Asegurate de que el ejecutable `Administrador.exe` est� ubicado en:
-
-```
-C:\Accusys Technology\AST-Activities Manager\ejecutable\Administrador.exe
-```
-
-Para que funcione correctamente el acceso al PuTTy:
-
-?? Asegurate de que el ejecutable `putty.exe` est� ubicado en:
-
-```
-C:\Program Files\PuTTY\putty.exe
-```
-
-Para que funcione correctamente el acceso al WinSCP:
-
-?? Asegurate de que el ejecutable `WinSCP.exe` est� ubicado en:
-
-```
-C:\Program Files (x86)\WinSCP\WinSCP.exe
-```
-
-Para que funcione correctamente el acceso al SoapUI:
-
-?? Asegurate de que el ejecutable `SoapUI-5.7.2.exe` est� ubicado en:
-
-```
-C:\Program Files\SmartBear\SoapUI-5.7.2\bin\SoapUI-5.7.2.exe
-```
-
-Para que funcione correctamente el acceso al ISQLW:
-
-?? Asegurate de que el ejecutable `Administrador.exe` est� ubicado en:
-
-```
-C:\Program Files (x86)\ISQL\MSSQL\BINN\ISQLW.EXE
-```
-
-Para que funcione correctamente el acceso al COBISExplorer:
-
-?? Asegurate de que el ejecutable `COBISCorp.eCOBIS.COBISExplorer.Shell.exe` est� ubicado en:
-
-```
-C:\ProgramData\COBIS\COBISExplorer\COBISCorp.eCOBIS.COBISExplorer.Shell.exe
-```
-
----
-
-## ?? Contacto
-
-Para dudas, sugerencias o mejoras:
-
-**valentin.rodriguez@accusys.com.ar**

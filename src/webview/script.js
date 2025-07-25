@@ -7,30 +7,9 @@ const equiposPorArea = {
 
 // Función para abrir herramientas
 function openTool(toolName) {
-    const toolPaths = {
-        'putty': 'C:\\Program Files\\PuTTY\\putty.exe',
-        'winscp': 'C:\\Program Files (x86)\\WinSCP\\WinSCP.exe',
-        'soapui': 'C:\\Program Files\\SmartBear\\SoapUI-5.7.2\\bin\\SoapUI-5.7.2.exe',
-        'isqlw': 'C:\\Program Files (x86)\\ISQL\\MSSQL\\BINN\\ISQLW.EXE',
-        'cobis': 'C:\\ProgramData\\COBIS\\COBISExplorer\\COBISCorp.eCOBIS.COBISExplorer.Shell.exe'
-    };
-
-    const toolNames = {
-        'putty': 'PuTTY',
-        'winscp': 'WinSCP',
-        'soapui': 'SoapUI',
-        'isqlw': 'ISQLW',
-        'cobis': 'CobisExplorer'
-    };
-
-    const path = toolPaths[toolName];
-    const name = toolNames[toolName];
-
-    // Verificar si el archivo existe antes de intentar abrirlo
+    // Enviar mensaje para obtener la ruta desde la configuración
     vscode.postMessage({
-        command: 'checkAndOpenTool',
-        path: path,
-        name: name,
+        command: 'getToolPath',
         toolName: toolName
     });
 }
@@ -239,4 +218,48 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('area').addEventListener('change', function() {
         checkAdvancedSearchStatus();
     });
-}); 
+});
+
+// Manejador de mensajes del webview
+window.addEventListener('message', event => {
+    const message = event.data;
+    
+    switch (message.command) {
+        case 'toolPath':
+            if (message.path) {
+                // Abrir la herramienta con la ruta recibida
+                vscode.postMessage({
+                    command: 'checkAndOpenTool',
+                    path: message.path,
+                    name: getToolDisplayName(message.toolName),
+                    toolName: message.toolName
+                });
+            } else {
+                // Mostrar mensaje de error si no hay ruta configurada
+                vscode.postMessage({
+                    command: 'showError',
+                    message: `Ruta no configurada. Ve a Configuración > AccuExtension para configurar la ruta.`
+                });
+            }
+            break;
+    }
+});
+
+// Función para obtener el nombre de visualización de la herramienta
+function getToolDisplayName(toolName) {
+    const toolNames = {
+        'putty': 'PuTTY',
+        'winscp': 'WinSCP',
+        'soapui': 'SoapUI',
+        'isqlw': 'ISQLW',
+        'cobis': 'CobisExplorer'
+    };
+    return toolNames[toolName] || toolName;
+}
+
+// Función para abrir la configuración
+function openSettings() {
+    vscode.postMessage({
+        command: 'openSettings'
+    });
+} 
