@@ -1,26 +1,25 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AccuExtension</title>
-    <!-- Font Awesome para iconos profesionales -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="${stylesUri}">
 </head>
 <body>
     <div class="container">
         <h1>
-            <i class="fas fa-star welcome-icon"></i>
+            <span class="welcome-icon">👋</span>
             <span>Bienvenido a AccuExtension</span>
         </h1>
         <img src="${imageSrc}" alt="Accusys Logo">
         
-        <!-- Men� de herramientas -->
+        <!-- Menú de herramientas -->
         <div class="tools-menu">
-            <!-- Bot�n de configuraci�n en la esquina superior derecha -->
+            <!-- Botón de configuración en la esquina superior derecha -->
             <button class="config-button-small" onclick="openSettings()" title="Configurar Rutas de Herramientas">
-                <i class="fas fa-cog"></i>
+                ⚙️
             </button>
             
             <div class="tool-item" onclick="openTool('putty')">
@@ -51,22 +50,22 @@
         
         <div class="section">
             <div class="reminder">
-                <i class="fas fa-clock reminder-icon"></i>
+                <span class="reminder-icon">⌚</span>
                 <span>No olvides cargar las horas de trabajo</span>
             </div>
             <button class="button" onclick="openAST()">
-                <i class="fas fa-chart-line"></i>
+                📊
                 Abrir AST
             </button>
             <a href="https://timereport.accusys.com.ar/web/login.aspx" target="_blank" class="ast-web-link">
-                <i class="fas fa-globe"></i>
+                🌐
                 Abrir AST Web
             </a>
         </div>
         
         <div class="section" style="margin-top: 20px;">
             <div class="tfs-title">
-                <i class="fas fa-tasks tfs-icon"></i>
+                <span class="tfs-icon">📋</span>
                 <span>Acceso a TFS</span>
             </div>
             
@@ -89,7 +88,7 @@
             </div>
             
             <button class="button" onclick="openTFSLink()" id="tfsButton" style="margin-top: 20px;" disabled>
-                <i class="fas fa-external-link-alt"></i>
+                🔗
                 Abrir TFS
             </button>
             
@@ -107,10 +106,10 @@
                         />
                     </div>
                     
-                    <button class="button" onclick="searchASTLink()" id="searchButton" disabled>
-                        <i class="fas fa-search"></i>
-                        Buscar AST
-                    </button>
+                                <button class="button" onclick="searchASTLink()" id="searchButton" disabled>
+                🔍
+                Buscar AST
+            </button>
                 </div>
                 
                 <div class="section-divider"></div>
@@ -159,7 +158,7 @@
                         </div>
                         
                         <button class="button" onclick="advancedSearchLink()" id="advancedSearchButton" disabled>
-                            <i class="fas fa-search"></i>
+                            🔍
                             Buscar
                         </button>
                     </div>

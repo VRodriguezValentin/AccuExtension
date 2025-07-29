@@ -1,12 +1,15 @@
-const vscode = require('vscode');
+ï»¿const vscode = require('vscode');
 const path = require('path');
 const fs = require('fs');
 const { exec } = require('child_process');
 
-// Variable global para rastrear si el panel ya está abierto
+// Variable global para rastrear si el panel ya estÃ¡ abierto
 let currentPanel = undefined;
 
-// Función para obtener las rutas de las herramientas desde la configuración
+/**
+ * Obtiene las rutas de las herramientas desde la configuraciÃ³n de VS Code
+ * @returns {Object} - Objeto con las rutas configuradas para cada herramienta
+ */
 function getToolPaths() {
     const config = vscode.workspace.getConfiguration('accuextension.tools');
     return {
@@ -19,7 +22,10 @@ function getToolPaths() {
     };
 }
 
-// Función para detectar automáticamente rutas de herramientas
+/**
+ * Detecta automÃ¡ticamente rutas de herramientas comunes
+ * @returns {Object} - Objeto con las rutas detectadas
+ */
 function detectToolPaths() {
     const commonPaths = {
         putty: [
@@ -50,7 +56,8 @@ function detectToolPaths() {
     
     for (const [tool, paths] of Object.entries(commonPaths)) {
         for (const toolPath of paths) {
-            if (fs.existsSync(toolPath)) {
+            // Validar la ruta antes de verificar existencia
+            if (isValidPath(toolPath) && fs.existsSync(toolPath)) {
                 detectedPaths[tool] = toolPath;
                 break;
             }
@@ -104,7 +111,7 @@ function activate(context) {
         );
         const imageSrc = panel.webview.asWebviewUri(imagePath);
 
-        // Obtener las rutas de las imágenes de herramientas
+        // Obtener las rutas de las imÃ¡genes de herramientas
         const puttyImagePath = vscode.Uri.file(
             path.join(context.extensionPath, 'media', 'PuTTY_icon.png')
         );
@@ -194,7 +201,7 @@ function activate(context) {
         );
     });
 
-    // Registrar el comando de configuración
+    // Registrar el comando de configuraciÃ³n
     let settingsDisposable = vscode.commands.registerCommand('accuextension.openSettings', () => {
         vscode.commands.executeCommand('workbench.action.openSettings', 'accuextension.tools');
     });
@@ -202,7 +209,7 @@ function activate(context) {
     context.subscriptions.push(disposable);
     context.subscriptions.push(settingsDisposable);
 
-    // Crear el botón en la StatusBar
+    // Crear el botÃ³n en la StatusBar
     const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     statusBarItem.text = '$(rocket) AccuExtension';
     statusBarItem.tooltip = 'Abrir AccuExtension';
@@ -212,58 +219,113 @@ function activate(context) {
     context.subscriptions.push(statusBarItem);
 }
 
+/**
+ * Abre AST-Activities Manager usando la ruta configurada
+ */
 function openASTManager() {
     const toolPaths = getToolPaths();
     const astPath = toolPaths.ast;
     
     if (!astPath) {
-        vscode.window.showErrorMessage('Ruta de AST no configurada. Ve a Configuración > AccuExtension para configurar la ruta.');
+        vscode.window.showErrorMessage('Ruta de AST no configurada. Ve a ConfiguraciÃ³n > AccuExtension para configurar la ruta.');
         return;
     }
     
-    exec(`"${astPath}"`, (error) => {
-        if (error) {
-            vscode.window.showErrorMessage(`No se pudo abrir AST-Activities Manager. Verifica la ruta en Configuración > AccuExtension: ${astPath}`);
-            console.error('Error al abrir AST:', error);
-        } else {
-            vscode.window.showInformationMessage('AST-Activities Manager abierto correctamente');
-        }
-    });
+    // Usar la funciÃ³n unificada openTool para consistencia
+    openTool(astPath, 'AST-Activities Manager', true);
 }
 
+/**
+ * Abre una URL en el navegador predeterminado con validaciÃ³n
+ * @param {string} url - URL a abrir
+ */
 function openTFS(url) {
-    // Abrir la URL en el navegador predeterminado
-    vscode.env.openExternal(vscode.Uri.parse(url));
-}
-
-function openTool(path, name) {
-    if (!path) {
-        vscode.window.showErrorMessage(`Ruta de ${name} no configurada. Ve a Configuración > AccuExtension para configurar la ruta.`);
+    // Validar que la URL no estÃ© vacÃ­a
+    if (!url || typeof url !== 'string') {
+        vscode.window.showErrorMessage('URL invÃ¡lida proporcionada para abrir TFS.');
         return;
     }
     
+    // Validar formato bÃ¡sico de URL
+    try {
+        const uri = vscode.Uri.parse(url);
+        if (!uri.scheme || !uri.authority) {
+            throw new Error('URL malformada');
+        }
+        vscode.env.openExternal(uri);
+    } catch (error) {
+        vscode.window.showErrorMessage(`URL invÃ¡lida: ${url}. Error: ${error.message}`);
+    }
+}
+
+/**
+ * Valida una ruta de archivo
+ * @param {string} path - Ruta a validar
+ * @returns {boolean} - True si la ruta es vÃ¡lida
+ */
+function isValidPath(path) {
+    if (!path || typeof path !== 'string') {
+        return false;
+    }
+    
+    // Verificar que sea una ruta absoluta en Windows
+    if (!path.match(/^[A-Za-z]:\\/)) {
+        return false;
+    }
+    
+    return true;
+}
+
+/**
+ * Abre una herramienta externa con validaciÃ³n completa
+ * @param {string} path - Ruta al ejecutable
+ * @param {string} name - Nombre de la herramienta para mostrar en mensajes
+ * @param {boolean} checkExistence - Si debe verificar que el archivo existe
+ */
+function openTool(path, name, checkExistence = false) {
+    // Validar que la ruta estÃ© configurada
+    if (!path) {
+        vscode.window.showErrorMessage(`Ruta de ${name} no configurada. Ve a ConfiguraciÃ³n > AccuExtension para configurar la ruta.`);
+        return;
+    }
+    
+    // Validar formato de la ruta
+    if (!isValidPath(path)) {
+        vscode.window.showErrorMessage(`Ruta invÃ¡lida para ${name}: ${path}. La ruta debe ser absoluta y no contener caracteres especiales.`);
+        return;
+    }
+    
+    // Verificar existencia del archivo si se solicita
+    if (checkExistence && !fs.existsSync(path)) {
+        vscode.window.showErrorMessage(`El archivo ${name} no existe en: ${path}. Verifica la ruta en ConfiguraciÃ³n > AccuExtension.`);
+        return;
+    }
+    
+    // Ejecutar la herramienta
     exec(`"${path}"`, (error) => {
         if (error) {
-            vscode.window.showErrorMessage(`Error al abrir ${name}: ${error.message}. Verifica la ruta en Configuración > AccuExtension.`);
+            vscode.window.showErrorMessage(`Error al abrir ${name}: ${error.message}. Verifica la ruta en ConfiguraciÃ³n > AccuExtension.`);
         } else {
             console.log(`${name} abierto correctamente.`);
         }
     });
 }
 
+/**
+ * FunciÃ³n de compatibilidad para mantener la API existente
+ * @param {string} path - Ruta al ejecutable
+ * @param {string} name - Nombre de la herramienta
+ * @param {string} toolName - Nombre de la herramienta (no usado, mantenido por compatibilidad)
+ */
 function checkAndOpenTool(path, name, toolName) {
-    if (!path) {
-        vscode.window.showErrorMessage(`Ruta de ${name} no configurada. Ve a Configuración > AccuExtension para configurar la ruta.`);
-        return;
-    }
-    
-    if (fs.existsSync(path)) {
-        openTool(path, name);
-    } else {
-        vscode.window.showErrorMessage(`El archivo ${name} no existe en: ${path}. Verifica la ruta en Configuración > AccuExtension.`);
-    }
+    openTool(path, name, true);
 }
 
+/**
+ * Maneja la solicitud de ruta de herramienta desde el webview
+ * @param {vscode.WebviewPanel} panel - Panel del webview
+ * @param {string} toolName - Nombre de la herramienta solicitada
+ */
 function handleGetToolPath(panel, toolName) {
     const toolPaths = getToolPaths();
     const path = toolPaths[toolName];

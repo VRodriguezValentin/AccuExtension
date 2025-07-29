@@ -1,13 +1,13 @@
-const vscode = acquireVsCodeApi();
+锘縞onst vscode = acquireVsCodeApi();
 
 const equiposPorArea = {
     'Pasivas': ['Naranja', 'Gris', 'Celeste', 'Cobre', 'Amarillo'],
     'Activas': ['Rojo', 'Blanco', 'Violeta']
 };
 
-// Funci髇 para abrir herramientas
+// Funci贸n para abrir herramientas
 function openTool(toolName) {
-    // Enviar mensaje para obtener la ruta desde la configuraci髇
+    // Enviar mensaje para obtener la ruta desde la configuraci贸n
     vscode.postMessage({
         command: 'getToolPath',
         toolName: toolName
@@ -238,14 +238,14 @@ window.addEventListener('message', event => {
                 // Mostrar mensaje de error si no hay ruta configurada
                 vscode.postMessage({
                     command: 'showError',
-                    message: `Ruta no configurada. Ve a Configuraci髇 > AccuExtension para configurar la ruta.`
+                    message: `Ruta no configurada. Ve a Configuraci贸n > AccuExtension para configurar la ruta.`
                 });
             }
             break;
     }
 });
 
-// Funci髇 para obtener el nombre de visualizaci髇 de la herramienta
+// Funci贸n para obtener el nombre de visualizaci贸n de la herramienta
 function getToolDisplayName(toolName) {
     const toolNames = {
         'putty': 'PuTTY',
@@ -257,7 +257,7 @@ function getToolDisplayName(toolName) {
     return toolNames[toolName] || toolName;
 }
 
-// Funci髇 para abrir la configuraci髇
+// Funci贸n para abrir la configuraci贸n
 function openSettings() {
     vscode.postMessage({
         command: 'openSettings'

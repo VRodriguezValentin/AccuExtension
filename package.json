@@ -1,7 +1,7 @@
 {
   "name": "accuextension",
   "displayName": "AccuExtension",
-  "description": "Extensión personalizada para desarrolladores de Accusys Technology",
+  "description": "Extension personalizada para desarrolladores de Accusys Technology",
   "version": "1.0.3",
   "engines": {
     "vscode": "^1.74.0"

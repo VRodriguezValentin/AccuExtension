@@ -4,21 +4,33 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 
 ---
 
-## [1.0.3] - 2025-01-22
+## [1.0.3] - 2025-07-29
 
 ### ✨ Agregado
 - **Botón de configuración de rutas de herramientas** integrado en el menú de herramientas (esquina superior derecha)
 - **Comando dedicado** para abrir configuración: "AccuExtension: Configurar Rutas de Herramientas"
 
+### 🔒 Seguridad
+- **Eliminado CDN externo** - Reemplazado Font Awesome con iconos Unicode nativos
+- **Validación de entrada** mejorada para URLs y rutas de archivos
+- **Sanitización de rutas** para prevenir inyección de comandos
+
 ### 🔧 Mejorado
 - **Flexibilidad** para diferentes configuraciones de sistema
+- **Código consolidado** - Eliminada duplicación en manejo de rutas
+- **Documentación JSDoc** agregada a todas las funciones principales
+- **Validación robusta** de rutas de archivos con verificación de caracteres peligrosos
+- **Manejo de errores** unificado y consistente
 
 ### 🐛 Corregido
 - **Rutas hardcodeadas** reemplazadas por configuración dinámica
+- **Función openASTManager** ahora usa la función unificada openTool
+- **Validación de URLs** en openTFS para prevenir errores
+- **Función openASTManager** ahora usa la función unificada openTool
 
 ---
 
-## [1.0.2] - 2025-01-22
+## [1.0.2] - 2025-07-25
 
 ### ✨ Agregado
 - **Botón de StatusBar** para acceso rápido a la extensión
@@ -39,7 +51,7 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 
 ---
 
-## [1.0.1] - 2025-01-22
+## [1.0.1] - 2025-07-21
 
 ### ✨ Agregado
 - **Icono de la extensión** usando el logo de Accusys
@@ -50,7 +62,7 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 
 ---
 
-## [1.0.0] - 2025-01-22
+## [1.0.0] - 2025-07-18
 
 ### ✨ Agregado
 - **Funcionalidad básica** de AccuExtension
