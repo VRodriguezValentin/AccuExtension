@@ -22,50 +22,8 @@ function getToolPaths() {
     };
 }
 
-/**
- * Detecta automáticamente rutas de herramientas comunes
- * @returns {Object} - Objeto con las rutas detectadas
- */
-function detectToolPaths() {
-    const commonPaths = {
-        putty: [
-            'C:\\Program Files\\PuTTY\\putty.exe',
-            'C:\\Program Files (x86)\\PuTTY\\putty.exe'
-        ],
-        winscp: [
-            'C:\\Program Files\\WinSCP\\WinSCP.exe',
-            'C:\\Program Files (x86)\\WinSCP\\WinSCP.exe'
-        ],
-        soapui: [
-            'C:\\Program Files\\SmartBear\\SoapUI-5.7.2\\bin\\SoapUI-5.7.2.exe',
-            'C:\\Program Files (x86)\\SmartBear\\SoapUI-5.7.2\\bin\\SoapUI-5.7.2.exe'
-        ],
-        isqlw: [
-            'C:\\Program Files (x86)\\ISQL\\MSSQL\\BINN\\ISQLW.EXE',
-            'C:\\Program Files\\ISQL\\MSSQL\\BINN\\ISQLW.EXE'
-        ],
-        cobis: [
-            'C:\\ProgramData\\COBIS\\COBISExplorer\\COBISCorp.eCOBIS.COBISExplorer.Shell.exe'
-        ],
-        ast: [
-            'C:\\Accusys Technology\\AST-Activities Manager\\ejecutable\\Administrador.exe'
-        ]
-    };
 
-    const detectedPaths = {};
-    
-    for (const [tool, paths] of Object.entries(commonPaths)) {
-        for (const toolPath of paths) {
-            // Validar la ruta antes de verificar existencia
-            if (isValidPath(toolPath) && fs.existsSync(toolPath)) {
-                detectedPaths[tool] = toolPath;
-                break;
-            }
-        }
-    }
-    
-    return detectedPaths;
-}
+
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -105,9 +63,14 @@ function activate(context) {
             currentPanel = undefined;
         }, null, context.subscriptions);
 
+        // Obtener el tema actual del editor y seleccionar el logo apropiado
+        const currentTheme = vscode.window.activeColorTheme;
+        const isDarkTheme = currentTheme.kind === vscode.ColorThemeKind.Dark;
+        const logoFileName = isDarkTheme ? 'accusys-logo.png' : 'accusys-logo-negativo.png';
+        
         // Obtener la ruta de la imagen
         const imagePath = vscode.Uri.file(
-            path.join(context.extensionPath, 'media', 'accusys-logo.png')
+            path.join(context.extensionPath, 'media', logoFileName)
         );
         const imageSrc = panel.webview.asWebviewUri(imagePath);
 
@@ -163,6 +126,8 @@ function activate(context) {
         htmlContent = htmlContent.replace('${stylesUri}', stylesUri);
         htmlContent = htmlContent.replace('${scriptUri}', scriptUri);
 
+
+
         // Establecer el contenido HTML del webview
         panel.webview.html = htmlContent;
 
@@ -191,9 +156,17 @@ function activate(context) {
                     case 'showError':
                         vscode.window.showErrorMessage(message.message);
                         return;
-                    case 'openSettings':
-                        vscode.commands.executeCommand('workbench.action.openSettings', 'accuextension.tools');
-                        return;
+                                            case 'openSettings':
+                            vscode.commands.executeCommand('workbench.action.openSettings', 'accuextension.tools');
+                            return;
+                        case 'openThemeSettings':
+                            vscode.commands.executeCommand('workbench.action.selectTheme');
+                            return;
+                        case 'updateLogo':
+                            updateLogoForTheme(panel, context);
+                            return;
+
+
                 }
             },
             undefined,
@@ -217,6 +190,13 @@ function activate(context) {
     statusBarItem.show();
 
     context.subscriptions.push(statusBarItem);
+
+    // Escuchar cambios en el tema del editor
+    vscode.window.onDidChangeActiveColorTheme(() => {
+        if (currentPanel) {
+            updateLogoForTheme(currentPanel, context);
+        }
+    });
 }
 
 /**
@@ -336,6 +316,29 @@ function handleGetToolPath(panel, toolName) {
         panel.webview.postMessage({ command: 'toolPath', path: null });
     }
 }
+
+/**
+ * Actualiza el logo del webview basado en el tema actual
+ * @param {vscode.WebviewPanel} panel - Panel del webview
+ * @param {vscode.ExtensionContext} context - Contexto de la extensión
+ */
+function updateLogoForTheme(panel, context) {
+    const currentTheme = vscode.window.activeColorTheme;
+    const isDarkTheme = currentTheme.kind === vscode.ColorThemeKind.Dark;
+    const logoFileName = isDarkTheme ? 'accusys-logo.png' : 'accusys-logo-negativo.png';
+    
+    const imagePath = vscode.Uri.file(
+        path.join(context.extensionPath, 'media', logoFileName)
+    );
+    const imageSrc = panel.webview.asWebviewUri(imagePath);
+    
+    panel.webview.postMessage({
+        command: 'updateLogo',
+        imageSrc: imageSrc.toString()
+    });
+}
+
+
 
 function deactivate() {}
 

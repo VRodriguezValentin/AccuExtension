@@ -2,7 +2,7 @@
   "name": "accuextension",
   "displayName": "AccuExtension",
   "description": "Extension personalizada para desarrolladores de Accusys Technology",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -21,6 +21,12 @@
       {
         "command": "accuextension.openSettings",
         "title": "AccuExtension: Configurar Rutas de Herramientas"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "sql",
+        "path": "./snippets/sql.json"
       }
     ],
     "configuration": {

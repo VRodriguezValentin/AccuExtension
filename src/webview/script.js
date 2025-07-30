@@ -1,5 +1,19 @@
 ﻿const vscode = acquireVsCodeApi();
 
+// Función para abrir la configuración de temas
+function openThemeSettings() {
+    vscode.postMessage({
+        command: 'openThemeSettings'
+    });
+    
+    // Después de abrir la configuración, actualizar el logo
+    setTimeout(() => {
+        vscode.postMessage({
+            command: 'updateLogo'
+        });
+    }, 1000);
+}
+
 const equiposPorArea = {
     'Pasivas': ['Naranja', 'Gris', 'Celeste', 'Cobre', 'Amarillo'],
     'Activas': ['Rojo', 'Blanco', 'Violeta']
@@ -242,6 +256,14 @@ window.addEventListener('message', event => {
                 });
             }
             break;
+        case 'updateLogo':
+            // Actualizar el logo del webview
+            const logoImg = document.querySelector('img[src*="accusys-logo"]');
+            if (logoImg && message.imageSrc) {
+                logoImg.src = message.imageSrc;
+            }
+            break;
+
     }
 });
 
@@ -262,4 +284,10 @@ function openSettings() {
     vscode.postMessage({
         command: 'openSettings'
     });
-} 
+}
+
+
+
+
+
+ 

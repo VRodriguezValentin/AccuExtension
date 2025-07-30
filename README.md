@@ -2,7 +2,7 @@
 
 **AccuExtension** es una extensión personalizada para desarrolladores de **Accusys Technology**, diseñada para integrarse con **Visual Studio Code** y **Cursor** para mejorar tu flujo de trabajo diario.
 
-[![Version](https://img.shields.io/badge/version-1.0.3-blue.svg)](https://marketplace.visualstudio.com/items?itemName=valentin.rodriguez.accuextension)
+[![Version](https://img.shields.io/badge/version-1.0.4-blue.svg)](https://open-vsx.org/extension/accusys-technology/accuextension)
 [![VS Code](https://img.shields.io/badge/VS%20Code-1.60+-blue.svg)](https://code.visualstudio.com/)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -22,6 +22,11 @@
 - **AST Web** - Enlace directo al time report
 - **TFS Integration** - Búsqueda y acceso a backlogs de TFS
 
+### 💻 **Snippets SQL**
+- **12 snippets predefinidos** para desarrollo COBIS
+- **Autocompletado inteligente** en archivos .sql y .sp
+- **Estructuras estándar** para stored procedures, tablas, vistas y catálogos
+
 ---
 
 
@@ -36,12 +41,32 @@
 2. Haz clic en el ícono ⚙️ en la esquina superior derecha del menú de herramientas
 3. Configura las rutas de las herramientas según tu instalación
 
+
+
 ### Búsqueda en TFS
 - Selecciona el equipo y área
 - Ingresa el número de AST → Buscar AST
 - Usa ext: para definir el tipo de archivo
 - Usa "Literal" para búsquedas exactas
-- Escribe por ejemplo nombres de archivos, tablas o lineas de codigo → "Buscar" 
+- Escribe por ejemplo nombres de archivos, tablas o lineas de codigo → "Buscar"
+
+### Snippets SQL
+Los snippets están disponibles automáticamente en archivos `.sql` y `.sp`. Escribe el prefijo y presiona `Tab`:
+
+| Prefijo | Descripción |
+|---------|-------------|
+| `insert_generico` | Insert genérico con 18 columnas |
+| `insert_tran_servicio724` | Insert para transacciones de servicio 724 |
+| `update_generico` | Update genérico con 6 columnas |
+| `delete_generico` | Delete genérico con 6 condiciones |
+| `select_generico` | Select genérico con ordenamiento |
+| `control_error_generico1` | Control de error básico |
+| `control_error_generico2` | Control de error con @@rowcount |
+| `control_error_generico3` | Control solo @@rowcount |
+| `sp_standard` | Estructura de stored procedure COBIS |
+| `catalogo_standard` | Creación de catálogos COBIS |
+| `create_table_standard` | Estructura de tablas |
+| `create_view_standard` | Estructura de vistas | 
 
 ---
 
@@ -92,6 +117,8 @@ AccuExtension/
 │       ├── index.html       # Interfaz HTML
 │       ├── styles.css       # Estilos CSS
 │       └── script.js        # Lógica del webview
+├── snippets/
+│   └── sql.json            # Configuración de snippets SQL
 ├── media/                   # Imágenes y recursos
 ├── package.json            # Configuración de la extensión
 └── README.md

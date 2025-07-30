@@ -4,6 +4,28 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 
 ---
 
+## [1.0.4] - 2025-07-30
+
+### ✨ Agregado
+- **Sistema de Snippets SQL** - 12 snippets predefinidos para desarrollo COBIS
+- **Autocompletado inteligente** - Snippets disponibles en archivos .sql y .sp
+- **Prefijos de snippets**:
+  - `insert_generico` - Insert genérico con 18 columnas
+  - `insert_tran_servicio724` - Insert para transacciones de servicio 724
+  - `update_generico` - Update genérico con 6 columnas
+  - `delete_generico` - Delete genérico con 6 condiciones
+  - `select_generico` - Select genérico con ordenamiento
+  - `control_error_generico1/2/3` - Controles de error estándar
+  - `sp_standard` - Estructura de stored procedure COBIS
+  - `catalogo_standard` - Creación de catálogos COBIS
+  - `create_table_standard` - Estructura de tablas
+  - `create_view_standard` - Estructura de vistas
+
+- **Botón de configuración de tema** - Botón 🎨 en la esquina superior derecha del webview para cambiar el tema del editor
+- **Actualización dinámica del logo** - El logo se actualiza en tiempo real al cambiar el tema
+
+---
+
 ## [1.0.3] - 2025-07-29
 
 ### ✨ Agregado
@@ -79,7 +101,7 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 ## 🔗 Enlaces
 
 - [GitHub Repository](https://github.com/VRodriguezValentin/AccuExtension)
-- [VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=valentin.rodriguez.accuextension)
+- [Open VSX Marketplace](https://open-vsx.org/extension/accusys-technology/accuextension)
 - [Issues](https://github.com/VRodriguezValentin/AccuExtension/issues)
 
 ---
