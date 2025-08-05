@@ -1,9 +1,9 @@
 ﻿# 🚀 AccuExtension
 
-**AccuExtension** es una extensión personalizada para desarrolladores de **Accusys Technology**, diseñada para integrarse con **Visual Studio Code** y **Cursor** para mejorar tu flujo de trabajo diario.
+**AccuExtension** es una extensión personalizada para desarrolladores de **Accusys Technology**, diseñada específicamente para **Cursor** para mejorar tu flujo de trabajo diario.
 
-[![Version](https://img.shields.io/badge/version-1.0.4-blue.svg)](https://open-vsx.org/extension/accusys-technology/accuextension)
-[![VS Code](https://img.shields.io/badge/VS%20Code-1.60+-blue.svg)](https://code.visualstudio.com/)
+[![Version](https://img.shields.io/badge/version-1.0.5-blue.svg)](https://open-vsx.org/extension/accusys-technology/accuextension)
+[![Cursor](https://img.shields.io/badge/Cursor-1.3.9+-black.svg)](https://cursor.com/?from=home)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
 ---
@@ -23,9 +23,9 @@
 - **TFS Integration** - Búsqueda y acceso a backlogs de TFS
 
 ### 💻 **Snippets SQL**
-- **12 snippets predefinidos** para desarrollo COBIS
+- **16 snippets predefinidos** para desarrollo COBIS
 - **Autocompletado inteligente** en archivos .sql y .sp
-- **Estructuras estándar** para stored procedures, tablas, vistas y catálogos
+- **Estructuras estándar** para stored procedures, tablas, vistas, catálogos, cursores y manejo de errores
 
 ---
 
@@ -60,10 +60,15 @@ Los snippets están disponibles automáticamente en archivos `.sql` y `.sp`. Esc
 | `update_generico` | Update genérico con 6 columnas |
 | `delete_generico` | Delete genérico con 6 condiciones |
 | `select_generico` | Select genérico con ordenamiento |
+| `select_cl_parametro` | Select a la tabla cobis..cl_parametro |
+| `select_cl_catalogo_cl_tabla` | Select a la tabla cobis..cl_catalogo / cobis..cl_tabla |
+| `cursor_standard` | Estructura estándar para cursor |
 | `control_error_generico1` | Control de error básico |
 | `control_error_generico2` | Control de error con @@rowcount |
 | `control_error_generico3` | Control solo @@rowcount |
 | `sp_standard` | Estructura de stored procedure COBIS |
+| `ERROR_TRAP` | Estructura estándar para error trap |
+| `exec_stored_procedure` | Ejemplo para execute de stored procedure |
 | `catalogo_standard` | Creación de catálogos COBIS |
 | `create_table_standard` | Estructura de tablas |
 | `create_view_standard` | Estructura de vistas | 

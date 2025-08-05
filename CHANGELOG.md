@@ -4,6 +4,19 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 
 ---
 
+## [1.0.5] - 2025-08-05
+
+### ✨ Agregado
+- **4 nuevos snippets SQL** para desarrollo COBIS avanzado:
+  - `ERROR_TRAP` - Estructura estándar para error trap con manejo de transacciones
+  - `exec_stored_procedure` - Ejemplo completo para execute de stored procedure
+  - `select_cl_parametro` - Select a la tabla cobis..cl_parametro
+  - `select_cl_catalogo_cl_tabla` - Select a la tabla cobis..cl_catalogo / cobis..cl_tabla
+  - `cursor_standard` - Estructura estándar para cursor
+- **Nuevas áreas y equipos** en TFS
+
+---
+
 ## [1.0.4] - 2025-07-30
 
 ### ✨ Agregado
@@ -65,7 +78,7 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 ### 🔧 Mejorado
 - **Interfaz de usuario** más limpia y organizada
 - **Prevención de múltiples paneles** webview (elimina titileo de pantalla)
-- **Activación automática** de la extensión al iniciar VS Code/Cursor
+- **Activación automática** de la extensión al iniciar Cursor
 
 ### 🐛 Corregido
 - **Problema de titileo** de pantalla al abrir la extensión

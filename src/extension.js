@@ -7,7 +7,7 @@ const { exec } = require('child_process');
 let currentPanel = undefined;
 
 /**
- * Obtiene las rutas de las herramientas desde la configuración de VS Code
+ * Obtiene las rutas de las herramientas desde la configuración de Cursor
  * @returns {Object} - Objeto con las rutas configuradas para cada herramienta
  */
 function getToolPaths() {
@@ -21,9 +21,6 @@ function getToolPaths() {
         ast: config.get('ast')
     };
 }
-
-
-
 
 /**
  * @param {vscode.ExtensionContext} context
@@ -186,7 +183,7 @@ function activate(context) {
     const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
     statusBarItem.text = '$(rocket) AccuExtension';
     statusBarItem.tooltip = 'Abrir AccuExtension';
-    statusBarItem.command = 'accuextension.showImage'; // El comando que ya tienes registrado
+    statusBarItem.command = 'accuextension.showImage';
     statusBarItem.show();
 
     context.subscriptions.push(statusBarItem);

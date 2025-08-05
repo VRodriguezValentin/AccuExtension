@@ -15,8 +15,13 @@ function openThemeSettings() {
 }
 
 const equiposPorArea = {
-    'Pasivas': ['Naranja', 'Gris', 'Celeste', 'Cobre', 'Amarillo'],
-    'Activas': ['Rojo', 'Blanco', 'Violeta']
+    'Pasivas':   ['Naranja', 'Gris', 'Celeste', 'Cobre', 'Amarillo', 'Verde'],
+    'Activas':   ['Rojo', 'Blanco', 'Violeta', 'Magenta'],
+    'Centrales': ['Verde'],
+    'Outsiders': ['Bordo'],
+    'Redes':     ['Amarillo'],
+    'Tradicionales': ['Oro', 'Plata'],
+    'Virtuales': ['Amarillo', 'Azul', 'Bronce', 'Negro', 'Plata']
 };
 
 // Función para abrir herramientas
