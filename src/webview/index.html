@@ -14,6 +14,67 @@
             🎨
         </button>
         
+        <!-- Sección de accesos directos personalizados -->
+        <div class="custom-shortcuts">
+            <div class="shortcuts-container">
+                <div class="shortcut-item" data-index="0">
+                    <button class="shortcut-button" onclick="editShortcut(0)" title="Editar acceso directo">
+                        <span class="shortcut-icon">+</span>
+                    </button>
+                    <div class="shortcut-info" style="display: none;">
+                        <div class="shortcut-display">
+                            <span class="shortcut-emoji"></span>
+                            <span class="shortcut-name"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="shortcut-item" data-index="1">
+                    <button class="shortcut-button" onclick="editShortcut(1)" title="Editar acceso directo">
+                        <span class="shortcut-icon">+</span>
+                    </button>
+                    <div class="shortcut-info" style="display: none;">
+                        <div class="shortcut-display">
+                            <span class="shortcut-emoji"></span>
+                            <span class="shortcut-name"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="shortcut-item" data-index="2">
+                    <button class="shortcut-button" onclick="editShortcut(2)" title="Editar acceso directo">
+                        <span class="shortcut-icon">+</span>
+                    </button>
+                    <div class="shortcut-info" style="display: none;">
+                        <div class="shortcut-display">
+                            <span class="shortcut-emoji"></span>
+                            <span class="shortcut-name"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="shortcut-item" data-index="3">
+                    <button class="shortcut-button" onclick="editShortcut(3)" title="Editar acceso directo">
+                        <span class="shortcut-icon">+</span>
+                    </button>
+                    <div class="shortcut-info" style="display: none;">
+                        <div class="shortcut-display">
+                            <span class="shortcut-emoji"></span>
+                            <span class="shortcut-name"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="shortcut-item" data-index="4">
+                    <button class="shortcut-button" onclick="editShortcut(4)" title="Editar acceso directo">
+                        <span class="shortcut-icon">+</span>
+                    </button>
+                    <div class="shortcut-info" style="display: none;">
+                        <div class="shortcut-display">
+                            <span class="shortcut-emoji"></span>
+                            <span class="shortcut-name"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <h1>
             <span class="welcome-icon">👋</span>
             <span>Bienvenido a AccuExtension</span>
@@ -98,85 +159,117 @@
             </div>
             
             <button class="button" onclick="openTFSLink()" id="tfsButton" style="margin-top: 20px;" disabled>
-                🔗
-                Abrir TFS
-            </button>
-            
-            <div class="section-divider"></div>
-            
-            <div class="search-section">
-                <div class="search-container">
-                    <div class="select-group">
-                        <label for="featureNumber">Numero AST</label>
-                        <input 
-                            type="number" 
-                            id="featureNumber" 
-                            placeholder="Ej: 12345"
-                            oninput="checkSearchButtonStatus()"
-                        />
-                    </div>
-                    
-                                <button class="button" onclick="searchASTLink()" id="searchButton" disabled>
                 🔍
                 Buscar AST
             </button>
-                </div>
-                
-                <div class="section-divider"></div>
-                
-                <div class="advanced-search-section">
-                    <div class="advanced-search-container">
-                        <div class="select-group">
-                            <label for="searchText">Archivo/Tabla/Codigo</label>
-                            <input 
-                                type="text" 
-                                id="searchText" 
-                                placeholder="Ej: sp_ente"
-                                oninput="checkAdvancedSearchStatus()"
-                            />
-                        </div>
-                        
-                        <div class="select-group">
-                            <label for="extSelect">ext:</label>
-                            <select id="extSelect" onchange="handleExtSelectChange()">
-                                <option value="">Ninguno</option>
-                                <option value="sp">sp</option>
-                                <option value="sql">sql</option>
-                                <option value="sqr">sqr</option>
-                                <option value="sh">sh</option>
-                                <option value="cs">cs</option>
-                                <option value="otro">Otro</option>
-                            </select>
-                        </div>
-                        
-                        <div class="select-group" id="customExtGroup" style="display: none;">
-                            <label for="customExt">Extension:</label>
-                            <input 
-                                type="text" 
-                                id="customExt" 
-                                placeholder="Ej: java"
-                                oninput="checkAdvancedSearchStatus()"
-                            />
-                        </div>
-                        
-                        <div class="checkbox-group">
-                            <label class="checkbox-label" title="Agrega &quot; &quot; a la busqueda, para que coincida exactamente con lo que se busca.">
-                                <input type="checkbox" id="literalCheck" value="literal" onchange="checkAdvancedSearchStatus()">
-                                <span>Literal</span>
-                            </label>
-                            <input type="checkbox" id="codeCheck" value="code" style="display: none;">
-                        </div>
-                        
-                        <button class="button" onclick="advancedSearchLink()" id="advancedSearchButton" disabled>
-                            🔍
-                            Buscar
-                        </button>
+            
+            <div class="search-section">
+                <div class="section-subtitle">Búsqueda por número de feature</div>
+                <div class="search-container">
+                    <div class="select-group">
+                        <label for="featureNumber">Número de Feature</label>
+                        <input type="number" id="featureNumber" placeholder="Ej: 12345" oninput="checkSearchButtonStatus()">
                     </div>
+                    <button class="button" onclick="searchASTLink()" id="searchButton" disabled>
+                        🔍
+                        Buscar
+                    </button>
+                </div>
+            </div>
+            
+            <div class="section-divider"></div>
+            
+            <div class="advanced-search-section">
+                <div class="section-subtitle">Búsqueda avanzada</div>
+                <div class="advanced-search-container">
+                    <div class="select-group">
+                        <label for="searchText">Texto a buscar</label>
+                        <input type="text" id="searchText" placeholder="Ej: nombre de archivo, tabla, línea de código" oninput="checkAdvancedSearchStatus()">
+                    </div>
+                    
+                    <div class="select-group">
+                        <label for="extSelect">Extensión de archivo</label>
+                        <select id="extSelect" onchange="handleExtSelectChange()">
+                            <option value="">Cualquier extensión</option>
+                            <option value="sql">SQL (.sql)</option>
+                            <option value="sp">Stored Procedure (.sp)</option>
+                            <option value="js">JavaScript (.js)</option>
+                            <option value="ts">TypeScript (.ts)</option>
+                            <option value="html">HTML (.html)</option>
+                            <option value="css">CSS (.css)</option>
+                            <option value="xml">XML (.xml)</option>
+                            <option value="json">JSON (.json)</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    
+                    <div class="select-group" id="customExtGroup" style="display: none;">
+                        <label for="customExt">Extensión personalizada</label>
+                        <input type="text" id="customExt" placeholder="Ej: txt, pdf, doc" oninput="checkAdvancedSearchStatus()">
+                    </div>
+                    
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="literalCheck">
+                            <span>Búsqueda literal (exacta)</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="codeCheck">
+                            <span>Búsqueda en código</span>
+                        </label>
+                    </div>
+                    
+                    <button class="button" onclick="advancedSearchLink()" id="advancedSearchButton" disabled>
+                        🔍
+                        Búsqueda Avanzada
+                    </button>
                 </div>
             </div>
         </div>
     </div>
-
+    
+    <!-- Modal para editar accesos directos -->
+    <div id="shortcutModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Editar Acceso Directo</h3>
+                <span class="close" onclick="closeShortcutModal()">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="shortcutEmoji">Selecciona un emoji:</label>
+                    <div class="emoji-selector">
+                        <button type="button" class="emoji-option" onclick="selectEmoji('🚀')">🚀</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji('⭐')">⭐</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji('🔥')">🔥</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji('💡')">💡</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji('📚')">📚</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji('🔧')">🔧</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji('📊')">📊</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji('🌐')">🌐</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji('⚡')">⚡</button>
+                        <button type="button" class="emoji-option" onclick="selectEmoji('🎯')">🎯</button>
+                    </div>
+                    <input type="hidden" id="shortcutEmoji" value="">
+                </div>
+                <div class="form-group">
+                    <label for="shortcutUrl">URL:</label>
+                    <input type="url" id="shortcutUrl" placeholder="https://ejemplo.com">
+                </div>
+                <div class="form-group">
+                    <label for="shortcutName">Nombre (opcional):</label>
+                    <input type="text" id="shortcutName" placeholder="Nombre del acceso directo">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="button" onclick="saveShortcut()">Guardar</button>
+                <button class="button button-secondary" onclick="closeShortcutModal()">Cancelar</button>
+                <button class="button button-secondary settings-button" title="Configurar accesos directos" onclick="openShortcutsSettings()">⚙️</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Script personalizado -->
     <script src="${scriptUri}"></script>
 </body>
 </html> 

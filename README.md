@@ -2,7 +2,7 @@
 
 **AccuExtension** es una extensión personalizada para desarrolladores de **Accusys Technology**, diseñada específicamente para **Cursor** para mejorar tu flujo de trabajo diario.
 
-[![Version](https://img.shields.io/badge/version-1.0.5-blue.svg)](https://open-vsx.org/extension/accusys-technology/accuextension)
+[![Version](https://img.shields.io/badge/version-1.0.6-blue.svg)](https://open-vsx.org/extension/accusys-technology/accuextension)
 [![Cursor](https://img.shields.io/badge/Cursor-1.3.9+-black.svg)](https://cursor.com/?from=home)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -48,7 +48,7 @@
 - Ingresa el número de AST → Buscar AST
 - Usa ext: para definir el tipo de archivo
 - Usa "Literal" para búsquedas exactas
-- Escribe por ejemplo nombres de archivos, tablas o lineas de codigo → "Buscar"
+- Escribe por ejemplo nombres de archivos, tablas o líneas de código → "Buscar"
 
 ### Snippets SQL
 Los snippets están disponibles automáticamente en archivos `.sql` y `.sp`. Escribe el prefijo y presiona `Tab`:
@@ -72,6 +72,37 @@ Los snippets están disponibles automáticamente en archivos `.sql` y `.sp`. Esc
 | `catalogo_standard` | Creación de catálogos COBIS |
 | `create_table_standard` | Estructura de tablas |
 | `create_view_standard` | Estructura de vistas | 
+
+---
+
+## 🔗 Accesos Directos Personalizados (Funcionalidad 1)
+
+Añade hasta 5 accesos directos con una URL.
+
+- Cómo usarlos:
+  - Haz clic en el botón "+" para abrir el modal.
+  - Elige un emoji de la lista, ingresa la URL y (opcional) un nombre.
+  - Presiona "Guardar". "Cancelar" cierra el modal y "⚙️" abre la configuración del editor para estos accesos.
+
+### ⚙️ Configuración en el Editor (Settings UI)
+
+Los accesos se configuran desde Settings en el apartado `AccuExtension > Shortcuts` (o con el botón ⚙️ del modal). Cada acceso tiene 3 campos editables:
+
+- `accuextension.shortcuts.custom{1..5}.character`  Carácter/emoji a mostrar
+- `accuextension.shortcuts.custom{1..5}.url`        URL de destino
+- `accuextension.shortcuts.custom{1..5}.name`       Nombre opcional a mostrar
+
+También hay un enlace "Vaciar" en cada `character` para limpiar los tres campos del acceso correspondiente.
+
+Ejemplo rápido (settings.json equivalente):
+
+```json
+{
+  "accuextension.shortcuts.custom1.character": "🚀",
+  "accuextension.shortcuts.custom1.url": "https://cursor.com/dashboard",
+  "accuextension.shortcuts.custom1.name": "Cursor"
+}
+```
 
 ---
 
@@ -118,6 +149,14 @@ F5
 AccuExtension/
 ├── src/
 │   ├── extension.js         # Lógica principal
+│   ├── constants/
+│   │   └── config.js        # Configuración centralizada
+│   ├── utils/
+│   │   ├── configManager.js # Gestión de configuración
+│   │   ├── pathValidator.js # Validación de rutas y URLs
+│   │   ├── toolManager.js   # Gestión de herramientas
+│   │   ├── webviewManager.js # Gestión del webview
+│   │   └── messageHandler.js # Manejo de mensajes
 │   └── webview/
 │       ├── index.html       # Interfaz HTML
 │       ├── styles.css       # Estilos CSS

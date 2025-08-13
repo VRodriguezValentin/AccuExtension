@@ -2,9 +2,10 @@
   "name": "accuextension",
   "displayName": "AccuExtension",
   "description": "Extension personalizada para desarrolladores de Accusys Technology en Cursor",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "engines": {
-    "vscode": "^1.74.0"
+    "vscode": "^1.74.0",
+    "cursor": "^1.10.0"
   },
   "categories": ["Other"],
   "keywords": ["accusys", "tfs", "ast", "activities", "manager", "productivity"],
@@ -21,6 +22,14 @@
       {
         "command": "accuextension.openSettings",
         "title": "AccuExtension: Configurar Rutas de Herramientas"
+      },
+      {
+        "command": "accuextension.openShortcutsSettings",
+        "title": "AccuExtension: Configurar Accesos Directos"
+      },
+      {
+        "command": "accuextension.clearShortcut",
+        "title": "AccuExtension: Vaciar Acceso Directo"
       }
     ],
     "snippets": [
@@ -61,6 +70,81 @@
           "type": "string",
           "default": "C:\\Accusys Technology\\AST-Activities Manager\\ejecutable\\Administrador.exe",
           "description": "Ruta al ejecutable de AST-Activities Manager"
+        },
+        "accuextension.shortcuts.custom1.character": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Carácter/emoji del acceso directo 1. [Vaciar](command:accuextension.clearShortcut?%5B1%5D)"
+        },
+        "accuextension.shortcuts.custom1.url": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "URL del acceso directo 1"
+        },
+        "accuextension.shortcuts.custom1.name": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Nombre del acceso directo 1 (opcional)"
+        },
+        "accuextension.shortcuts.custom2.character": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Carácter/emoji del acceso directo 2. [Vaciar](command:accuextension.clearShortcut?%5B2%5D)"
+        },
+        "accuextension.shortcuts.custom2.url": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "URL del acceso directo 2"
+        },
+        "accuextension.shortcuts.custom2.name": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Nombre del acceso directo 2 (opcional)"
+        },
+        "accuextension.shortcuts.custom3.character": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Carácter/emoji del acceso directo 3. [Vaciar](command:accuextension.clearShortcut?%5B3%5D)"
+        },
+        "accuextension.shortcuts.custom3.url": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "URL del acceso directo 3"
+        },
+        "accuextension.shortcuts.custom3.name": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Nombre del acceso directo 3 (opcional)"
+        },
+        "accuextension.shortcuts.custom4.character": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Carácter/emoji del acceso directo 4. [Vaciar](command:accuextension.clearShortcut?%5B4%5D)"
+        },
+        "accuextension.shortcuts.custom4.url": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "URL del acceso directo 4"
+        },
+        "accuextension.shortcuts.custom4.name": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Nombre del acceso directo 4 (opcional)"
+        },
+        "accuextension.shortcuts.custom5.character": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Carácter/emoji del acceso directo 5. [Vaciar](command:accuextension.clearShortcut?%5B5%5D)"
+        },
+        "accuextension.shortcuts.custom5.url": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "URL del acceso directo 5"
+        },
+        "accuextension.shortcuts.custom5.name": {
+          "type": "string",
+          "default": "",
+          "markdownDescription": "Nombre del acceso directo 5 (opcional)"
         }
       }
     }

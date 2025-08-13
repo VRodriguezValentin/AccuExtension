@@ -4,6 +4,32 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 
 ---
 
+## [1.0.6] - 2025-08-13
+
+### 🏗️ **Refactorización Mayor**
+- **Arquitectura modular** - Código reorganizado en módulos especializados para mejor mantenibilidad
+- **Separación de responsabilidades** - Lógica dividida en módulos específicos
+
+### 🌟 **Nuevos Módulos**
+- **`src/constants/config.js`** - Configuración centralizada de la extensión
+- **`src/utils/configManager.js`** - Gestión de configuración y temas
+- **`src/utils/pathValidator.js`** - Validación unificada de rutas y URLs
+- **`src/utils/toolManager.js`** - Gestión de herramientas externas
+- **`src/utils/webviewManager.js`** - Gestión del webview y recursos
+- **`src/utils/messageHandler.js`** - Manejo de mensajes entre webview y extensión
+
+### 🔧 **Mejoras Técnicas**
+- **Sistema de constantes** - URLs, mensajes de error y comandos centralizados
+- **Validación robusta** - Sistema unificado de validación de entrada
+- **Manejo de mensajes optimizado** - Sistema basado en mapeo de comandos
+- **Helpers para imágenes** - Código más limpio y reutilizable para recursos
+- **Gestión de errores mejorada** - Mensajes consistentes y manejo centralizado
+
+### ✨ Agregado: 
+- **Accesos Directos Personalizados** - 5 botones “+” para agregar accesos directos. - Modal: Selección de emoji predefinido, campos para URL y nombre. Botones: Guardar, Cancelar y ⚙️ (abre `accuextension.shortcuts`).
+
+---
+
 ## [1.0.5] - 2025-08-05
 
 ### ✨ Agregado

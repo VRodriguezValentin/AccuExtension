@@ -1,20 +1,34 @@
 ﻿const vscode = acquireVsCodeApi();
 
-// Función para abrir la configuración de temas
-function openThemeSettings() {
-    vscode.postMessage({
-        command: 'openThemeSettings'
-    });
-    
-    // Después de abrir la configuración, actualizar el logo
-    setTimeout(() => {
-        vscode.postMessage({
-            command: 'updateLogo'
-        });
-    }, 1000);
-}
+// Constantes para comandos de mensajes
+const COMMANDS = {
+    OPEN_THEME_SETTINGS: 'openThemeSettings',
+    GET_TOOL_PATH: 'getToolPath',
+    CHECK_AND_OPEN_TOOL: 'checkAndOpenTool',
+    OPEN_AST: 'openAST',
+    OPEN_TFS: 'openTFS',
+    SEARCH_AST: 'searchAST',
+    SHOW_ERROR: 'showError',
+    UPDATE_LOGO: 'updateLogo',
+    TOOL_PATH: 'toolPath',
+    OPEN_SETTINGS: 'openSettings',
+    OPEN_CUSTOM_URL: 'openCustomUrl',
+    OPEN_SHORTCUTS_SETTINGS: 'openShortcutsSettings'
+};
 
-const equiposPorArea = {
+// Constantes para URLs
+const URLS = {
+    TFS_BASE: 'http://tfs2018:8080/tfs/Accusys',
+    BACKLOG_PATH: '/_backlogs?level=Requirements&showParents=false&redirect=True&_a=backlog',
+    SEARCH_PATH: '/_search?type=work%20item&lp=custom-Team&text=',
+    CODE_SEARCH_PATH: '/_search?type=code&lp=custom-Team&text=',
+    SEARCH_FILTERS: '&filters=Projects%7B',
+    CODE_SEARCH_FILTERS: '&filters=ProjectFilters%7B',
+    SEARCH_SUFFIX: '%7D&_a=search'
+};
+
+// Configuración de equipos por área
+const EQUIPOS_POR_AREA = {
     'Pasivas':   ['Naranja', 'Gris', 'Celeste', 'Cobre', 'Amarillo', 'Verde'],
     'Activas':   ['Rojo', 'Blanco', 'Violeta', 'Magenta'],
     'Centrales': ['Verde'],
@@ -24,21 +38,224 @@ const equiposPorArea = {
     'Virtuales': ['Amarillo', 'Azul', 'Bronce', 'Negro', 'Plata']
 };
 
+// Variables para accesos directos
+let currentShortcutIndex = -1;
+let shortcuts = [{}, {}, {}, {}, {}];
+
+// Función para abrir la configuración de temas
+function openThemeSettings() {
+    vscode.postMessage({
+        command: COMMANDS.OPEN_THEME_SETTINGS
+    });
+    
+    // Después de abrir la configuración, actualizar el logo
+    setTimeout(() => {
+        vscode.postMessage({
+            command: COMMANDS.UPDATE_LOGO
+        });
+    }, 1000);
+}
+
 // Función para abrir herramientas
 function openTool(toolName) {
-    // Enviar mensaje para obtener la ruta desde la configuración
     vscode.postMessage({
-        command: 'getToolPath',
+        command: COMMANDS.GET_TOOL_PATH,
         toolName: toolName
     });
 }
 
 function openAST() {
     vscode.postMessage({
-        command: 'openAST'
+        command: COMMANDS.OPEN_AST
     });
 }
 
+// Funciones para accesos directos personalizados
+function editShortcut(index) {
+    currentShortcutIndex = index;
+    const shortcut = shortcuts[index] || {};
+    
+    // Limpiar selección previa de emoji
+    document.querySelectorAll('.emoji-option').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // Pre-seleccionar emoji si existe
+    if (shortcut.emoji) {
+        const emojiBtn = Array.from(document.querySelectorAll('.emoji-option')).find(btn => btn.textContent === shortcut.emoji);
+        if (emojiBtn) {
+            emojiBtn.classList.add('selected');
+        }
+    }
+    
+    // Llenar campos del modal
+    document.getElementById('shortcutEmoji').value = shortcut.emoji || '';
+    document.getElementById('shortcutUrl').value = shortcut.url || '';
+    document.getElementById('shortcutName').value = shortcut.name || '';
+    
+    // Mostrar modal
+    document.getElementById('shortcutModal').style.display = 'flex';
+}
+
+function selectEmoji(emoji) {
+    // Limpiar selección previa
+    document.querySelectorAll('.emoji-option').forEach(btn => {
+        btn.classList.remove('selected');
+    });
+    
+    // Seleccionar nuevo emoji
+    const emojiBtn = Array.from(document.querySelectorAll('.emoji-option')).find(btn => btn.textContent === emoji);
+    if (emojiBtn) {
+        emojiBtn.classList.add('selected');
+    }
+    
+    document.getElementById('shortcutEmoji').value = emoji;
+}
+
+function saveShortcut() {
+    const emoji = document.getElementById('shortcutEmoji').value;
+    const url = document.getElementById('shortcutUrl').value;
+    const name = document.getElementById('shortcutName').value;
+    
+    if (!emoji || !url) {
+        alert('Por favor, selecciona un emoji y ingresa una URL');
+        return;
+    }
+    
+    if (!isValidUrl(url)) {
+        alert('Por favor, ingresa una URL válida');
+        return;
+    }
+    
+    // Actualizar estado local para respuesta inmediata
+    shortcuts[currentShortcutIndex] = {
+        emoji: emoji,
+        url: url,
+        name: name
+    };
+    
+    // Notificar a la extensión para sincronizar con Settings (fuente de verdad)
+    vscode.postMessage({
+        command: 'syncShortcutToSettings',
+        index: currentShortcutIndex,
+        data: { character: emoji, url, name }
+    });
+    
+    // Actualizar interfaz
+    updateShortcutDisplay(currentShortcutIndex);
+    
+    // Cerrar modal
+    closeShortcutModal();
+}
+
+function deleteShortcut() {
+    if (currentShortcutIndex >= 0) {
+        // Eliminar acceso directo (estado local)
+        shortcuts.splice(currentShortcutIndex, 1);
+        // Actualizar interfaz
+        updateShortcutDisplay(currentShortcutIndex);
+        closeShortcutModal();
+    }
+}
+
+function clearShortcut() {
+    if (currentShortcutIndex >= 0) {
+        // Vaciar acceso directo (estado local)
+        shortcuts[currentShortcutIndex] = {
+            emoji: '',
+            url: '',
+            name: ''
+        };
+        // Actualizar interfaz
+        updateShortcutDisplay(currentShortcutIndex);
+        closeShortcutModal();
+    }
+}
+
+function closeShortcutModal() {
+    document.getElementById('shortcutModal').style.display = 'none';
+    currentShortcutIndex = -1;
+}
+
+function updateShortcutDisplay(index) {
+    const shortcutItem = document.querySelector(`[data-index="${index}"]`);
+    if (!shortcutItem) return;
+    
+    const shortcutButton = shortcutItem.querySelector('.shortcut-button');
+    const shortcutInfo = shortcutItem.querySelector('.shortcut-info');
+    const shortcut = shortcuts[index];
+    
+    if (shortcut && shortcut.emoji && shortcut.url) {
+        // Mostrar información del acceso directo
+        shortcutButton.style.display = 'none';
+        shortcutInfo.style.display = 'flex';
+        
+        const emojiSpan = shortcutInfo.querySelector('.shortcut-emoji');
+        const nameSpan = shortcutInfo.querySelector('.shortcut-name');
+        
+        emojiSpan.textContent = shortcut.emoji;
+        nameSpan.textContent = shortcut.name || ' ';
+        
+        // Agregar evento click para abrir URL
+        shortcutInfo.onclick = () => openCustomShortcut(shortcut);
+    } else {
+        // Mostrar botón de agregar
+        shortcutButton.style.display = 'flex';
+        shortcutInfo.style.display = 'none';
+        shortcutInfo.onclick = null;
+    }
+}
+
+function openCustomShortcut(shortcut) {
+    if (shortcut && shortcut.url) {
+        vscode.postMessage({
+            command: COMMANDS.OPEN_CUSTOM_URL,
+            url: shortcut.url
+        });
+    }
+}
+
+function loadShortcuts() {
+    // Cargar accesos directos desde localStorage
+    const saved = localStorage.getItem('accuextension-shortcuts');
+    if (saved) {
+        try {
+            shortcuts = JSON.parse(saved);
+        } catch (e) {
+            shortcuts = [];
+        }
+    }
+    
+    // Actualizar interfaz para todos los accesos directos
+    for (let i = 0; i < 5; i++) {
+        updateShortcutDisplay(i);
+    }
+}
+
+function loadShortcutsFromSettings(settingsShortcuts) {
+    // settingsShortcuts: array de 5 objetos {character,url,name}
+    shortcuts = shortcuts || [];
+    for (let i = 0; i < 5; i++) {
+        const fromSettings = settingsShortcuts[i] || {};
+        shortcuts[i] = {
+            emoji: fromSettings.character || '',
+            url: fromSettings.url || '',
+            name: fromSettings.name || ''
+        };
+    }
+    for (let i = 0; i < 5; i++) updateShortcutDisplay(i);
+}
+
+function isValidUrl(string) {
+    try {
+        new URL(string);
+        return true;
+    } catch (_) {
+        return false;
+    }
+}
+
+// Función para actualizar la lista de equipos según el área seleccionada
 function updateEquipos() {
     const areaSelect = document.getElementById('area');
     const equipoSelect = document.getElementById('equipo');
@@ -52,14 +269,14 @@ function updateEquipos() {
     if (selectedArea) {
         equipoSelect.disabled = false;
         
-        // Agregar opcion por defecto
+        // Agregar opción por defecto
         const defaultOption = document.createElement('option');
         defaultOption.value = '';
         defaultOption.textContent = 'Selecciona un equipo';
         equipoSelect.appendChild(defaultOption);
         
-        // Agregar equipos correspondientes al area
-        equiposPorArea[selectedArea].forEach(equipo => {
+        // Agregar equipos correspondientes al área
+        EQUIPOS_POR_AREA[selectedArea].forEach(equipo => {
             const option = document.createElement('option');
             option.value = equipo;
             option.textContent = equipo;
@@ -69,72 +286,69 @@ function updateEquipos() {
         equipoSelect.disabled = true;
         const defaultOption = document.createElement('option');
         defaultOption.value = '';
-        defaultOption.textContent = 'Primero selecciona un area';
+        defaultOption.textContent = 'Primero selecciona un área';
         equipoSelect.appendChild(defaultOption);
         tfsButton.disabled = true;
     }
     
-    // Verificar si se puede habilitar el boton
+    // Verificar si se puede habilitar el botón
     checkButtonStatus();
     checkSearchButtonStatus();
     checkAdvancedSearchStatus();
 }
 
+// Función para verificar el estado del botón TFS
 function checkButtonStatus() {
     const areaSelect = document.getElementById('area');
     const equipoSelect = document.getElementById('equipo');
     const tfsButton = document.getElementById('tfsButton');
     
-    if (areaSelect.value && equipoSelect.value) {
-        tfsButton.disabled = false;
-    } else {
-        tfsButton.disabled = true;
-    }
+    tfsButton.disabled = !(areaSelect.value && equipoSelect.value);
 }
 
+// Función para abrir enlace TFS
 function openTFSLink() {
     const area = document.getElementById('area').value;
     const equipo = document.getElementById('equipo').value;
     
     if (area && equipo) {
-        const url = `http://tfs2018:8080/tfs/Accusys/${area}/Equipo%20${equipo}/_backlogs?level=Requirements&showParents=false&redirect=True&_a=backlog`;
+        const url = `${URLS.TFS_BASE}/${area}/Equipo%20${equipo}${URLS.BACKLOG_PATH}`;
         
         vscode.postMessage({
-            command: 'openTFS',
+            command: COMMANDS.OPEN_TFS,
             url: url
         });
     }
 }
 
+// Función para verificar el estado del botón de búsqueda
 function checkSearchButtonStatus() {
     const areaSelect = document.getElementById('area');
     const equipoSelect = document.getElementById('equipo');
     const featureInput = document.getElementById('featureNumber');
     const searchButton = document.getElementById('searchButton');
     
-    // Habilitar el boton solo si hay area, equipo y numero de feature
-    if (areaSelect.value && equipoSelect.value && featureInput.value) {
-        searchButton.disabled = false;
-    } else {
-        searchButton.disabled = true;
-    }
+    // Habilitar el botón solo si hay área, equipo y número de feature
+    searchButton.disabled = !(areaSelect.value && equipoSelect.value && featureInput.value);
 }
 
+// Función para buscar en AST
 function searchASTLink() {
     const area = document.getElementById('area').value;
     const equipo = document.getElementById('equipo').value;
     const feature = document.getElementById('featureNumber').value;
     
     if (area && equipo && feature) {
-        const url = `http://tfs2018:8080/tfs/Accusys/${area}/Equipo%20${equipo}/_search?type=work%20item&lp=custom-Team&text=${feature}&filters=Projects%7B${area}%7D&_a=search`;
+        const url = `${URLS.TFS_BASE}/${area}/Equipo%20${equipo}${URLS.SEARCH_PATH}${feature}${URLS.SEARCH_FILTERS}${area}${URLS.SEARCH_SUFFIX}`;
         
         vscode.postMessage({
-            command: 'searchAST',
+            command: COMMANDS.SEARCH_AST,
             url: url
         });
     }
 }
 
+// Función para verificar el estado del botón de búsqueda avanzada
 function checkAdvancedSearchStatus() {
     const areaSelect = document.getElementById('area');
     const equipoSelect = document.getElementById('equipo');
@@ -143,29 +357,26 @@ function checkAdvancedSearchStatus() {
     const extSelect = document.getElementById('extSelect');
     const customExt = document.getElementById('customExt');
     
-    // Verificar si se selecciono "otro" y hay extension personalizada
+    // Verificar si se seleccionó "otro" y hay extensión personalizada
     let validExtension = true;
     if (extSelect.value === 'otro' && !customExt.value.trim()) {
         validExtension = false;
     }
     
-    // Habilitar el boton solo si hay area, equipo, texto de busqueda y extension valida
-    if (areaSelect.value && equipoSelect.value && searchText.value.trim() && validExtension) {
-        advancedButton.disabled = false;
-        
-        // Auto-seleccionar "code" si hay mas de una palabra y no esta ya seleccionado
-        const words = searchText.value.trim().split(' ');
-        if (words.length > 1) {
-            const codeCheckbox = document.getElementById('codeCheck');
-            if (codeCheckbox && !codeCheckbox.checked) {
-                codeCheckbox.checked = true;
-            }
+    // Habilitar el botón solo si hay área, equipo, texto de búsqueda y extensión válida
+    advancedButton.disabled = !(areaSelect.value && equipoSelect.value && searchText.value.trim() && validExtension);
+    
+    // Auto-seleccionar "code" si hay más de una palabra y no está ya seleccionado
+    const words = searchText.value.trim().split(' ');
+    if (words.length > 1) {
+        const codeCheckbox = document.getElementById('codeCheck');
+        if (codeCheckbox && !codeCheckbox.checked) {
+            codeCheckbox.checked = true;
         }
-    } else {
-        advancedButton.disabled = true;
     }
 }
 
+// Función para manejar cambios en el select de extensión
 function handleExtSelectChange() {
     const extSelect = document.getElementById('extSelect');
     const customExtGroup = document.getElementById('customExtGroup');
@@ -180,6 +391,7 @@ function handleExtSelectChange() {
     checkAdvancedSearchStatus();
 }
 
+// Función para búsqueda avanzada
 function advancedSearchLink() {
     const area = document.getElementById('area').value;
     const equipo = document.getElementById('equipo').value;
@@ -192,20 +404,19 @@ function advancedSearchLink() {
     if (area && equipo && searchText) {
         let searchQuery = '';
         
-        // Determinar el tipo de busqueda
-        // Si ambos estan seleccionados o solo literal, usar comillas
+        // Determinar el tipo de búsqueda
         if (literalCheck) {
-            // Busqueda literal con comillas
+            // Búsqueda literal con comillas
             searchQuery = `"${searchText}"`;
         } else if (codeCheck) {
-            // Busqueda code (espacios ya estan incluidos)
+            // Búsqueda code (espacios ya están incluidos)
             searchQuery = searchText;
         } else {
-            // Busqueda normal
+            // Búsqueda normal
             searchQuery = searchText;
         }
         
-        // Agregar extension si esta seleccionada
+        // Agregar extensión si está seleccionada
         if (extSelect === 'otro' && customExt) {
             searchQuery += ` ext:${customExt}`;
         } else if (extSelect && extSelect !== 'otro') {
@@ -216,61 +427,14 @@ function advancedSearchLink() {
         const encodedQuery = encodeURIComponent(searchQuery);
         
         // Construir la URL
-        const url = `http://tfs2018:8080/tfs/Accusys/${area}/Equipo%20${equipo}/_search?type=code&lp=custom-Team&text=${encodedQuery}&filters=ProjectFilters%7B${area}%7D&_a=search`;
+        const url = `${URLS.TFS_BASE}/${area}/Equipo%20${equipo}${URLS.CODE_SEARCH_PATH}${encodedQuery}${URLS.CODE_SEARCH_FILTERS}${area}${URLS.SEARCH_SUFFIX}`;
         
         vscode.postMessage({
-            command: 'searchAST',
+            command: COMMANDS.SEARCH_AST,
             url: url
         });
     }
 }
-
-// Agregar listener al select de equipo cuando el DOM este listo
-document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('equipo').addEventListener('change', function() {
-        checkButtonStatus();
-        checkSearchButtonStatus();
-        checkAdvancedSearchStatus();
-    });
-    
-    // Listener para el select de area para actualizar busqueda avanzada
-    document.getElementById('area').addEventListener('change', function() {
-        checkAdvancedSearchStatus();
-    });
-});
-
-// Manejador de mensajes del webview
-window.addEventListener('message', event => {
-    const message = event.data;
-    
-    switch (message.command) {
-        case 'toolPath':
-            if (message.path) {
-                // Abrir la herramienta con la ruta recibida
-                vscode.postMessage({
-                    command: 'checkAndOpenTool',
-                    path: message.path,
-                    name: getToolDisplayName(message.toolName),
-                    toolName: message.toolName
-                });
-            } else {
-                // Mostrar mensaje de error si no hay ruta configurada
-                vscode.postMessage({
-                    command: 'showError',
-                    message: `Ruta no configurada. Ve a Configuración > AccuExtension para configurar la ruta.`
-                });
-            }
-            break;
-        case 'updateLogo':
-            // Actualizar el logo del webview
-            const logoImg = document.querySelector('img[src*="accusys-logo"]');
-            if (logoImg && message.imageSrc) {
-                logoImg.src = message.imageSrc;
-            }
-            break;
-
-    }
-});
 
 // Función para obtener el nombre de visualización de la herramienta
 function getToolDisplayName(toolName) {
@@ -287,9 +451,82 @@ function getToolDisplayName(toolName) {
 // Función para abrir la configuración
 function openSettings() {
     vscode.postMessage({
-        command: 'openSettings'
+        command: COMMANDS.OPEN_SETTINGS
     });
 }
+
+// Función para abrir la configuración de accesos directos
+function openShortcutsSettings() {
+    vscode.postMessage({
+        command: COMMANDS.OPEN_SHORTCUTS_SETTINGS
+    });
+}
+
+// Agregar listeners cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    // Inicializar UI con botones "+" hasta recibir settings
+    for (let i = 0; i < 5; i++) {
+        updateShortcutDisplay(i);
+    }
+    
+    document.getElementById('equipo').addEventListener('change', function() {
+        checkButtonStatus();
+        checkSearchButtonStatus();
+        checkAdvancedSearchStatus();
+    });
+    
+    // Listener para el select de área para actualizar búsqueda avanzada
+    document.getElementById('area').addEventListener('change', function() {
+        checkAdvancedSearchStatus();
+    });
+    
+    // Cerrar modal al hacer clic fuera de él
+    window.addEventListener('click', function(event) {
+        const modal = document.getElementById('shortcutModal');
+        if (event.target === modal) {
+            closeShortcutModal();
+        }
+    });
+});
+
+// Manejador de mensajes del webview
+window.addEventListener('message', event => {
+    const message = event.data;
+    
+    switch (message.command) {
+        case COMMANDS.TOOL_PATH:
+            if (message.path) {
+                // Abrir la herramienta con la ruta recibida
+                vscode.postMessage({
+                    command: COMMANDS.CHECK_AND_OPEN_TOOL,
+                    path: message.path,
+                    name: getToolDisplayName(message.toolName),
+                    toolName: message.toolName
+                });
+            } else {
+                // Mostrar mensaje de error si no hay ruta configurada
+                vscode.postMessage({
+                    command: COMMANDS.SHOW_ERROR,
+                    message: 'Ruta no configurada. Ve a Configuración > AccuExtension para configurar la ruta.'
+                });
+            }
+            break;
+        
+        case COMMANDS.UPDATE_LOGO:
+            // Actualizar el logo del webview
+            const logoImg = document.querySelector('img[src*="accusys-logo"]');
+            if (logoImg && message.imageSrc) {
+                logoImg.src = message.imageSrc;
+            }
+            break;
+        
+        case 'initShortcutsFromSettings':
+            if (Array.isArray(message.data)) {
+                loadShortcutsFromSettings(message.data);
+            }
+            break;
+    }
+});
 
 
 
