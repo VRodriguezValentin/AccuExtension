@@ -106,6 +106,39 @@ Ejemplo rápido (settings.json equivalente):
 
 ---
 
+## ⏰ Recordatorios de Horas
+
+Sistema automático de recordatorios para cargar las horas de trabajo en el time report de Accusys.
+
+### 🔔 **Características:**
+- **Notificaciones automáticas** según el intervalo configurado
+- **Al tocar la notificación** se abre directamente el [Time Report de Accusys](https://timereport.accusys.com.ar/web/login.aspx)
+
+### ⚙️ **Configuración:**
+
+Los recordatorios se configuran desde Settings en el apartado `AccuExtension > Reminders`:
+
+- **`accuextension.reminders.enabled`** - Activar/desactivar recordatorios
+- **`accuextension.reminders.interval`** - Intervalo entre notificaciones:
+  - `30min` - Cada 30 minutos
+  - `1hr` - Cada 1 hora  
+  - `2hrs` - Cada 2 horas (por defecto)
+  - `4hrs` - Cada 4 horas
+  - `Desactivado` - Sin recordatorios
+
+### 🔧 **Ejemplo de configuración (settings.json):**
+
+```json
+{
+  "accuextension.reminders.enabled": true,
+  "accuextension.reminders.interval": "2hrs"
+}
+```
+
+**Nota**: Los cambios en la configuración se aplican inmediatamente sin necesidad de reiniciar la extensión.
+
+---
+
 ## ⚙️ Configuración
 
 ### Rutas Predeterminadas

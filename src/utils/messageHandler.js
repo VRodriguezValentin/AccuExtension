@@ -59,6 +59,10 @@ const messageHandlers = {
     
     [config.MESSAGE_COMMANDS.OPEN_SHORTCUTS_SETTINGS]: () => {
         configManager.openShortcutsSettings();
+    },
+    
+    [config.MESSAGE_COMMANDS.OPEN_TIME_REPORT]: () => {
+        configManager.openTimeReport();
     }
 };
 

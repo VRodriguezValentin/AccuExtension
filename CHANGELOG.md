@@ -27,6 +27,11 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 
 ### ✨ Agregado: 
 - **Accesos Directos Personalizados** - 5 botones “+” para agregar accesos directos. - Modal: Selección de emoji predefinido, campos para URL y nombre. Botones: Guardar, Cancelar y ⚙️ (abre `accuextension.shortcuts`).
+- **Recordatorios de Horas** - Sistema automático de notificaciones para cargar tiempo de trabajo:
+  - Configuración flexible: 30min, 1hr, 2hrs, 4hrs, Desactivado
+  - Al tocar la notificación se abre directamente el [Time Report de Accusys](https://timereport.accusys.com.ar/web/login.aspx)
+  - Configuración persistente en `accuextension.reminders.enabled` y `accuextension.reminders.interval`
+  - Comando `accuextension.openTimeReport` para abrir time report desde notificaciones
 
 ---
 

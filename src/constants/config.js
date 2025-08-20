@@ -1,5 +1,5 @@
-/**
- * ConfiguraciÛn centralizada de AccuExtension
+Ôªø/**
+ * ConfiguraciÔøΩn centralizada de AccuExtension
  * @module constants/config
  */
 
@@ -23,7 +23,7 @@ module.exports = {
         ast: 'AST-Activities Manager'
     },
     
-    // Mapeo de im·genes por herramienta
+    // Mapeo de imÔøΩgenes por herramienta
     TOOL_IMAGES: {
         putty: 'PuTTY_icon.png',
         winscp: 'WinSCP_Logo.png',
@@ -38,34 +38,46 @@ module.exports = {
         light: 'accusys-logo-negativo.png'
     },
     
-    // Mensajes de error est·ndar
+    // Mensajes de error estÔøΩndar
     ERROR_MESSAGES: {
-        TOOL_NOT_CONFIGURED: 'Ruta no configurada. Ve a ConfiguraciÛn > AccuExtension para configurar la ruta.',
-        INVALID_PATH: 'Ruta inv·lida proporcionada.',
+        TOOL_NOT_CONFIGURED: 'Ruta no configurada. Ve a Configuraci√≥n > AccuExtension para configurar la ruta.',
+        INVALID_PATH: 'Ruta inv√°lida proporcionada.',
         FILE_NOT_FOUND: 'El archivo no existe en la ruta especificada.',
-        INVALID_URL: 'URL inv·lida proporcionada.',
-        TOOL_OPEN_ERROR: 'Error al abrir la herramienta. Verifica la ruta en ConfiguraciÛn > AccuExtension.'
+        INVALID_URL: 'URL inv√°lida proporcionada.',
+        TOOL_OPEN_ERROR: 'Error al abrir la herramienta. Verifica la ruta en Configuraci√≥n > AccuExtension.'
     },
     
-    // Comandos de mensajes
+    // Comandos para mensajes
     MESSAGE_COMMANDS: {
+        GET_TOOL_PATH: 'getToolPath',
+        CHECK_AND_OPEN_TOOL: 'checkAndOpenTool',
         OPEN_AST: 'openAST',
         OPEN_TFS: 'openTFS',
         SEARCH_AST: 'searchAST',
-        OPEN_TOOL: 'openTool',
-        CHECK_AND_OPEN_TOOL: 'checkAndOpenTool',
-        GET_TOOL_PATH: 'getToolPath',
         SHOW_ERROR: 'showError',
-        OPEN_SETTINGS: 'openSettings',
-        OPEN_THEME_SETTINGS: 'openThemeSettings',
         UPDATE_LOGO: 'updateLogo',
         TOOL_PATH: 'toolPath',
-        UPDATE_LOGO_VIEW: 'updateLogo',
+        OPEN_SETTINGS: 'openSettings',
         OPEN_CUSTOM_URL: 'openCustomUrl',
-        OPEN_SHORTCUTS_SETTINGS: 'openShortcutsSettings'
+        OPEN_SHORTCUTS_SETTINGS: 'openShortcutsSettings',
+        OPEN_TIME_REPORT: 'openTimeReport'
     },
     
-    // ConfiguraciÛn de accesos directos
+    // URLs del sistema
+    SYSTEM_URLS: {
+        TIME_REPORT: 'https://timereport.accusys.com.ar/web/login.aspx'
+    },
+    
+    // Configuraci√≥n de recordatorios
+    REMINDER_INTERVALS: {
+        '30min': 30 * 60 * 1000,      // 30 minutos en milisegundos
+        '1hr': 60 * 60 * 1000,        // 1 hora en milisegundos
+        '2hrs': 2 * 60 * 60 * 1000,   // 2 horas en milisegundos
+        '4hrs': 4 * 60 * 60 * 1000,   // 4 horas en milisegundos
+        'Desactivado': 0               // Sin recordatorios
+    },
+    
+    // Configuraci√≥n de accesos directos
     SHORTCUT_CONFIG_KEYS: {
         CUSTOM1: 'accuextension.shortcuts.custom1',
         CUSTOM2: 'accuextension.shortcuts.custom2',

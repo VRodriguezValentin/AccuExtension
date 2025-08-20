@@ -1,4 +1,4 @@
-{
+﻿{
   "name": "accuextension",
   "displayName": "AccuExtension",
   "description": "Extension personalizada para desarrolladores de Accusys Technology en Cursor",
@@ -30,6 +30,10 @@
       {
         "command": "accuextension.clearShortcut",
         "title": "AccuExtension: Vaciar Acceso Directo"
+      },
+      {
+        "command": "accuextension.openTimeReport",
+        "title": "AccuExtension: Abrir Time Report"
       }
     ],
     "snippets": [
@@ -74,7 +78,7 @@
         "accuextension.shortcuts.custom1.character": {
           "type": "string",
           "default": "",
-          "markdownDescription": "Car�cter/emoji del acceso directo 1. [Vaciar](command:accuextension.clearShortcut?%5B1%5D)"
+          "markdownDescription": "Carácter/emoji del acceso directo 1. [Vaciar](command:accuextension.clearShortcut?%5B1%5D)"
         },
         "accuextension.shortcuts.custom1.url": {
           "type": "string",
@@ -89,7 +93,7 @@
         "accuextension.shortcuts.custom2.character": {
           "type": "string",
           "default": "",
-          "markdownDescription": "Car�cter/emoji del acceso directo 2. [Vaciar](command:accuextension.clearShortcut?%5B2%5D)"
+          "markdownDescription": "Carácter/emoji del acceso directo 2. [Vaciar](command:accuextension.clearShortcut?%5B2%5D)"
         },
         "accuextension.shortcuts.custom2.url": {
           "type": "string",
@@ -104,7 +108,7 @@
         "accuextension.shortcuts.custom3.character": {
           "type": "string",
           "default": "",
-          "markdownDescription": "Car�cter/emoji del acceso directo 3. [Vaciar](command:accuextension.clearShortcut?%5B3%5D)"
+          "markdownDescription": "Carácter/emoji del acceso directo 3. [Vaciar](command:accuextension.clearShortcut?%5B3%5D)"
         },
         "accuextension.shortcuts.custom3.url": {
           "type": "string",
@@ -119,7 +123,7 @@
         "accuextension.shortcuts.custom4.character": {
           "type": "string",
           "default": "",
-          "markdownDescription": "Car�cter/emoji del acceso directo 4. [Vaciar](command:accuextension.clearShortcut?%5B4%5D)"
+          "markdownDescription": "Carácter/emoji del acceso directo 4. [Vaciar](command:accuextension.clearShortcut?%5B4%5D)"
         },
         "accuextension.shortcuts.custom4.url": {
           "type": "string",
@@ -134,7 +138,7 @@
         "accuextension.shortcuts.custom5.character": {
           "type": "string",
           "default": "",
-          "markdownDescription": "Car�cter/emoji del acceso directo 5. [Vaciar](command:accuextension.clearShortcut?%5B5%5D)"
+          "markdownDescription": "Carácter/emoji del acceso directo 5. [Vaciar](command:accuextension.clearShortcut?%5B5%5D)"
         },
         "accuextension.shortcuts.custom5.url": {
           "type": "string",
@@ -145,6 +149,24 @@
           "type": "string",
           "default": "",
           "markdownDescription": "Nombre del acceso directo 5 (opcional)"
+        },
+        "accuextension.reminders.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Activar recordatorios para cargar horas de trabajo"
+        },
+        "accuextension.reminders.interval": {
+          "type": "string",
+          "default": "2hrs",
+          "enum": ["30min", "1hr", "2hrs", "4hrs", "Desactivado"],
+          "enumDescriptions": [
+            "Cada 30 minutos",
+            "Cada 1 hora", 
+            "Cada 2 horas",
+            "Cada 4 horas",
+            "Sin recordatorios"
+          ],
+          "description": "Intervalo entre recordatorios para cargar horas de trabajo"
         }
       }
     }

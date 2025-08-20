@@ -149,6 +149,54 @@ function openShortcutsSettings() {
     vscode.commands.executeCommand('workbench.action.openSettings', 'accuextension.shortcuts');
 }
 
+/**
+ * Obtiene la configuración de recordatorios
+ * @returns {Object} - Configuración de recordatorios
+ */
+function getReminderConfig() {
+    const config = vscode.workspace.getConfiguration('accuextension.reminders');
+    return {
+        enabled: config.get('enabled', true),
+        interval: config.get('interval', '2hrs')
+    };
+}
+
+/**
+ * Verifica si los recordatorios están habilitados
+ * @returns {boolean} - True si están habilitados
+ */
+function areRemindersEnabled() {
+    const config = getReminderConfig();
+    return config.enabled && config.interval !== 'Desactivado';
+}
+
+/**
+ * Obtiene el intervalo de recordatorios en milisegundos
+ * @returns {number} - Intervalo en milisegundos
+ */
+function getReminderIntervalMs() {
+    const config = getReminderConfig();
+    if (!config.enabled || config.interval === 'Desactivado') {
+        return 0;
+    }
+    
+    const { REMINDER_INTERVALS } = require('../constants/config');
+    return REMINDER_INTERVALS[config.interval] || REMINDER_INTERVALS['2hrs'];
+}
+
+/**
+ * Abre el time report de Accusys
+ */
+function openTimeReport() {
+    const { SYSTEM_URLS } = require('../constants/config');
+    try {
+        const uri = vscode.Uri.parse(SYSTEM_URLS.TIME_REPORT);
+        vscode.env.openExternal(uri);
+    } catch (error) {
+        vscode.window.showErrorMessage(`Error al abrir el time report: ${error.message}`);
+    }
+}
+
 module.exports = {
     getToolPaths,
     getToolPath,
@@ -161,5 +209,9 @@ module.exports = {
     getAllShortcutConfigs,
     clearShortcutConfig,
     openShortcutsSettings,
-    clearShortcutByCommand
+    clearShortcutByCommand,
+    getReminderConfig,
+    areRemindersEnabled,
+    getReminderIntervalMs,
+    openTimeReport
 }; 

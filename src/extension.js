@@ -44,22 +44,26 @@ function activate(context) {
         configManager.openExtensionSettings();
     });
 
-    // Registrar el comando de configuración de accesos directos
+    // Comando para abrir configuración de accesos directos
     let shortcutsSettingsDisposable = vscode.commands.registerCommand('accuextension.openShortcutsSettings', () => {
         configManager.openShortcutsSettings();
     });
 
-    // Comando para vaciar un acceso directo desde Settings UI
+    // Comando para vaciar acceso directo
     let clearShortcutDisposable = vscode.commands.registerCommand('accuextension.clearShortcut', (args) => {
-        // args puede venir como [index] desde el enlace markdown
-        const index = Array.isArray(args) ? Number(args[0]) : Number(args);
-        configManager.clearShortcutByCommand(index);
+        configManager.clearShortcutByCommand(args);
+    });
+
+    // Comando para abrir time report
+    let openTimeReportDisposable = vscode.commands.registerCommand('accuextension.openTimeReport', () => {
+        configManager.openTimeReport();
     });
 
     context.subscriptions.push(disposable);
     context.subscriptions.push(settingsDisposable);
     context.subscriptions.push(shortcutsSettingsDisposable);
     context.subscriptions.push(clearShortcutDisposable);
+    context.subscriptions.push(openTimeReportDisposable);
 
     // Crear el botón en la StatusBar
     const statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
@@ -76,6 +80,64 @@ function activate(context) {
             messageHandler.updateLogoForTheme(currentPanel, context);
         }
     });
+
+    // Sistema de recordatorios
+    let reminderTimer = null;
+
+    /**
+     * Inicia el sistema de recordatorios
+     */
+    function startReminderSystem() {
+        if (reminderTimer) {
+            clearInterval(reminderTimer);
+        }
+
+        if (!configManager.areRemindersEnabled()) {
+            return;
+        }
+
+        const intervalMs = configManager.getReminderIntervalMs();
+        if (intervalMs > 0) {
+            reminderTimer = setInterval(() => {
+                showReminderNotification();
+            }, intervalMs);
+            
+            console.log(`AccuExtension: Sistema de recordatorios iniciado con intervalo de ${intervalMs}ms`);
+        }
+    }
+
+    /**
+     * Reinicia el sistema de recordatorios
+     */
+    function restartReminderSystem() {
+        startReminderSystem();
+    }
+
+    /**
+     * Muestra la notificación de recordatorio
+     */
+    function showReminderNotification() {
+        const notification = vscode.window.showInformationMessage(
+            '⏰ ¡No te olvides de cargar las horas de trabajo!',
+            'Abrir Time Report'
+        );
+
+        notification.then(selection => {
+            if (selection === 'Abrir Time Report') {
+                configManager.openTimeReport();
+            }
+        });
+    }
+
+    // Escuchar cambios en la configuración de recordatorios
+    vscode.workspace.onDidChangeConfiguration((e) => {
+        if (e.affectsConfiguration('accuextension.reminders')) {
+            restartReminderSystem();
+        }
+    });
+
+    // Iniciar sistema de recordatorios
+    startReminderSystem();
 }
 
 function deactivate() {}
