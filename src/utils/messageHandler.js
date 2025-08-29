@@ -63,6 +63,26 @@ const messageHandlers = {
     
     [config.MESSAGE_COMMANDS.OPEN_TIME_REPORT]: () => {
         configManager.openTimeReport();
+    },
+    
+    [config.MESSAGE_COMMANDS.SAVE_TFS_SELECTION]: (area, equipo) => {
+        configManager.saveTFSSelection(area, equipo);
+    },
+    
+    [config.MESSAGE_COMMANDS.GET_TFS_SELECTION]: (panel) => {
+        try {
+            const selection = configManager.getTFSSelection();
+            
+            if (panel && panel.webview) {
+                panel.webview.postMessage({
+                    command: 'tfsSelectionLoaded',
+                    area: selection.area,
+                    equipo: selection.equipo
+                });
+            }
+        } catch (error) {
+            // Error silencioso para mantener la consola limpia
+        }
     }
 };
 
@@ -85,15 +105,16 @@ function handleMessage(message, panel, context) {
                 handler(panel, ...params);
             } else if (message.command === config.MESSAGE_COMMANDS.UPDATE_LOGO) {
                 handler(panel, context);
+            } else if (message.command === config.MESSAGE_COMMANDS.GET_TFS_SELECTION) {
+                handler(panel);
             } else {
                 handler(...params);
             }
         } catch (error) {
-            console.error(`Error handling message ${message.command}:`, error);
-            vscode.window.showErrorMessage(`Error procesando comando: ${error.message}`);
+            // Error silencioso para mantener la consola limpia
         }
     } else {
-        console.warn(`Unknown message command: ${message.command}`);
+        // Comando desconocido, continuar sin mostrar warning
     }
 }
 
@@ -157,7 +178,7 @@ function setupMessageListener(panel, context) {
                         name: data.name || ''
                     });
                 } catch (e) {
-                    console.error('Error syncing shortcut to settings', e);
+                    // Error silencioso para mantener la consola limpia
                 }
                 return;
             }
@@ -172,7 +193,7 @@ function setupMessageListener(panel, context) {
                         });
                     });
                 } catch (e) {
-                    console.error('Error bulk syncing shortcuts', e);
+                    // Error silencioso para mantener la consola limpia
                 }
                 return;
             }
@@ -187,7 +208,7 @@ function setupMessageListener(panel, context) {
         const cfgs = getAllShortcutConfigs();
         panel.webview.postMessage({ command: 'initShortcutsFromSettings', data: cfgs });
     } catch (e) {
-        console.error('Error sending initial shortcuts config', e);
+        // Error silencioso para mantener la consola limpia
     }
 
     // Escuchar cambios en configuración para sincronizar hacia el webview
@@ -197,7 +218,7 @@ function setupMessageListener(panel, context) {
                 const cfgs = getAllShortcutConfigs();
                 panel.webview.postMessage({ command: 'initShortcutsFromSettings', data: cfgs });
             } catch (err) {
-                console.error('Error broadcasting shortcuts changes', err);
+                // Error silencioso para mantener la consola limpia
             }
         }
     });
@@ -210,7 +231,7 @@ function setupMessageListener(panel, context) {
                 const cfgs = getAllShortcutConfigs();
                 panel.webview.postMessage({ command: 'initShortcutsFromSettings', data: cfgs });
             } catch (err) {
-                console.error('Error refreshing shortcuts on view state change', err);
+                // Error silencioso para mantener la consola limpia
             }
         }
     }, null, context.subscriptions);

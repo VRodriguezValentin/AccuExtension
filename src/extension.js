@@ -13,13 +13,21 @@ let currentPanel = undefined;
  * @param {vscode.ExtensionContext} context
  */
 function activate(context) {
-    console.log('AccuExtension esta activa!');
+    // Establecer el contexto global para que esté disponible en otros módulos
+    global.extensionContext = context;
+    
+    // Registrar el comando para abrir el webview
+    let webviewDisposable = vscode.commands.registerCommand('accuextension.openWebview', () => {
+        createWebviewPanel(context);
+    });
+    
+    context.subscriptions.push(webviewDisposable);
 
     // Registrar el comando principal
-    let disposable = vscode.commands.registerCommand('accuextension.showImage', () => {
+    let showImageDisposable = vscode.commands.registerCommand('accuextension.showImage', () => {
         // Si ya hay un panel abierto, mostrarlo en lugar de crear uno nuevo
         if (currentPanel) {
-            currentPanel.reveal(vscode.ViewColumn.One);
+            currentPanel.reveal(vscode.ViewColumn.Beside); // Cambiar a panel lateral
             return;
         }
 
@@ -59,7 +67,7 @@ function activate(context) {
         configManager.openTimeReport();
     });
 
-    context.subscriptions.push(disposable);
+    context.subscriptions.push(showImageDisposable);
     context.subscriptions.push(settingsDisposable);
     context.subscriptions.push(shortcutsSettingsDisposable);
     context.subscriptions.push(clearShortcutDisposable);
@@ -101,8 +109,6 @@ function activate(context) {
             reminderTimer = setInterval(() => {
                 showReminderNotification();
             }, intervalMs);
-            
-            console.log(`AccuExtension: Sistema de recordatorios iniciado con intervalo de ${intervalMs}ms`);
         }
     }
 
@@ -140,7 +146,10 @@ function activate(context) {
     startReminderSystem();
 }
 
-function deactivate() {}
+function deactivate() {
+    // Limpiar el contexto global
+    global.extensionContext = null;
+}
 
 module.exports = {
     activate,

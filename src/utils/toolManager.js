@@ -43,16 +43,19 @@ function openTool(path, name, checkExistence = false) {
         }
     }
     
-    // Ejecutar la herramienta
-    exec(`"${path}"`, (error) => {
-        if (error) {
-            vscode.window.showErrorMessage(
-                `${config.ERROR_MESSAGES.TOOL_OPEN_ERROR} ${name}: ${error.message}. Verifica la ruta en Configuración > AccuExtension.`
-            );
-        } else {
-            console.log(`${name} abierto correctamente.`);
-        }
-    });
+    try {
+        // Ejecutar la herramienta
+        exec(`"${path}"`, (error) => {
+            if (error) {
+                vscode.window.showErrorMessage(
+                    `${config.ERROR_MESSAGES.TOOL_OPEN_ERROR} ${name}: ${error.message}. Verifica la ruta en Configuración > AccuExtension.`
+                );
+            }
+        });
+    } catch (error) {
+        console.error(`Error al abrir ${name}:`, error.message);
+        return false;
+    }
 }
 
 /**

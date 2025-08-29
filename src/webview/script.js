@@ -13,7 +13,9 @@ const COMMANDS = {
     TOOL_PATH: 'toolPath',
     OPEN_SETTINGS: 'openSettings',
     OPEN_CUSTOM_URL: 'openCustomUrl',
-    OPEN_SHORTCUTS_SETTINGS: 'openShortcutsSettings'
+    OPEN_SHORTCUTS_SETTINGS: 'openShortcutsSettings',
+    SAVE_TFS_SELECTION: 'saveTFSSelection',
+    GET_TFS_SELECTION: 'getTFSSelection'
 };
 
 // Constantes para URLs
@@ -47,13 +49,6 @@ function openThemeSettings() {
     vscode.postMessage({
         command: COMMANDS.OPEN_THEME_SETTINGS
     });
-    
-    // Después de abrir la configuración, actualizar el logo
-    setTimeout(() => {
-        vscode.postMessage({
-            command: COMMANDS.UPDATE_LOGO
-        });
-    }, 1000);
 }
 
 // Función para abrir herramientas
@@ -302,8 +297,26 @@ function checkButtonStatus() {
     const areaSelect = document.getElementById('area');
     const equipoSelect = document.getElementById('equipo');
     const tfsButton = document.getElementById('tfsButton');
+    const saveButton = document.getElementById('saveButton');
     
-    tfsButton.disabled = !(areaSelect.value && equipoSelect.value);
+    const isEnabled = areaSelect.value && equipoSelect.value;
+    tfsButton.disabled = !isEnabled;
+    saveButton.disabled = !isEnabled;
+}
+
+// Función para guardar la selección de TFS
+function saveTFSSelection() {
+    const area = document.getElementById('area').value;
+    const equipo = document.getElementById('equipo').value;
+    
+    if (area && equipo) {
+        // Enviar mensaje al backend para guardar la configuración
+        vscode.postMessage({
+            command: COMMANDS.SAVE_TFS_SELECTION,
+            area: area,
+            equipo: equipo
+        });
+    }
 }
 
 // Función para abrir enlace TFS
@@ -348,31 +361,22 @@ function searchASTLink() {
     }
 }
 
-// Función para verificar el estado del botón de búsqueda avanzada
+// Función para verificar el estado de la búsqueda avanzada
 function checkAdvancedSearchStatus() {
-    const areaSelect = document.getElementById('area');
-    const equipoSelect = document.getElementById('equipo');
-    const searchText = document.getElementById('searchText');
-    const advancedButton = document.getElementById('advancedSearchButton');
+    const searchText = document.getElementById('searchText').value.trim();
     const extSelect = document.getElementById('extSelect');
     const customExt = document.getElementById('customExt');
+    const searchButton = document.getElementById('advancedSearchButton');
     
-    // Verificar si se seleccionó "otro" y hay extensión personalizada
-    let validExtension = true;
-    if (extSelect.value === 'otro' && !customExt.value.trim()) {
-        validExtension = false;
-    }
+    // El botón se habilita solo si hay texto para buscar
+    const hasText = searchText.length > 0;
     
-    // Habilitar el botón solo si hay área, equipo, texto de búsqueda y extensión válida
-    advancedButton.disabled = !(areaSelect.value && equipoSelect.value && searchText.value.trim() && validExtension);
-    
-    // Auto-seleccionar "code" si hay más de una palabra y no está ya seleccionado
-    const words = searchText.value.trim().split(' ');
-    if (words.length > 1) {
-        const codeCheckbox = document.getElementById('codeCheck');
-        if (codeCheckbox && !codeCheckbox.checked) {
-            codeCheckbox.checked = true;
-        }
+    // Verificar si se necesita extensión personalizada
+    if (extSelect.value === 'otro') {
+        const hasCustomExt = customExt.value.trim().length > 0;
+        searchButton.disabled = !hasText || !hasCustomExt;
+    } else {
+        searchButton.disabled = !hasText;
     }
 }
 
@@ -383,11 +387,14 @@ function handleExtSelectChange() {
     
     if (extSelect.value === 'otro') {
         customExtGroup.style.display = 'block';
+        customExtGroup.classList.add('show');
     } else {
         customExtGroup.style.display = 'none';
+        customExtGroup.classList.remove('show');
         document.getElementById('customExt').value = '';
     }
     
+    // Verificar el estado del botón después del cambio
     checkAdvancedSearchStatus();
 }
 
@@ -398,23 +405,8 @@ function advancedSearchLink() {
     const searchText = document.getElementById('searchText').value.trim();
     const extSelect = document.getElementById('extSelect').value;
     const customExt = document.getElementById('customExt').value.trim();
-    const literalCheck = document.getElementById('literalCheck').checked;
-    const codeCheck = document.getElementById('codeCheck').checked;
-    
     if (area && equipo && searchText) {
-        let searchQuery = '';
-        
-        // Determinar el tipo de búsqueda
-        if (literalCheck) {
-            // Búsqueda literal con comillas
-            searchQuery = `"${searchText}"`;
-        } else if (codeCheck) {
-            // Búsqueda code (espacios ya están incluidos)
-            searchQuery = searchText;
-        } else {
-            // Búsqueda normal
-            searchQuery = searchText;
-        }
+        let searchQuery = searchText;
         
         // Agregar extensión si está seleccionada
         if (extSelect === 'otro' && customExt) {
@@ -462,12 +454,45 @@ function openShortcutsSettings() {
     });
 }
 
+// Función para cargar la configuración guardada de TFS
+function loadTFSSelection() {
+    vscode.postMessage({
+        command: COMMANDS.GET_TFS_SELECTION
+    });
+}
+
+// Función para aplicar la selección guardada a los selects
+function applyTFSSelection(area, equipo) {
+    if (area && equipo) {
+        // Seleccionar el área
+        const areaSelect = document.getElementById('area');
+        areaSelect.value = area;
+        
+        // Actualizar la lista de equipos
+        updateEquipos();
+        
+        // Después de un pequeño delay, seleccionar el equipo
+        setTimeout(() => {
+            const equipoSelect = document.getElementById('equipo');
+            equipoSelect.value = equipo;
+            
+            // Verificar el estado de los botones
+            checkButtonStatus();
+            checkSearchButtonStatus();
+            checkAdvancedSearchStatus();
+        }, 100);
+    }
+}
+
 // Agregar listeners cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializar UI con botones "+" hasta recibir settings
     for (let i = 0; i < 5; i++) {
         updateShortcutDisplay(i);
     }
+    
+    // Cargar la configuración guardada de TFS
+    loadTFSSelection();
     
     document.getElementById('equipo').addEventListener('change', function() {
         checkButtonStatus();
@@ -524,6 +549,11 @@ window.addEventListener('message', event => {
             if (Array.isArray(message.data)) {
                 loadShortcutsFromSettings(message.data);
             }
+            break;
+            
+        case 'tfsSelectionLoaded':
+            // Aplicar la selección guardada de TFS
+            applyTFSSelection(message.area, message.equipo);
             break;
     }
 });

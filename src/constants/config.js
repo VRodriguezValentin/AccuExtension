@@ -58,9 +58,12 @@ module.exports = {
         UPDATE_LOGO: 'updateLogo',
         TOOL_PATH: 'toolPath',
         OPEN_SETTINGS: 'openSettings',
+        OPEN_THEME_SETTINGS: 'openThemeSettings',
         OPEN_CUSTOM_URL: 'openCustomUrl',
         OPEN_SHORTCUTS_SETTINGS: 'openShortcutsSettings',
-        OPEN_TIME_REPORT: 'openTimeReport'
+        OPEN_TIME_REPORT: 'openTimeReport',
+        SAVE_TFS_SELECTION: 'saveTFSSelection',
+        GET_TFS_SELECTION: 'getTFSSelection'
     },
     
     // URLs del sistema
@@ -84,5 +87,11 @@ module.exports = {
         CUSTOM3: 'accuextension.shortcuts.custom3',
         CUSTOM4: 'accuextension.shortcuts.custom4',
         CUSTOM5: 'accuextension.shortcuts.custom5'
+    },
+    
+    // Configuración de TFS
+    TFS_CONFIG_KEYS: {
+        SELECTED_AREA: 'accuextension.tfs.selectedArea',
+        SELECTED_EQUIPO: 'accuextension.tfs.selectedEquipo'
     }
 }; 

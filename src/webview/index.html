@@ -10,7 +10,7 @@
 <body>
     <div class="container">
         <!-- Botón de configuración de tema -->
-        <button class="theme-config-button" onclick="openThemeSettings()" title="Configurar tema del editor">
+        <button class="theme-toggle" onclick="openThemeSettings()" title="Configurar tema del editor">
             🎨
         </button>
         
@@ -156,12 +156,15 @@
                         <option value="">Primero selecciona un area</option>
                     </select>
                 </div>
+                
+                <button class="button tfs-button" onclick="openTFSLink()" id="tfsButton" disabled title="Abrir TFS en el navegador">
+                    🌐
+                </button>
+                
+                <button class="button save-button" onclick="saveTFSSelection()" id="saveButton" disabled title="Guardar área y equipo como predeterminados">
+                    💾
+                </button>
             </div>
-            
-            <button class="button" onclick="openTFSLink()" id="tfsButton" style="margin-top: 20px;" disabled>
-                🔍
-                Buscar AST
-            </button>
             
             <div class="search-section">
                 <div class="section-subtitle">Búsqueda por número de feature</div>
@@ -177,46 +180,32 @@
                 </div>
             </div>
             
-            <div class="section-divider"></div>
-            
             <div class="advanced-search-section">
                 <div class="section-subtitle">Búsqueda avanzada</div>
                 <div class="advanced-search-container">
-                    <div class="select-group">
+                    <div class="search-text-group">
                         <label for="searchText">Texto a buscar</label>
                         <input type="text" id="searchText" placeholder="Ej: nombre de archivo, tabla, línea de código" oninput="checkAdvancedSearchStatus()">
                     </div>
                     
-                    <div class="select-group">
+                    <div class="extension-group">
                         <label for="extSelect">Extensión de archivo</label>
                         <select id="extSelect" onchange="handleExtSelectChange()">
                             <option value="">Cualquier extensión</option>
                             <option value="sql">SQL (.sql)</option>
                             <option value="sp">Stored Procedure (.sp)</option>
-                            <option value="js">JavaScript (.js)</option>
-                            <option value="ts">TypeScript (.ts)</option>
-                            <option value="html">HTML (.html)</option>
-                            <option value="css">CSS (.css)</option>
+                            <option value="cs">C# (.cs)</option>
+                            <option value="vb">VisualBasic (.vb)</option>
+                            <option value="frm">FRM (.frm)</option>
                             <option value="xml">XML (.xml)</option>
                             <option value="json">JSON (.json)</option>
                             <option value="otro">Otro</option>
                         </select>
                     </div>
                     
-                    <div class="select-group" id="customExtGroup" style="display: none;">
+                    <div class="custom-extension-group" id="customExtGroup" style="display: none;">
                         <label for="customExt">Extensión personalizada</label>
-                        <input type="text" id="customExt" placeholder="Ej: txt, pdf, doc" oninput="checkAdvancedSearchStatus()">
-                    </div>
-                    
-                    <div class="checkbox-group">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="literalCheck">
-                            <span>Búsqueda literal (exacta)</span>
-                        </label>
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="codeCheck">
-                            <span>Búsqueda en código</span>
-                        </label>
+                        <input type="text" id="customExt" placeholder="Ej: .txt, .pdf, .doc" oninput="checkAdvancedSearchStatus()">
                     </div>
                     
                     <button class="button" onclick="advancedSearchLink()" id="advancedSearchButton" disabled>

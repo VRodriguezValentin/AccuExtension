@@ -1,5 +1,5 @@
-/**
- * Gestión del webview para AccuExtension
+ï»¿/**
+ * GestiÃ³n del webview para AccuExtension
  * @module utils/webviewManager
  */
 
@@ -10,14 +10,14 @@ const config = require('../constants/config');
 
 /**
  * Crea y configura un nuevo panel webview
- * @param {vscode.ExtensionContext} context - Contexto de la extensión
+ * @param {vscode.ExtensionContext} context - Contexto de la extensiÃ³n
  * @returns {vscode.WebviewPanel} - Panel del webview configurado
  */
 function createWebviewPanel(context) {
     const panel = vscode.window.createWebviewPanel(
         'accuExtensionView',
         'AccuExtension',
-        vscode.ViewColumn.One,
+        vscode.ViewColumn.Beside, // Cambiar a panel lateral a la derecha
         {
             enableScripts: true,
             localResourceRoots: [
@@ -31,8 +31,8 @@ function createWebviewPanel(context) {
 }
 
 /**
- * Obtiene el logo apropiado según el tema actual
- * @param {vscode.ExtensionContext} context - Contexto de la extensión
+ * Obtiene el logo apropiado segÃºn el tema actual
+ * @param {vscode.ExtensionContext} context - Contexto de la extensiÃ³n
  * @param {vscode.WebviewPanel} panel - Panel del webview
  * @returns {string} - URI del logo como string
  */
@@ -49,7 +49,7 @@ function getLogoUri(context, panel) {
 
 /**
  * Obtiene la URI de una imagen de herramienta
- * @param {vscode.ExtensionContext} context - Contexto de la extensión
+ * @param {vscode.ExtensionContext} context - Contexto de la extensiÃ³n
  * @param {vscode.WebviewPanel} panel - Panel del webview
  * @param {string} toolName - Nombre de la herramienta
  * @returns {string} - URI de la imagen como string
@@ -67,10 +67,10 @@ function getToolImageUri(context, panel, toolName) {
 }
 
 /**
- * Obtiene todas las URIs de imágenes de herramientas
- * @param {vscode.ExtensionContext} context - Contexto de la extensión
+ * Obtiene todas las URIs de imÃ¡genes de herramientas
+ * @param {vscode.ExtensionContext} context - Contexto de la extensiÃ³n
  * @param {vscode.WebviewPanel} panel - Panel del webview
- * @returns {Object} - Objeto con todas las URIs de imágenes
+ * @returns {Object} - Objeto con todas las URIs de imÃ¡genes
  */
 function getAllToolImageUris(context, panel) {
     const imageUris = {};
@@ -100,7 +100,7 @@ function getAllToolImageUris(context, panel) {
 
 /**
  * Obtiene las URIs de los archivos CSS y JavaScript
- * @param {vscode.ExtensionContext} context - Contexto de la extensión
+ * @param {vscode.ExtensionContext} context - Contexto de la extensiÃ³n
  * @param {vscode.WebviewPanel} panel - Panel del webview
  * @returns {Object} - Objeto con las URIs de los archivos
  */
@@ -120,7 +120,7 @@ function getAssetUris(context, panel) {
 
 /**
  * Lee y procesa el contenido HTML del webview
- * @param {vscode.ExtensionContext} context - Contexto de la extensión
+ * @param {vscode.ExtensionContext} context - Contexto de la extensiÃ³n
  * @param {vscode.WebviewPanel} panel - Panel del webview
  * @returns {string} - Contenido HTML procesado
  */
@@ -133,13 +133,6 @@ function getWebviewHtml(context, panel) {
     const toolImageUris = getAllToolImageUris(context, panel);
     const assetUris = getAssetUris(context, panel);
     
-    // Debug detallado para Extension Debugger
-    console.log('=== ACCUEXTENSION DEBUG ===');
-    console.log('Context extensionPath:', context.extensionPath);
-    console.log('Logo URI:', logoUri);
-    console.log('Tool Image URIs:', toolImageUris);
-    console.log('Asset URIs:', assetUris);
-    
     // Reemplazar todas las variables en el HTML
     const replacements = {
         '${imageSrc}': logoUri,
@@ -148,35 +141,25 @@ function getWebviewHtml(context, panel) {
         ...toolImageUris
     };
     
-    console.log('Replacements object:', replacements);
-    console.log('HTML content before replacement length:', htmlContent.length);
-    
-    // Verificar que las variables estén en el HTML
+    // Verificar que las variables estÃ©n en el HTML
     Object.keys(replacements).forEach(placeholder => {
         const count = (htmlContent.match(new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length;
-        console.log(`Placeholder ${placeholder} found ${count} times in HTML`);
+        // Placeholder encontrado, continuar
     });
     
     Object.entries(replacements).forEach(([placeholder, value]) => {
         if (value) {
-            const beforeCount = (htmlContent.match(new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length;
             htmlContent = htmlContent.replace(placeholder, value);
-            const afterCount = (htmlContent.match(new RegExp(placeholder.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g')) || []).length;
-            console.log(`Replaced ${placeholder}: ${beforeCount} ? ${afterCount} occurrences`);
-        } else {
-            console.warn(`AccuExtension: Missing value for placeholder: ${placeholder}`);
         }
+        // Si no hay valor, continuar sin mostrar warning
     });
-    
-    console.log('HTML content after replacement length:', htmlContent.length);
-    console.log('=== END ACCUEXTENSION DEBUG ===');
     
     return htmlContent;
 }
 
 /**
  * Configura el contenido HTML del webview
- * @param {vscode.ExtensionContext} context - Contexto de la extensión
+ * @param {vscode.ExtensionContext} context - Contexto de la extensiÃ³n
  * @param {vscode.WebviewPanel} panel - Panel del webview
  */
 function setupWebviewContent(context, panel) {

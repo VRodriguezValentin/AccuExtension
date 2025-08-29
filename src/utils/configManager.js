@@ -1,12 +1,12 @@
-/**
- * GestiÛn de configuraciÛn para AccuExtension
+Ôªø/**
+ * Gesti√≥n de configuraci√≥n para AccuExtension
  * @module utils/configManager
  */
 
 const vscode = require('vscode');
 
 /**
- * Obtiene las rutas de las herramientas desde la configuraciÛn de Cursor
+ * Obtiene las rutas de las herramientas desde la configuraci√≥n de Cursor
  * @returns {Object} - Objeto con las rutas configuradas para cada herramienta
  */
 function getToolPaths() {
@@ -22,9 +22,9 @@ function getToolPaths() {
 }
 
 /**
- * Obtiene la configuraciÛn de una herramienta especÌfica
+ * Obtiene la configuraci√≥n de una herramienta espec√≠fica
  * @param {string} toolName - Nombre de la herramienta
- * @returns {string|null} - Ruta configurada o null si no est· configurada
+ * @returns {string|null} - Ruta configurada o null si no est√° configurada
  */
 function getToolPath(toolName) {
     const toolPaths = getToolPaths();
@@ -32,9 +32,9 @@ function getToolPath(toolName) {
 }
 
 /**
- * Verifica si una herramienta est· configurada
+ * Verifica si una herramienta est√° configurada
  * @param {string} toolName - Nombre de la herramienta
- * @returns {boolean} - True si la herramienta est· configurada
+ * @returns {boolean} - True si la herramienta est√° configurada
  */
 function isToolConfigured(toolName) {
     const path = getToolPath(toolName);
@@ -42,8 +42,8 @@ function isToolConfigured(toolName) {
 }
 
 /**
- * Obtiene la configuraciÛn del tema actual
- * @returns {Object} - InformaciÛn del tema actual
+ * Obtiene la configuraci√≥n del tema actual
+ * @returns {Object} - Informaci√≥n del tema actual
  */
 function getCurrentTheme() {
     const currentTheme = vscode.window.activeColorTheme;
@@ -55,23 +55,34 @@ function getCurrentTheme() {
 }
 
 /**
- * Abre la configuraciÛn de la extensiÛn
+ * Abre la configuraci√≥n de la extensi√≥n
  */
 function openExtensionSettings() {
     vscode.commands.executeCommand('workbench.action.openSettings', 'accuextension.tools');
 }
 
 /**
- * Abre la configuraciÛn de temas
+ * Abre la configuraci√≥n de temas
  */
 function openThemeSettings() {
-    vscode.commands.executeCommand('workbench.action.selectTheme');
+    try {
+        // Comando que abre la paleta de comandos y filtra por tema
+        vscode.commands.executeCommand('workbench.action.selectTheme');
+    } catch (error) {
+        try {
+            // Fallback: abrir configuraci√≥n general
+            vscode.commands.executeCommand('workbench.action.openSettings');
+        } catch (fallbackError) {
+            // Si todo falla, mostrar un mensaje
+            vscode.window.showInformationMessage('Para cambiar el tema, ve a Configuraci√≥n > Color Theme');
+        }
+    }
 }
 
 /**
- * Obtiene la configuraciÛn de un acceso directo especÌfico
- * @param {number} index - Õndice del acceso directo (0-4)
- * @returns {Object} - ConfiguraciÛn del acceso directo
+ * Obtiene la configuraci√≥n de un acceso directo espec√≠fico
+ * @param {number} index - √çndice del acceso directo (0-4)
+ * @returns {Object} - Configuraci√≥n del acceso directo
  */
 function getShortcutConfig(index) {
     const config = vscode.workspace.getConfiguration();
@@ -92,9 +103,9 @@ function getShortcutConfig(index) {
 }
 
 /**
- * Actualiza la configuraciÛn de un acceso directo
- * @param {number} index - Õndice del acceso directo (0-4)
- * @param {Object} config - Nueva configuraciÛn
+ * Actualiza la configuraci√≥n de un acceso directo
+ * @param {number} index - √çndice del acceso directo (0-4)
+ * @param {Object} config - Nueva configuraci√≥n
  */
 function updateShortcutConfig(index, data) {
     const base = `accuextension.shortcuts.custom${index + 1}`;
@@ -123,8 +134,8 @@ function getAllShortcutConfigs() {
 }
 
 /**
- * Limpia la configuraciÛn de un acceso directo (lo deja vacÌo)
- * @param {number} index - Õndice del acceso directo (0-4)
+ * Limpia la configuraci√≥n de un acceso directo (lo deja vac√≠o)
+ * @param {number} index - √çndice del acceso directo (0-4)
  */
 function clearShortcutConfig(index) {
     updateShortcutConfig(index, {
@@ -135,7 +146,7 @@ function clearShortcutConfig(index) {
 }
 
 /**
- * VacÌa un acceso directo desde un comando (Ìndice 1..5)
+ * Vac√≠a un acceso directo desde un comando (√≠ndice 1..5)
  */
 function clearShortcutByCommand(oneBasedIndex) {
     const index = Math.max(0, Math.min(4, (oneBasedIndex || 1) - 1));
@@ -143,15 +154,15 @@ function clearShortcutByCommand(oneBasedIndex) {
 }
 
 /**
- * Abre la configuraciÛn de accesos directos
+ * Abre la configuraci√≥n de accesos directos
  */
 function openShortcutsSettings() {
     vscode.commands.executeCommand('workbench.action.openSettings', 'accuextension.shortcuts');
 }
 
 /**
- * Obtiene la configuraciÛn de recordatorios
- * @returns {Object} - ConfiguraciÛn de recordatorios
+ * Obtiene la configuraci√≥n de recordatorios
+ * @returns {Object} - Configuraci√≥n de recordatorios
  */
 function getReminderConfig() {
     const config = vscode.workspace.getConfiguration('accuextension.reminders');
@@ -162,8 +173,8 @@ function getReminderConfig() {
 }
 
 /**
- * Verifica si los recordatorios est·n habilitados
- * @returns {boolean} - True si est·n habilitados
+ * Verifica si los recordatorios est√°n habilitados
+ * @returns {boolean} - True si est√°n habilitados
  */
 function areRemindersEnabled() {
     const config = getReminderConfig();
@@ -197,6 +208,96 @@ function openTimeReport() {
     }
 }
 
+/**
+ * Guarda la selecci√≥n de √°rea y equipo de TFS
+ * @param {string} area - √Årea seleccionada
+ * @param {string} equipo - Equipo seleccionado
+ */
+async function saveTFSSelection(area, equipo) {
+    try {
+        // Verificar que los valores no sean undefined o null
+        if (!area || !equipo) {
+            vscode.window.showErrorMessage('Error: Valores inv√°lidos para guardar');
+            return;
+        }
+        
+        // Usar el almacenamiento global de la extensi√≥n
+        const context = getExtensionContext();
+        if (context) {
+            // Guardar en el almacenamiento global
+            await context.globalState.update('tfs.selectedArea', area);
+            await context.globalState.update('tfs.selectedEquipo', equipo);
+            
+            vscode.window.showInformationMessage(`Configuraci√≥n de TFS guardada: ${area} - ${equipo}`);
+        } else {
+            vscode.window.showErrorMessage('Error: No se pudo acceder al almacenamiento de la extensi√≥n');
+        }
+    } catch (error) {
+        vscode.window.showErrorMessage(`Error al guardar la configuraci√≥n de TFS: ${error.message}`);
+    }
+}
+
+/**
+ * Obtiene la configuraci√≥n guardada de TFS
+ * @returns {Object} - Objeto con √°rea y equipo guardados
+ */
+function getTFSSelection() {
+    try {
+        // Usar el almacenamiento global de la extensi√≥n
+        const context = getExtensionContext();
+        if (context) {
+            const area = context.globalState.get('tfs.selectedArea', '');
+            const equipo = context.globalState.get('tfs.selectedEquipo', '');
+            
+            return { area, equipo };
+        } else {
+            return { area: '', equipo: '' };
+        }
+    } catch (error) {
+        return { area: '', equipo: '' };
+    }
+}
+
+/**
+ * Limpia la configuraci√≥n guardada de TFS
+ */
+function clearTFSSelection() {
+    const { TFS_CONFIG_KEYS } = require('../constants/config');
+    try {
+        const config = vscode.workspace.getConfiguration();
+        config.update(TFS_CONFIG_KEYS.SELECTED_AREA, undefined, vscode.ConfigurationTarget.Global);
+        config.update(TFS_CONFIG_KEYS.SELECTED_EQUIPO, undefined, vscode.ConfigurationTarget.Global);
+        
+        vscode.window.showInformationMessage('Configuraci√≥n de TFS limpiada');
+    } catch (error) {
+        vscode.window.showErrorMessage(`Error al limpiar la configuraci√≥n de TFS: ${error.message}`);
+    }
+}
+
+/**
+ * Obtiene el contexto de la extensi√≥n
+ * @returns {vscode.ExtensionContext|null} - Contexto de la extensi√≥n o null si no est√° disponible
+ */
+function getExtensionContext() {
+    // Intentar obtener el contexto desde el m√≥dulo principal
+    try {
+        // Buscar en el m√≥dulo principal de la extensi√≥n
+        const mainModule = require.main;
+        if (mainModule && mainModule.exports && mainModule.exports.context) {
+            return mainModule.exports.context;
+        }
+        
+        // Si no est√° disponible, intentar usar una variable global
+        if (global.extensionContext) {
+            return global.extensionContext;
+        }
+        
+        return null;
+    } catch (error) {
+        return null;
+    }
+}
+
 module.exports = {
     getToolPaths,
     getToolPath,
@@ -213,5 +314,8 @@ module.exports = {
     getReminderConfig,
     areRemindersEnabled,
     getReminderIntervalMs,
-    openTimeReport
+    openTimeReport,
+    saveTFSSelection,
+    getTFSSelection,
+    clearTFSSelection
 }; 
