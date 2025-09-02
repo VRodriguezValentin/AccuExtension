@@ -27,7 +27,7 @@ function activate(context) {
     let showImageDisposable = vscode.commands.registerCommand('accuextension.showImage', () => {
         // Si ya hay un panel abierto, mostrarlo en lugar de crear uno nuevo
         if (currentPanel) {
-            currentPanel.reveal(vscode.ViewColumn.Beside); // Cambiar a panel lateral
+            currentPanel.reveal(vscode.ViewColumn.Beside, true); // Revertir a Beside con preserveFocus
             return;
         }
 

@@ -1,4 +1,4 @@
-﻿{
+{
   "name": "accuextension",
   "displayName": "AccuExtension",
   "description": "Extension personalizada para desarrolladores de Accusys Technology en Cursor",
@@ -193,4 +193,4 @@
     "url": "https://github.com/VRodriguezValentin/AccuExtension/issues"
   },
   "icon": "media/accusys-isotipo.png"
-} 
+}

@@ -14,7 +14,10 @@
             🎨
         </button>
         
-        <!-- Sección de accesos directos personalizados -->
+        <!-- Logo principal -->
+        <img src="${imageSrc}" alt="Accusys Logo">
+        
+        <!-- Accesos directos personalizados -->
         <div class="custom-shortcuts">
             <div class="shortcuts-container">
                 <div class="shortcut-item" data-index="0">
@@ -75,12 +78,6 @@
             </div>
         </div>
         
-        <h1>
-            <span class="welcome-icon">👋</span>
-            <span>Bienvenido a AccuExtension</span>
-        </h1>
-        <img src="${imageSrc}" alt="Accusys Logo">
-        
         <!-- Menú de herramientas -->
         <div class="tools-menu">
             <!-- Botón de configuración en la esquina superior derecha -->
@@ -88,48 +85,46 @@
                 ⚙️
             </button>
             
-            <div class="tool-item" onclick="openTool('putty')">
+            <div class="tool-item" onclick="openTool('putty')" title="PuTTY">
                 <img src="${puttyImage}" alt="PuTTY" class="tool-icon">
                 <span class="tool-name">PuTTY</span>
             </div>
-            <div class="tool-divider"></div>
-            <div class="tool-item" onclick="openTool('winscp')">
+            <div class="tool-item" onclick="openTool('winscp')" title="WinSCP">
                 <img src="${winscpImage}" alt="WinSCP" class="tool-icon">
                 <span class="tool-name">WinSCP</span>
             </div>
-            <div class="tool-divider"></div>
-            <div class="tool-item" onclick="openTool('soapui')">
+            <div class="tool-item" onclick="openTool('soapui')" title="SoapUI">
                 <img src="${soapuiImage}" alt="SoapUI" class="tool-icon">
                 <span class="tool-name">SoapUI</span>
             </div>
-            <div class="tool-divider"></div>
-            <div class="tool-item" onclick="openTool('isqlw')">
+            <div class="tool-item" onclick="openTool('isqlw')" title="ISQLW">
                 <img src="${isqlwImage}" alt="ISQLW" class="tool-icon">
                 <span class="tool-name">ISQLW</span>
             </div>
-            <div class="tool-divider"></div>
-            <div class="tool-item" onclick="openTool('cobis')">
+            <div class="tool-item" onclick="openTool('cobis')" title="CobisExplorer">
                 <img src="${cobisImage}" alt="CobisExplorer" class="tool-icon">
                 <span class="tool-name">CobisExplorer</span>
             </div>
         </div>
         
+        <!-- Sección AST -->
         <div class="section">
             <div class="reminder">
                 <span class="reminder-icon">⌚</span>
                 <span>No olvides cargar las horas de trabajo</span>
             </div>
-            <button class="button" onclick="openAST()">
-                📊
-                Abrir AST
-            </button>
-            <a href="https://timereport.accusys.com.ar/web/login.aspx" target="_blank" class="ast-web-link">
-                🌐
-                Abrir AST Web
-            </a>
+            <div class="ast-buttons-container">
+                <button class="button" onclick="openAST()">
+                    📊 Abrir AST
+                </button>
+                <a href="https://timereport.accusys.com.ar/web/login.aspx" target="_blank" class="ast-web-link">
+                    🌐 Abrir AST Web
+                </a>
+            </div>
         </div>
         
-        <div class="section" style="margin-top: 20px;">
+        <!-- Sección TFS -->
+        <div class="section">
             <div class="tfs-title">
                 <span class="tfs-icon">📋</span>
                 <span>Acceso a TFS</span>
@@ -137,9 +132,9 @@
             
             <div class="select-container">
                 <div class="select-group">
-                    <label for="area">Area</label>
+                    <label for="area">Área</label>
                     <select id="area" onchange="updateEquipos()">
-                        <option value="">Selecciona un area</option>
+                        <option value="">Selecciona un área</option>
                         <option value="Pasivas">Pasivas</option>
                         <option value="Activas">Activas</option>
                         <option value="Centrales">Centrales</option>
@@ -153,19 +148,25 @@
                 <div class="select-group">
                     <label for="equipo">Equipo</label>
                     <select id="equipo" disabled>
-                        <option value="">Primero selecciona un area</option>
+                        <option value="">Primero selecciona un área</option>
                     </select>
                 </div>
                 
-                <button class="button tfs-button" onclick="openTFSLink()" id="tfsButton" disabled title="Abrir TFS en el navegador">
-                    🌐
-                </button>
-                
-                <button class="button save-button" onclick="saveTFSSelection()" id="saveButton" disabled title="Guardar área y equipo como predeterminados">
-                    💾
-                </button>
+                <div class="tfs-buttons-container">
+                    <button class="button tfs-button" onclick="openTFSLink()" id="tfsButton" disabled title="Abrir TFS en el navegador">
+                        🌐 Abrir TFS
+                    </button>
+                    
+                    <button class="button save-button" onclick="saveTFSSelection()" id="saveButton" disabled title="Guardar área y equipo como predeterminados">
+                        💾 Guardar
+                    </button>
+                </div>
             </div>
-            
+        </div>
+        
+        <!-- Contenedor para secciones de búsqueda lado a lado -->
+        <div class="search-sections-container">
+            <!-- Búsqueda por número -->
             <div class="search-section">
                 <div class="section-subtitle">Búsqueda por número de feature</div>
                 <div class="search-container">
@@ -174,12 +175,12 @@
                         <input type="number" id="featureNumber" placeholder="Ej: 12345" oninput="checkSearchButtonStatus()">
                     </div>
                     <button class="button" onclick="searchASTLink()" id="searchButton" disabled>
-                        🔍
-                        Buscar
+                        🔍 Buscar
                     </button>
                 </div>
             </div>
             
+            <!-- Búsqueda avanzada -->
             <div class="advanced-search-section">
                 <div class="section-subtitle">Búsqueda avanzada</div>
                 <div class="advanced-search-container">
@@ -203,14 +204,13 @@
                         </select>
                     </div>
                     
-                    <div class="custom-extension-group" id="customExtGroup" style="display: none;">
+                    <div class="custom-extension-group" id="customExtGroup">
                         <label for="customExt">Extensión personalizada</label>
                         <input type="text" id="customExt" placeholder="Ej: .txt, .pdf, .doc" oninput="checkAdvancedSearchStatus()">
                     </div>
                     
                     <button class="button" onclick="advancedSearchLink()" id="advancedSearchButton" disabled>
-                        🔍
-                        Búsqueda Avanzada
+                        🔍 Búsqueda Avanzada
                     </button>
                 </div>
             </div>

@@ -44,14 +44,14 @@ function openTool(path, name, checkExistence = false) {
     }
     
     try {
-        // Ejecutar la herramienta
-        exec(`"${path}"`, (error) => {
-            if (error) {
-                vscode.window.showErrorMessage(
-                    `${config.ERROR_MESSAGES.TOOL_OPEN_ERROR} ${name}: ${error.message}. Verifica la ruta en Configuración > AccuExtension.`
-                );
-            }
-        });
+    // Ejecutar la herramienta
+    exec(`"${path}"`, (error) => {
+        if (error) {
+            vscode.window.showErrorMessage(
+                `${config.ERROR_MESSAGES.TOOL_OPEN_ERROR} ${name}: ${error.message}. Verifica la ruta en Configuración > AccuExtension.`
+            );
+        }
+    });
     } catch (error) {
         console.error(`Error al abrir ${name}:`, error.message);
         return false;

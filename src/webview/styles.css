@@ -3,13 +3,25 @@
     --accusys-black: #000000;
     --accusys-white: #FFFFFF;
     --accusys-blue: #0053D8;
-    --accusys-blue-hover: #0053D7;
-    --accusys-blue-active: #0053D9;
+    --accusys-blue-hover: #0042b8;
+    --accusys-blue-active: #003498;
+    
+    /* Tamaños base responsive y consistentes */
+    --max-content-width: min(90%, 400px);
+    --section-padding: clamp(10px, 1.8vw, 16px);
+    --gap-tiny: clamp(4px, 0.6vw, 6px);
+    --gap-small: clamp(6px, 0.8vw, 8px);
+    --gap-medium: clamp(8px, 1vw, 12px);
+    --gap-large: clamp(12px, 1.5vw, 16px);
+    --border-radius: clamp(4px, 0.6vw, 6px);
+    --border-radius-small: clamp(2px, 0.4vw, 4px);
+    --input-height: clamp(28px, 3.2vw, 32px);
+    --button-height: clamp(30px, 3.5vw, 36px);
+    --tool-size: clamp(36px, 4.5vw, 48px);
+    --font-size-base: clamp(11px, 1vw, 13px);
+    --font-size-small: clamp(9px, 0.8vw, 11px);
+    --font-size-tiny: clamp(8px, 0.7vw, 9px);
 }
-
-
-
-
 
 * {
     box-sizing: border-box;
@@ -17,47 +29,149 @@
 
 body {
     margin: 0;
-    padding: 20px;
+    padding: clamp(6px, 1vw, 12px);
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     min-height: 100vh;
     background-color: var(--vscode-editor-background);
     font-family: var(--vscode-font-family);
+    font-size: var(--font-size-base);
+    overflow-x: hidden;
+    line-height: 1.3;
 }
 
 .container {
-    text-align: center;
-    max-width: 600px;
-    position: relative;
     width: 100%;
+    max-width: var(--max-content-width);
+    margin: 0 auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
+/* Logo principal extremadamente grande */
 img {
-    max-width: 100%;
+    display: block;
+    max-width: clamp(280px, 75%, 400px);
     height: auto;
-    border-radius: 8px;
-    margin-bottom: 30px;
+    margin: 0 auto var(--gap-large) auto;
+    border-radius: var(--border-radius-small);
 }
 
-/* Estilos para el menú de herramientas */
-.tools-menu {
+
+
+/* Botón de tema responsive */
+.theme-toggle {
+    position: fixed;
+    top: clamp(6px, 1vw, 10px);
+    right: clamp(6px, 1vw, 10px);
+    width: clamp(24px, 2.8vw, 30px);
+    height: clamp(24px, 2.8vw, 30px);
+    background: var(--vscode-editor-background);
+    color: var(--vscode-foreground);
+    border: 1px solid var(--vscode-widget-border);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: clamp(12px, 1.2vw, 15px);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 30px auto;
-    padding: 25px;
-    background: var(--vscode-editor-inactiveSelectionBackground);
-    border-radius: 12px;
-    border: 2px solid var(--vscode-widget-border);
-    max-width: 900px;
-    gap: 0;
-    position: relative;
-    box-shadow: 
-        0 8px 25px rgba(0, 0, 0, 0.15),
-        0 2px 8px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: all 0.2s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--vscode-list-hoverBackground);
+    transform: scale(1.05);
+}
+
+/* Accesos directos responsive */
+.custom-shortcuts {
+    margin-bottom: var(--gap-medium);
+    display: flex;
+    justify-content: center;
+}
+
+.shortcuts-container {
+    display: flex;
+    gap: clamp(6px, 1vw, 8px);
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+}
+
+.shortcut-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--gap-tiny);
+}
+
+.shortcut-button,
+.shortcut-info {
+    width: clamp(28px, 3.2vw, 36px);
+    height: clamp(28px, 3.2vw, 36px);
+    border-radius: var(--border-radius-small);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.shortcut-button {
+    border: 2px dashed var(--vscode-widget-border);
+    background: transparent;
+    cursor: pointer;
+    font-size: clamp(14px, 1.6vw, 18px);
+    color: var(--vscode-foreground);
+}
+
+.shortcut-button:hover {
+    border-color: var(--vscode-focusBorder);
+    background: var(--vscode-list-hoverBackground);
+}
+
+.shortcut-info {
+    cursor: pointer;
+    flex-direction: column;
+    padding: var(--gap-tiny);
+}
+
+.shortcut-info:hover {
+    background: var(--vscode-list-hoverBackground);
+}
+
+.shortcut-emoji {
+    font-size: clamp(14px, 1.6vw, 18px);
+}
+
+.shortcut-name {
+    font-size: var(--font-size-tiny);
+    color: var(--vscode-descriptionForeground);
+    text-align: center;
+    white-space: nowrap;
     overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    line-height: 1.1;
+}
+
+/* Menú de herramientas compacto para una fila */
+.tools-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: clamp(8px, 1.4vw, 12px);
+    padding: clamp(14px, 2.2vw, 18px);
+    background: var(--vscode-editor-inactiveSelectionBackground);
+    border: 1px solid var(--vscode-widget-border);
+    border-radius: var(--border-radius);
+    margin-bottom: var(--gap-large);
+    position: relative;
 }
 
 .tools-menu::before {
@@ -66,212 +180,190 @@ img {
     top: 0;
     left: 0;
     right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--vscode-focusBorder), var(--accusys-blue), var(--vscode-focusBorder));
-    opacity: 0.8;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accusys-blue), transparent);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
-.tools-menu:hover::before {
+.config-button-small {
+    position: absolute;
+    top: clamp(4px, 0.8vw, 8px);
+    right: clamp(4px, 0.8vw, 8px);
+    width: clamp(18px, 2vw, 24px);
+    height: clamp(18px, 2vw, 24px);
+    background: var(--vscode-editor-background);
+    color: var(--vscode-descriptionForeground);
+    border: 1px solid var(--vscode-widget-border);
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: clamp(9px, 1vw, 12px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.7;
+    transition: all 0.2s ease;
+    z-index: 10;
+}
+
+.config-button-small:hover {
     opacity: 1;
-    background: linear-gradient(90deg, var(--vscode-focusBorder), var(--accusys-blue), var(--vscode-focusBorder));
-    animation: shimmer 2s infinite;
+    background: var(--vscode-list-hoverBackground);
 }
 
 .tool-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 15px;
+    padding: var(--gap-tiny);
     cursor: pointer;
-    border-radius: 8px;
+    border-radius: var(--border-radius-small);
     transition: all 0.2s ease;
-    min-width: 100px;
+    min-height: clamp(70px, 9vw, 90px);
+    min-width: clamp(70px, 9vw, 90px);
+    justify-content: center;
 }
 
 .tool-item:hover {
     background: var(--vscode-list-hoverBackground);
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
 }
 
 .tool-icon {
-    width: 48px;
-    height: 48px;
+    width: var(--tool-size);
+    height: var(--tool-size);
     object-fit: contain;
-    margin-bottom: 12px;
+    margin-bottom: var(--gap-tiny);
 }
 
 .tool-name {
-    font-size: 14px;
-    font-weight: 500;
-    text-align: center;
+    font-size: clamp(10px, 1.2vw, 13px);
     color: var(--vscode-foreground);
+    text-align: center;
+    line-height: 1.2;
+    word-break: break-word;
+    font-weight: 500;
 }
 
 .tool-divider {
-    width: 1px;
-    height: 80px;
-    background: var(--vscode-widget-border);
-    margin: 0 8px;
-    opacity: 0.6;
+    display: none;
 }
 
-/* Botón de configuración de tema */
-.theme-toggle {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: var(--vscode-editor-background);
-    color: var(--vscode-foreground);
-    border: 1px solid var(--vscode-widget-border);
-    padding: 8px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 16px;
-    transition: all 0.2s ease;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-}
-
-.theme-toggle:hover {
-    background: var(--vscode-list-hoverBackground);
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.theme-toggle:active {
-    transform: translateY(0);
-}
-
-/* Botón de configuración pequeño en la esquina superior derecha */
-.config-button-small {
-    position: absolute;
-    top: 5px;
-    right: 2px;
-    background: var(--vscode-editor-background);
-    color: var(--vscode-descriptionForeground);
-    border: 1px solid var(--vscode-widget-border);
-    padding: 8px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.2s ease;
-    opacity: 0.8;
-    width: 32px;
-    height: 32px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.config-button-small:hover {
-    background: var(--vscode-list-hoverBackground);
-    color: var(--vscode-foreground);
-    opacity: 1;
-    transform: scale(1.1);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.config-button-small i {
-    font-size: 14px;
-}
-
-h1 {
-    color: var(--vscode-editor-foreground);
-    font-family: var(--vscode-font-family);
-    margin-bottom: 20px;
-    font-size: 32px;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-}
-
-.welcome-icon {
-    font-size: 36px;
-    color: var(--accusys-blue);
-    display: inline-block;
-    animation: wave 2.5s ease-in-out infinite;
-}
-
-@keyframes wave {
-    0%, 100% { transform: rotate(0deg); }
-    25% { transform: rotate(-20deg); }
-    75% { transform: rotate(20deg); }
-}
-
+/* Secciones responsive */
 .section {
-    margin-top: 30px;
-    padding: 30px;
-    background-color: var(--vscode-editor-inactiveSelectionBackground);
-    border-radius: 16px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border: 2px solid var(--accusys-blue);
+    background: var(--vscode-editor-inactiveSelectionBackground);
+    border: 1px solid var(--vscode-widget-border);
+    border-radius: var(--border-radius);
+    padding: var(--section-padding);
+    margin-bottom: var(--gap-large);
     position: relative;
-    overflow: hidden;
+    width: 100%;
 }
 
-/* Decoracion con gradiente azul */
+/* Contenedor para secciones de búsqueda lado a lado */
+.search-sections-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap-medium);
+    width: 100%;
+    margin-bottom: var(--gap-large);
+}
+
+/* Contenedor de botones AST del mismo tamaño que TFS */
+.ast-buttons-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap-tiny);
+    margin-top: var(--gap-tiny);
+}
+
+.ast-buttons-container .button {
+    margin: 0;
+    padding: clamp(8px, 1.5vw, 12px);
+    font-size: var(--font-size-base);
+    min-height: var(--button-height);
+    font-weight: 600;
+}
+
+.ast-buttons-container .ast-web-link {
+    margin: 0;
+    text-align: center;
+    justify-self: stretch;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: clamp(8px, 1.5vw, 12px);
+    font-size: var(--font-size-base);
+    min-height: var(--button-height);
+    font-weight: 600;
+}
+
 .section::before {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, var(--accusys-blue-hover), var(--accusys-blue), var(--accusys-blue-active));
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accusys-blue), transparent);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
+/* Recordatorio del mismo tamaño que TFS */
 .reminder {
-    color: var(--vscode-editor-foreground);
-    font-size: 18px;
-    margin-bottom: 24px;
-    font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 12px;
+    gap: var(--gap-small);
+    margin-bottom: var(--gap-small);
+    font-size: var(--font-size-base);
+    color: var(--vscode-foreground);
+    padding: var(--section-padding);
+    background: rgba(0, 83, 216, 0.05);
+    border-radius: var(--border-radius);
+    font-weight: 500;
 }
 
 .reminder-icon {
+    font-size: clamp(16px, 1.8vw, 20px);
     color: var(--accusys-blue);
-    font-size: 26px;
+    animation: pulse 2s ease-in-out infinite;
 }
 
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.9; }
+}
+
+/* Botones responsive */
 .button {
-    background-color: var(--accusys-blue);
-    color: var(--accusys-white);
+    background: var(--accusys-blue);
+    color: white;
     border: none;
-    padding: 14px 24px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    font-family: var(--vscode-font-family);
+    padding: clamp(6px, 1vw, 8px) clamp(8px, 1.2vw, 12px);
+    font-size: var(--font-size-small);
     font-weight: 600;
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    transition: all 0.2s ease;
     display: inline-flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
+    gap: var(--gap-tiny);
     text-transform: uppercase;
-    letter-spacing: 0.5px;
-    flex-shrink: 0;
+    letter-spacing: 0.2px;
+    min-height: var(--button-height);
+    width: 100%;
 }
 
 .button:hover {
-    background-color: var(--accusys-blue-hover);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 83, 216, 0.3);
+    background: var(--accusys-blue-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 83, 216, 0.25);
 }
 
 .button:active {
-    background-color: var(--accusys-blue-active);
+    background: var(--accusys-blue-active);
     transform: translateY(0);
 }
 
@@ -282,1336 +374,596 @@ h1 {
 }
 
 .button:disabled:hover {
-    background-color: var(--accusys-blue);
-    transform: none;
+    background: var(--accusys-blue);
     box-shadow: none;
 }
 
-/* Centrar botones independientes */
-.section > .button {
-    display: inline-flex;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.button i {
-    font-size: 18px;
-}
-
-/* Contenedor para botones AST */
-.section {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-/* Estilos para el enlace AST Web */
+/* Enlaces responsive */
 .ast-web-link {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    margin-top: 12px;
-    padding: 8px 16px;
-    background: transparent;
+    gap: var(--gap-tiny);
+    padding: clamp(6px, 1vw, 8px) clamp(8px, 1.2vw, 12px);
     color: var(--vscode-textLink-foreground);
     text-decoration: none;
     border: 1px solid var(--vscode-textLink-foreground);
-    border-radius: 6px;
-    font-family: var(--vscode-font-family);
+    border-radius: var(--border-radius-small);
+    font-size: var(--font-size-small);
     font-weight: 500;
-    font-size: 12px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.2px;
     transition: all 0.2s ease;
-    opacity: 0.8;
+    margin-top: 0;
 }
 
 .ast-web-link:hover {
     background: var(--vscode-textLink-foreground);
-    color: var(--vscode-textLink-activeBackground);
-    opacity: 1;
-    transform: translateY(-1px);
-    text-decoration: none;
+    color: var(--vscode-editor-background);
 }
 
-.ast-web-link:active {
-    transform: translateY(0);
-}
-
-.ast-web-link i {
-    font-size: 12px;
-}
-
-/* Estilos para selectores */
-.select-container {
-    margin: 20px auto;
+/* Sección TFS responsive */
+.tfs-title {
+    background: linear-gradient(135deg, var(--accusys-blue), var(--accusys-blue-active));
+    color: white;
+    padding: clamp(6px, 1vw, 10px);
+    margin: calc(var(--section-padding) * -1);
+    margin-bottom: var(--gap-small);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    text-align: center;
+    font-size: var(--font-size-base);
+    font-weight: 600;
     display: flex;
-    flex-direction: row;
-    gap: 20px;
+    align-items: center;
     justify-content: center;
-    align-items: flex-start;
-    max-width: 450px;
+    gap: var(--gap-tiny);
+}
+
+.tfs-icon {
+    font-size: 1.2em;
+}
+
+/* Contenedor de selección responsive */
+.select-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap-small);
+    margin-bottom: var(--gap-small);
 }
 
 .select-group {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
-    flex: 1;
+    gap: var(--gap-small);
+}
+
+/* Contenedor de botones TFS */
+.tfs-buttons-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--gap-tiny);
+    grid-column: span 2;
+    margin-top: var(--gap-tiny);
 }
 
 label {
-    color: var(--vscode-editor-foreground);
-    font-weight: 500;
-    font-size: 14px;
-    text-align: left;
-    margin-bottom: 4px;
+    font-size: var(--font-size-small);
+    font-weight: 600;
+    color: var(--vscode-descriptionForeground);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+select,
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: clamp(5px, 0.8vw, 7px) clamp(6px, 1vw, 10px);
+    border: 1px solid var(--vscode-input-border);
+    border-radius: var(--border-radius-small);
+    background: var(--vscode-input-background);
+    color: var(--vscode-input-foreground);
+    font-family: inherit;
+    font-size: var(--font-size-small);
+    transition: all 0.2s ease;
+    min-height: var(--input-height);
 }
 
 select {
-    padding: 10px 15px;
-    border-radius: 6px;
-    border: 1px solid var(--vscode-input-border);
-    background-color: var(--vscode-input-background);
-    color: var(--vscode-input-foreground);
-    font-family: var(--vscode-font-family);
-    font-size: 14px;
-    width: 100%;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    box-sizing: border-box;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
+    background-position: right clamp(8px, 1.5vw, 12px) center;
+    background-repeat: no-repeat;
+    background-size: clamp(12px, 1.5vw, 16px);
+    padding-right: clamp(24px, 3vw, 32px);
 }
 
-select:hover {
-    border-color: var(--accusys-blue);
-}
-
-select:focus {
-    outline: none;
-    border-color: var(--accusys-blue);
-    box-shadow: 0 0 0 2px rgba(0, 83, 216, 0.2);
-}
-
-input[type="number"] {
-    padding: 12px 16px;
-    border-radius: 10px;
-    border: 2px solid var(--vscode-input-border);
-    background-color: var(--vscode-input-background);
-    color: var(--vscode-input-foreground);
-    font-family: inherit;
-    font-size: 0.95em;
-    width: 100%;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
+select:hover,
+input[type="text"]:hover,
 input[type="number"]:hover {
     border-color: var(--vscode-focusBorder);
-    box-shadow: 0 3px 12px rgba(0, 83, 216, 0.15);
-    transform: translateY(-1px);
 }
 
+select:focus,
+input[type="text"]:focus,
 input[type="number"]:focus {
     outline: none;
     border-color: var(--vscode-focusBorder);
-    box-shadow: 0 0 0 3px rgba(0, 83, 216, 0.1);
-    transform: translateY(-1px);
+    box-shadow: 0 0 0 2px rgba(0, 83, 216, 0.1);
 }
 
-/* Estilizar las flechas del input number en Chrome/Safari */
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
-    height: 18px;
-    margin-right: 5px;
-    opacity: 1;
+select:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
-/* Estilizar las flechas del input number en Firefox */
-input[type="number"] {
-    -moz-appearance: textfield;
-    appearance: textfield;
-}
-
-.tfs-title {
-    color: var(--vscode-editor-foreground);
-    font-size: 20px;
-    font-weight: 600;
-    margin-bottom: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.tfs-icon {
-    color: var(--accusys-blue);
-    font-size: 24px;
-}
-
-/* Animacion sutil para el icono del reloj */
-@keyframes pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.2); opacity: 0.8; }
-    100% { transform: scale(1); opacity: 1; }
-}
-
-.reminder-icon {
-    animation: pulse 1.5s ease-in-out infinite;
-}
-
-/* Tema oscuro - ajustes */
-@media (prefers-color-scheme: dark) {
-    .section {
-        background-color: rgba(0, 83, 216, 0.1);
-    }
-}
-
-/* Estilos adicionales para la seccion de busqueda */
-.search-section {
-    margin-top: 0;
-    padding-top: 0;
-}
-
-.search-container {
-    display: flex;
-    align-items: flex-end;
-    gap: 20px;
-    justify-content: center;
-    margin: 10px auto 0;
-    padding: 0 20px;
+/* Botones TFS responsive */
+.tfs-button,
+.save-button {
     width: 100%;
-    max-width: 500px;
+    padding: clamp(8px, 1.5vw, 12px);
+    font-size: var(--font-size-base);
+    min-height: var(--button-height);
+    margin: 0;
 }
 
-/* Subtitulos para las secciones */
-.section-subtitle {
-    color: var(--vscode-descriptionForeground);
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 15px;
-    opacity: 0.7;
+.save-button {
+    background: linear-gradient(135deg, #28a745, #20c997);
 }
 
-.search-container .select-group {
-    flex: 0 1 auto;
-    min-width: 180px;
-    max-width: 250px;
+.save-button:hover {
+    background: linear-gradient(135deg, #218838, #1ea471);
 }
 
-.search-container .button {
-    flex: 0 0 auto;
-    margin-bottom: 0;
-    padding: 10px 20px;
-    font-size: 14px;
-    height: fit-content;
-}
-
-.search-container input[type="number"] {
-    width: 100%;
-    min-width: 150px;
-}
-
-/* Estilos para busqueda avanzada */
+/* Secciones de búsqueda responsive */
+.search-section,
 .advanced-search-section {
-    margin-top: 0;
-    padding-top: 0;
+    background: var(--vscode-editor-inactiveSelectionBackground);
+    border: 1px solid var(--vscode-widget-border);
+    border-radius: var(--border-radius);
+    padding: var(--section-padding);
+    margin-bottom: var(--gap-small);
 }
 
+/* Secciones de búsqueda dentro del contenedor lado a lado */
+.search-sections-container .search-section,
+.search-sections-container .advanced-search-section {
+    margin-bottom: 0;
+}
+
+.section-subtitle {
+    font-size: var(--font-size-tiny);
+    font-weight: 600;
+    color: var(--vscode-descriptionForeground);
+    text-transform: uppercase;
+    letter-spacing: 0.2px;
+    margin-bottom: var(--gap-small);
+    text-align: center;
+    padding-bottom: var(--gap-tiny);
+    border-bottom: 1px solid var(--vscode-widget-border);
+}
+
+.search-container,
 .advanced-search-container {
     display: flex;
-    align-items: flex-end;
-    gap: 15px;
-    justify-content: center;
-    margin: 10px auto 0;
-    padding: 0 20px;
-    width: 100%;
-    max-width: 700px;
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: var(--gap-small);
 }
 
-.advanced-search-container .select-group {
-    flex: 0 1 auto;
-}
-
-.advanced-search-container .select-group:first-child {
-    flex: 1 1 250px;
-    min-width: 200px;
-}
-
-.advanced-search-container .select-group:nth-child(2) {
-    flex: 0 0 100px;
-}
-
-.advanced-search-container #customExtGroup {
-    flex: 0 0 120px;
-}
-
-.advanced-search-container select {
-    min-height: 38px;
-}
-
-.advanced-search-container #customExt {
-    width: 100%;
-    padding: 10px 15px;
-    border-radius: 6px;
-    border: 1px solid var(--vscode-input-border);
-    background-color: var(--vscode-input-background);
-    color: var(--vscode-input-foreground);
-    font-family: var(--vscode-font-family);
-    font-size: 14px;
-    transition: all 0.2s ease;
-    box-sizing: border-box;
-}
-
-.advanced-search-container #customExt:hover {
-    border-color: var(--accusys-blue);
-}
-
-.advanced-search-container #customExt:focus {
-    outline: none;
-    border-color: var(--accusys-blue);
-    box-shadow: 0 0 0 2px rgba(0, 83, 216, 0.2);
-}
-
-.advanced-search-container input[type="text"] {
-    width: 100%;
-    padding: 10px 15px;
-    border-radius: 6px;
-    border: 1px solid var(--vscode-input-border);
-    background-color: var(--vscode-input-background);
-    color: var(--vscode-input-foreground);
-    font-family: var(--vscode-font-family);
-    font-size: 14px;
-    transition: all 0.2s ease;
-    box-sizing: border-box;
-}
-
-.advanced-search-container input[type="text"]:hover {
-    border-color: var(--accusys-blue);
-}
-
-.advanced-search-container input[type="text"]:focus {
-    outline: none;
-    border-color: var(--accusys-blue);
-    box-shadow: 0 0 0 2px rgba(0, 83, 216, 0.2);
-}
-
-
-
+.search-container .button,
 .advanced-search-container .button {
-    flex: 0 0 auto;
-    margin-bottom: 0;
-    padding: 10px 20px;
-    font-size: 14px;
+    width: 100%;
+    margin-top: var(--gap-tiny);
 }
 
-/* Responsive para busqueda avanzada */
-@media (max-width: 768px) {
-    .advanced-search-container {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 15px;
-    }
-    
-    .advanced-search-container .select-group {
-        width: 100%;
-    }
-    
-
-    
-    .advanced-search-container .button {
-        width: 100%;
-    }
-}
-
-/* Estilos para accesos directos personalizados */
-.custom-shortcuts {
-    position: fixed;
-    top: 70px;
-    right: -60px;
-    background: transparent;
-    border: none;
-    padding: 0;
-    width: 200px;
-    z-index: 1000;
-}
-
-.shortcuts-container {
+/* Grupos de búsqueda avanzada responsive */
+.search-text-group,
+.extension-group,
+.custom-extension-group {
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    align-items: center;
+    gap: var(--gap-small);
 }
 
-.shortcut-item {
+.custom-extension-group {
+    display: none;
+}
+
+.custom-extension-group.show {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
 }
 
-.shortcut-button {
-    width: 28px;
-    height: 28px;
-    border: 2px dashed var(--vscode-panel-border);
-    background: transparent;
-    border-radius: 6px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: all 0.2s ease;
-    color: var(--vscode-foreground);
-    font-size: 14px;
-}
-
-.shortcut-button:hover {
-    border-color: var(--vscode-focusBorder);
-    background: var(--vscode-button-hoverBackground);
-}
-
-.shortcut-info {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    cursor: pointer;
-    padding: 4px 6px;
-    border-radius: 4px;
-    transition: background 0.2s ease;
-    min-width: 60px;
-}
-
-.shortcut-info:hover {
-    background: var(--vscode-list-hoverBackground);
-}
-
-.shortcut-display {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-}
-
-.shortcut-emoji {
-    font-size: 18px;
-    line-height: 1;
-}
-
-.shortcut-name {
-    font-size: 10px;
-    color: var(--vscode-foreground);
-    text-align: center;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 80px;
-    line-height: 1;
-}
-
-/* Modal para editar accesos directos */
+/* Modal responsive */
 .modal {
     position: fixed;
-    z-index: 2000;
-    left: 0;
     top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 2000;
+    padding: clamp(16px, 3vw, 24px);
 }
 
 .modal-content {
     background: var(--vscode-editor-background);
     border: 1px solid var(--vscode-widget-border);
-    border-radius: 15px;
-    width: 90%;
-    max-width: 500px;
+    border-radius: var(--border-radius);
+    width: 100%;
+    max-width: clamp(320px, 80vw, 420px);
     max-height: 90vh;
     overflow-y: auto;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
 }
 
 .modal-header {
-    padding: 20px 20px 15px;
-    border-bottom: 1px solid var(--vscode-widget-border);
+    background: linear-gradient(135deg, var(--accusys-blue), var(--accusys-blue-active));
+    color: white;
+    padding: clamp(12px, 2vw, 16px);
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: linear-gradient(135deg, #0053D8 0%, #003d9e 100%);
-    color: white;
-    border-radius: 15px 15px 0 0;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
 .modal-header h3 {
     margin: 0;
-    color: white;
-    font-size: 1.2em;
+    font-size: clamp(14px, 1.8vw, 16px);
     font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .close {
+    width: clamp(20px, 2.5vw, 28px);
+    height: clamp(20px, 2.5vw, 28px);
+    background: rgba(255, 255, 255, 0.2);
+    border: none;
+    border-radius: 50%;
     color: white;
-    font-size: 24px;
-    font-weight: bold;
+    font-size: clamp(14px, 1.8vw, 18px);
     cursor: pointer;
-    opacity: 0.8;
-    transition: all 0.3s ease;
-    width: 28px;
-    height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.2s ease;
 }
 
 .close:hover {
-    opacity: 1;
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.05);
+    background: rgba(255, 255, 255, 0.3);
 }
 
 .modal-body {
-    padding: 20px;
-    background: var(--vscode-editor-background);
+    padding: clamp(16px, 2.5vw, 20px);
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: clamp(12px, 2vw, 16px);
 }
 
 .form-group label {
     display: block;
-    margin-bottom: 8px;
-    color: var(--vscode-foreground);
+    margin-bottom: var(--gap-small);
+    font-size: var(--font-size-small);
     font-weight: 600;
-    font-size: 0.9em;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    color: var(--vscode-foreground);
 }
 
 .form-group input {
     width: 100%;
-    padding: 12px 16px;
-    border: 2px solid var(--vscode-input-border);
-    border-radius: 10px;
+    padding: clamp(8px, 1.5vw, 12px);
+    border: 1px solid var(--vscode-input-border);
+    border-radius: var(--border-radius-small);
     background: var(--vscode-input-background);
     color: var(--vscode-input-foreground);
-    font-size: 0.95em;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.form-group input:hover {
-    border-color: var(--vscode-focusBorder);
-    box-shadow: 0 3px 12px rgba(0, 83, 216, 0.15);
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: var(--vscode-focusBorder);
-    box-shadow: 0 0 0 3px rgba(0, 83, 216, 0.1);
-    transform: translateY(-1px);
+    font-size: var(--font-size-base);
 }
 
 .emoji-selector {
     display: grid;
     grid-template-columns: repeat(5, 1fr);
-    gap: 8px;
-    margin-bottom: 10px;
+    gap: var(--gap-small);
+    margin-bottom: var(--gap-medium);
 }
 
 .emoji-option {
-    width: 40px;
-    height: 40px;
-    border: 2px solid var(--vscode-input-border);
+    width: 100%;
+    aspect-ratio: 1;
+    border: 1px solid var(--vscode-input-border);
     background: var(--vscode-input-background);
-    border-radius: 10px;
+    border-radius: var(--border-radius-small);
     cursor: pointer;
-    font-size: 18px;
-    transition: all 0.3s ease;
+    font-size: clamp(16px, 2vw, 20px);
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.2s ease;
 }
 
 .emoji-option:hover {
     border-color: var(--vscode-focusBorder);
     background: var(--vscode-list-hoverBackground);
-    transform: scale(1.05);
-    box-shadow: 0 3px 12px rgba(0, 83, 216, 0.15);
 }
 
 .emoji-option.selected {
     border-color: var(--vscode-focusBorder);
-    background: linear-gradient(135deg, #0053D8 0%, #003d9e 100%);
+    background: var(--accusys-blue);
     color: white;
-    transform: scale(1.1);
-    box-shadow: 0 4px 15px rgba(0, 83, 216, 0.3);
 }
 
 .modal-footer {
-    padding: 20px 20px 20px;
+    padding: clamp(12px, 2vw, 16px);
     border-top: 1px solid var(--vscode-widget-border);
     display: flex;
-    gap: 12px;
+    gap: var(--gap-small);
     justify-content: space-between;
-    align-items: center;
-    background: var(--vscode-editor-inactiveSelectionBackground);
-    border-radius: 0 0 15px 15px;
+    flex-wrap: wrap;
 }
 
-/* El botón de configuración va a la derecha */
-.modal-footer .settings-button {
-    margin-left: auto;
+.modal-footer .button {
+    padding: clamp(6px, 1vw, 10px) clamp(12px, 2vw, 16px);
+    font-size: var(--font-size-small);
+    min-height: clamp(32px, 4vw, 40px);
+    flex: 1;
+    min-width: clamp(80px, 15vw, 120px);
 }
 
 .button-secondary {
-    background: #6c757d;
-    color: white;
-    border: none;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-size: 0.9em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+    background: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-button-secondaryForeground);
 }
 
 .button-secondary:hover {
-    background: #5a6268;
-    transform: translateY(-1px);
-    box-shadow: 0 3px 12px rgba(108, 117, 125, 0.3);
+    background: var(--vscode-button-secondaryHoverBackground);
 }
 
-/* Responsive para pantallas pequeñas */
-@media (max-width: 768px) {
-    .custom-shortcuts {
-        position: static;
-        width: 100%;
-        margin: 20px 0;
-    }
-    
-    .shortcuts-container {
-        flex-direction: row;
-        justify-content: center;
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-    
-    .shortcut-item {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .shortcut-name {
-        max-width: 80px;
-    }
-    
-    .modal-content {
-        width: 95%;
-        margin: 20px;
-    }
-    
-    .emoji-selector {
-        grid-template-columns: repeat(5, 1fr);
-    }
-    
-    .modal-footer {
-        flex-direction: column;
-    }
-    
-    .modal-footer .button {
-        width: 100%;
-    }
+.settings-button {
+    flex: 0 0 auto;
+    min-width: auto;
+    width: clamp(36px, 4.5vw, 44px);
 }
 
-/* Estilos para la sección de TFS */
-.tfs-title {
-    background: linear-gradient(135deg, #0053D8 0%, #003d9e 100%);
-    color: white;
-    padding: 18px;
-    border-radius: 12px;
-    text-align: center;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 15px rgba(0, 83, 216, 0.3);
-    position: relative;
-    overflow: hidden;
-}
-
-.tfs-title::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
-
-.tfs-title:hover::before {
-    left: 100%;
-}
-
-.tfs-title span {
-    font-size: 1.2em;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.tfs-icon {
-    font-size: 1.4em;
-    margin-right: 10px;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.05); }
-}
-
-/* Contenedor de selección mejorado */
-.select-container {
-    background: var(--vscode-editor-inactiveSelectionBackground);
-    border-radius: 15px;
-    padding: 20px;
-    margin: 20px 0;
-    box-shadow: 
-        0 8px 25px rgba(0, 0, 0, 0.15),
-        0 2px 8px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border: 2px solid var(--vscode-widget-border);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: row;
-    gap: 15px;
-    align-items: flex-end;
-    position: relative;
-    overflow: hidden;
-}
-
-.select-container::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--vscode-focusBorder), var(--accusys-blue), var(--vscode-focusBorder));
-    opacity: 0.8;
-}
-
-.select-container:hover {
-    transform: translateY(-2px);
-    box-shadow: 
-        0 12px 35px rgba(0, 0, 0, 0.2),
-        0 4px 12px rgba(0, 0, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    border-color: var(--vscode-focusBorder);
-}
-
-.select-container:hover::before {
-    opacity: 1;
-    background: linear-gradient(90deg, var(--vscode-focusBorder), var(--accusys-blue), var(--vscode-focusBorder));
-    animation: shimmer 2s infinite;
-}
-
+/* Animaciones suaves */
 @keyframes shimmer {
     0% { transform: translateX(-100%); }
     100% { transform: translateX(100%); }
 }
 
-.select-group {
-    margin-bottom: 0;
-    position: relative;
-    flex: 1;
-    min-width: 0;
-}
+/* Media Queries para diferentes resoluciones */
 
-.select-group:last-child {
-    margin-bottom: 0;
-}
-
-label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: var(--vscode-foreground);
-    font-size: 0.9em;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
-
-select {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid var(--vscode-input-border);
-    border-radius: 10px;
-    background: var(--vscode-input-background);
-    font-size: 0.95em;
-    color: var(--vscode-input-foreground);
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 15px center;
-    background-repeat: no-repeat;
-    background-size: 16px;
-}
-
-select:hover {
-    border-color: var(--vscode-focusBorder);
-    box-shadow: 0 3px 12px rgba(0, 83, 216, 0.15);
-    transform: translateY(-1px);
-}
-
-select:focus {
-    outline: none;
-    border-color: var(--vscode-focusBorder);
-    box-shadow: 0 0 0 3px rgba(0, 83, 216, 0.1);
-    transform: translateY(-1px);
-}
-
-select:disabled {
-    background-color: var(--vscode-input-background);
-    color: var(--vscode-disabledForeground);
-    cursor: not-allowed;
-    opacity: 0.7;
-}
-
-/* Botón de TFS integrado en el contenedor */
-.tfs-button {
-    flex: 0 0 auto;
-    background: linear-gradient(135deg, #0053D8 0%, #003d9e 100%);
-    border: none;
-    color: white;
-    padding: 12px 16px;
-    font-size: 1.2em;
-    font-weight: 600;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 83, 216, 0.3);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: relative;
-    overflow: hidden;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.tfs-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
-
-.tfs-button:hover::before {
-    left: 100%;
-}
-
-.tfs-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 83, 216, 0.4);
-}
-
-.tfs-button:active {
-    transform: translateY(0);
-}
-
-.tfs-button:disabled {
-    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: 0 3px 12px rgba(108, 117, 125, 0.3);
-}
-
-/* Botón de guardar */
-.save-button {
-    flex: 0 0 auto;
-    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-    border: none;
-    color: white;
-    padding: 12px 16px;
-    font-size: 1.2em;
-    font-weight: 600;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: relative;
-    overflow: hidden;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.save-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
-
-.save-button:hover::before {
-    left: 100%;
-}
-
-.save-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(40, 167, 69, 0.4);
-}
-
-.save-button:active {
-    transform: translateY(0);
-}
-
-.save-button:disabled {
-    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: 0 3px 12px rgba(108, 117, 125, 0.3);
-}
-
-/* Sección de búsqueda por número de feature */
-.search-section {
-    background: var(--vscode-editor-inactiveSelectionBackground);
-    border-radius: 15px;
-    padding: 20px;
-    margin: 20px 0;
-    box-shadow: 
-        0 8px 25px rgba(0, 0, 0, 0.15),
-        0 2px 8px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border: 2px solid var(--vscode-widget-border);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.search-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--vscode-focusBorder), var(--accusys-blue), var(--vscode-focusBorder));
-    opacity: 0.8;
-}
-
-.search-section:hover {
-    transform: translateY(-2px);
-    box-shadow: 
-        0 12px 35px rgba(0, 0, 0, 0.2),
-        0 4px 12px rgba(0, 0, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    border-color: var(--vscode-focusBorder);
-}
-
-.search-section:hover::before {
-    opacity: 1;
-    background: linear-gradient(90deg, var(--vscode-focusBorder), var(--accusys-blue), var(--vscode-focusBorder));
-    animation: shimmer 2s infinite;
-}
-
-.section-subtitle {
-    font-size: 1.1em;
-    font-weight: 600;
-    color: var(--vscode-foreground);
-    margin-bottom: 15px;
-    text-align: center;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: relative;
-}
-
-.section-subtitle::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 40px;
-    height: 2px;
-    background: linear-gradient(135deg, #0053D8 0%, #003d9e 100%);
-    border-radius: 1px;
-}
-
-.search-container {
-    display: flex;
-    gap: 15px;
-    align-items: flex-end;
-}
-
-.search-container .select-group {
-    flex: 1;
-    margin-bottom: 0;
-}
-
-.search-container .button {
-    padding: 12px 20px;
-    font-size: 0.95em;
-    border-radius: 10px;
-    background: linear-gradient(135deg, #0053D8 0%, #003d9e 100%);
-    border: none;
-    color: white;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 83, 216, 0.3);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-weight: 600;
-    white-space: nowrap;
-}
-
-.search-container .button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 83, 216, 0.4);
-}
-
-.search-container .button:disabled {
-    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: 0 3px 12px rgba(108, 117, 125, 0.3);
-}
-
-.search-container input[type="number"] {
-    padding: 12px 16px;
-    border: 2px solid var(--vscode-input-border);
-    border-radius: 10px;
-    font-size: 0.95em;
-    background-color: var(--vscode-input-background);
-    color: var(--vscode-input-foreground);
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-.search-container input[type="number"]:hover {
-    border-color: var(--vscode-focusBorder);
-    box-shadow: 0 3px 12px rgba(0, 83, 216, 0.15);
-}
-
-.search-container input[type="number"]:focus {
-    outline: none;
-    border-color: var(--vscode-focusBorder);
-    box-shadow: 0 0 0 3px rgba(0, 83, 216, 0.1);
-}
-
-/* Sección de búsqueda avanzada */
-.advanced-search-section {
-    background: var(--vscode-editor-inactiveSelectionBackground);
-    border-radius: 15px;
-    padding: 25px;
-    margin: 20px 0;
-    box-shadow: 
-        0 8px 25px rgba(0, 0, 0, 0.15),
-        0 2px 8px rgba(0, 0, 0, 0.1),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
-    border: 2px solid var(--vscode-widget-border);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-}
-
-.advanced-search-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    background: linear-gradient(90deg, var(--vscode-focusBorder), var(--accusys-blue), var(--vscode-focusBorder));
-    opacity: 0.8;
-}
-
-.advanced-search-section:hover {
-    transform: translateY(-2px);
-    box-shadow: 
-        0 12px 35px rgba(0, 0, 0, 0.2),
-        0 4px 12px rgba(0, 0, 0, 0.15),
-        inset 0 1px 0 rgba(255, 255, 255, 0.15);
-    border-color: var(--vscode-focusBorder);
-}
-
-.advanced-search-section:hover::before {
-    opacity: 1;
-    background: linear-gradient(90deg, var(--vscode-focusBorder), var(--accusys-blue), var(--vscode-focusBorder));
-    animation: shimmer 2s infinite;
-}
-
-.advanced-search-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    align-items: end;
-}
-
-.advanced-search-container .search-text-group {
-    grid-column: 1;
-    margin-bottom: 0;
-}
-
-.advanced-search-container .extension-group {
-    grid-column: 2;
-    margin-bottom: 0;
-}
-
-.advanced-search-container .custom-extension-group {
-    grid-column: 2;
-    margin-bottom: 0;
-    display: none;
-}
-
-.advanced-search-container .custom-extension-group.show {
-    display: block;
-}
-
-/* Cuando la extensión personalizada está visible, ajustar el grid */
-.advanced-search-container:has(.custom-extension-group.show) {
-    grid-template-columns: 2fr 1fr;
-}
-
-.advanced-search-container:has(.custom-extension-group.show) .search-text-group {
-    grid-column: 1;
-}
-
-.advanced-search-container:has(.custom-extension-group.show) .extension-group {
-    grid-column: 2;
-}
-
-.advanced-search-container:has(.custom-extension-group.show) .custom-extension-group {
-    grid-column: 2;
-}
-
-/* Estilos alternativos para navegadores que no soporten :has() */
-.advanced-search-container .custom-extension-group.show ~ .search-text-group {
-    grid-column: 1;
-}
-
-.advanced-search-container .custom-extension-group.show ~ .extension-group {
-    grid-column: 2;
-}
-
-.advanced-search-container .custom-extension-group.show ~ .custom-extension-group {
-    grid-column: 2;
-}
-
-.advanced-search-container select {
-    width: 100%;
-}
-
-.advanced-search-container #customExt {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid var(--vscode-input-border);
-    border-radius: 10px;
-    font-size: 0.95em;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    background-color: var(--vscode-input-background);
-    color: var(--vscode-input-foreground);
-}
-
-.advanced-search-container #customExt:hover {
-    border-color: var(--vscode-focusBorder);
-    box-shadow: 0 3px 12px rgba(0, 83, 216, 0.15);
-}
-
-.advanced-search-container #customExt:focus {
-    outline: none;
-    border-color: var(--vscode-focusBorder);
-    box-shadow: 0 0 0 3px rgba(0, 83, 216, 0.1);
-}
-
-.advanced-search-container input[type="text"] {
-    width: 100%;
-    padding: 12px 16px;
-    border: 2px solid var(--vscode-input-border);
-    border-radius: 10px;
-    font-size: 0.95em;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    background-color: var(--vscode-input-background);
-    color: var(--vscode-input-foreground);
-}
-
-.advanced-search-container input[type="text"]:hover {
-    border-color: var(--vscode-focusBorder);
-    box-shadow: 0 3px 12px rgba(0, 83, 216, 0.15);
-}
-
-.advanced-search-container input[type="text"]:focus {
-    outline: none;
-    border-color: var(--vscode-focusBorder);
-    box-shadow: 0 0 0 3px rgba(0, 83, 216, 0.1);
-}
-
-.advanced-search-container .button {
-    width: auto;
-    min-width: 200px;
-    max-width: 300px;
-    background: linear-gradient(135deg, #0053D8 0%, #003d9e 100%);
-    border: none;
-    color: white;
-    padding: 14px 24px;
-    font-size: 1em;
-    font-weight: 600;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0, 83, 216, 0.3);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    position: relative;
-    overflow: hidden;
-    grid-column: 1 / -1;
-    margin-top: 15px;
-    justify-self: center;
-}
-
-.advanced-search-container .button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
-}
-
-.advanced-search-container .button:hover::before {
-    left: 100%;
-}
-
-.advanced-search-container .button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 83, 216, 0.4);
-}
-
-.advanced-search-container .button:active {
-    transform: translateY(0);
-}
-
-.advanced-search-container .button:disabled {
-    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-    cursor: not-allowed;
-    transform: none;
-    box-shadow: 0 3px 12px rgba(108, 117, 125, 0.3);
-}
-
-/* Responsive design mejorado */
-@media (max-width: 768px) {
-    .select-container {
-        flex-direction: column;
-        gap: 15px;
-        align-items: stretch;
+/* Pantallas pequeñas (menos de 400px de ancho del panel) */
+@media (max-width: 400px) {
+    :root {
+        --max-content-width: 95%;
+        --section-padding: 10px;
+        --font-size-base: 11px;
+        --font-size-small: 9px;
+        --font-size-tiny: 8px;
+        --input-height: 30px;
+        --button-height: 34px;
     }
     
-    .select-container .select-group {
-        width: 100%;
+    .shortcuts-container {
+        flex-wrap: wrap;
+        gap: clamp(6px, 1vw, 8px);
+    }
+    
+    .tools-menu {
+        gap: clamp(5px, 1vw, 7px);
+        padding: clamp(10px, 1.8vw, 14px);
+        flex-wrap: wrap;
+    }
+    
+    .tool-item {
+        min-height: clamp(55px, 7.5vw, 70px);
+        min-width: clamp(55px, 7.5vw, 70px);
+    }
+    
+    .tool-name {
+        font-size: clamp(8px, 1vw, 10px);
+    }
+    
+    .select-container {
+        grid-template-columns: 1fr;
+        gap: var(--gap-small);
+    }
+    
+    .tfs-buttons-container {
+        grid-template-columns: 1fr;
+        gap: var(--gap-tiny);
+    }
+    
+    .ast-buttons-container {
+        grid-template-columns: 1fr;
+        gap: var(--gap-tiny);
+    }
+    
+    /* Secciones de búsqueda apiladas en pantallas pequeñas */
+    .search-sections-container {
+        grid-template-columns: 1fr;
+        gap: var(--gap-small);
+    }
+    
+    /* Elementos TFS más consistentes en pantallas pequeñas */
+    .tfs-title {
+        font-size: clamp(12px, 1.5vw, 14px);
+        padding: clamp(6px, 1vw, 8px);
+    }
+    
+    label {
+        font-size: clamp(8px, 0.9vw, 10px);
+        margin-bottom: 2px;
+    }
+    
+    select,
+    input[type="text"],
+    input[type="number"] {
+        padding: clamp(4px, 0.8vw, 6px) clamp(6px, 1vw, 8px);
+        font-size: clamp(10px, 1vw, 12px);
+        min-height: var(--input-height);
     }
     
     .tfs-button,
     .save-button {
-        width: 100%;
-        height: auto;
-        padding: 14px 24px;
+        padding: clamp(6px, 1vw, 8px);
+        font-size: clamp(10px, 1vw, 12px);
+        min-height: var(--button-height);
+    }
+}
+
+/* Pantallas medianas (400px - 600px de ancho del panel) */
+@media (min-width: 400px) and (max-width: 600px) {
+    :root {
+        --max-content-width: 90%;
+        --section-padding: 14px;
+        --input-height: 36px;
+        --button-height: 40px;
     }
     
+    .tools-menu {
+        gap: clamp(7px, 1.3vw, 9px);
+        padding: clamp(12px, 2vw, 16px);
+    }
+    
+    .tool-item {
+        min-height: clamp(60px, 8vw, 75px);
+        min-width: clamp(60px, 8vw, 75px);
+    }
+    
+    .tool-name {
+        font-size: clamp(9px, 1.1vw, 11px);
+    }
+    
+    /* Elementos TFS más consistentes en pantallas medianas */
+    .tfs-title {
+        font-size: clamp(13px, 1.6vw, 15px);
+        padding: clamp(7px, 1.2vw, 10px);
+    }
+    
+    label {
+        font-size: clamp(9px, 1vw, 11px);
+    }
+    
+    select,
+    input[type="text"],
+    input[type="number"] {
+        padding: clamp(5px, 1vw, 8px) clamp(7px, 1.2vw, 10px);
+        font-size: clamp(11px, 1.1vw, 13px);
+        min-height: var(--input-height);
+    }
+    
+    .tfs-button,
+    .save-button {
+        padding: clamp(7px, 1.2vw, 10px);
+        font-size: clamp(11px, 1.1vw, 13px);
+        min-height: var(--button-height);
+    }
+}
+
+/* Pantallas grandes (más de 600px de ancho del panel) */
+@media (min-width: 600px) {
+    :root {
+        --max-content-width: 85%;
+        --section-padding: 18px;
+        --input-height: 40px;
+        --button-height: 44px;
+    }
+    
+    .tools-menu {
+        gap: clamp(9px, 1.6vw, 14px);
+        padding: clamp(16px, 2.4vw, 20px);
+    }
+    
+    .tool-item {
+        min-height: clamp(75px, 9.5vw, 95px);
+        min-width: clamp(75px, 9.5vw, 95px);
+    }
+    
+    .tool-name {
+        font-size: clamp(11px, 1.3vw, 14px);
+    }
+    
+    /* En pantallas grandes, la búsqueda avanzada mantiene layout vertical dentro del contenedor lado a lado */
     .advanced-search-container {
         display: flex;
         flex-direction: column;
-        gap: 15px;
-        grid-template-columns: 1fr;
+        gap: var(--gap-small);
     }
     
-    .advanced-search-container .search-text-group,
-    .advanced-search-container .extension-group,
-    .advanced-search-container .custom-extension-group {
-        width: 100%;
-        grid-column: 1;
-    }
-    
-    .search-container {
-        flex-direction: column;
-        gap: 15px;
-    }
-    
-    .search-container .button {
-        width: 100%;
-    }
-    
-    .select-container,
-    .search-section,
-    .advanced-search-section {
-        padding: 15px;
-        margin: 15px 0;
-    }
-    
+    /* Elementos TFS más consistentes en pantallas grandes */
     .tfs-title {
-        padding: 15px;
-        margin-bottom: 15px;
+        font-size: clamp(15px, 1.8vw, 17px);
+        padding: clamp(10px, 1.5vw, 14px);
     }
     
-    .tfs-title span {
-        font-size: 1.1em;
+    label {
+        font-size: clamp(11px, 1.1vw, 13px);
     }
     
-    .section-subtitle {
-        font-size: 1em;
-        margin-bottom: 12px;
+    select,
+    input[type="text"],
+    input[type="number"] {
+        padding: clamp(8px, 1.2vw, 12px) clamp(10px, 1.5vw, 14px);
+        font-size: clamp(13px, 1.2vw, 15px);
+        min-height: var(--input-height);
     }
     
-    .section-subtitle::after {
-        width: 35px;
-        height: 2px;
-        bottom: -5px;
+    .tfs-button,
+    .save-button {
+        padding: clamp(10px, 1.5vw, 14px);
+        font-size: clamp(13px, 1.2vw, 15px);
+        min-height: var(--button-height);
     }
 }
 
-.advanced-search-container .search-text-group label,
-.advanced-search-container .extension-group label,
-.advanced-search-container .custom-extension-group label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 600;
-    color: var(--vscode-foreground);
-    font-size: 0.9em;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    text-align: left;
+/* Ajustes para modo oscuro */
+@media (prefers-color-scheme: dark) {
+    .section,
+    .search-section,
+    .advanced-search-section,
+    .tools-menu {
+        background: rgba(255, 255, 255, 0.03);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .reminder {
+        background: rgba(0, 83, 216, 0.08);
+    }
+}
+
+/* Ajustes para modo claro */
+@media (prefers-color-scheme: light) {
+    .section,
+    .search-section,
+    .advanced-search-section,
+    .tools-menu {
+        background: rgba(0, 0, 0, 0.03);
+        border-color: rgba(0, 0, 0, 0.1);
+    }
+    
+    .reminder {
+        background: rgba(0, 83, 216, 0.05);
+    }
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: clamp(6px, 1vw, 10px);
+    height: clamp(6px, 1vw, 10px);
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--vscode-scrollbarSlider-background);
+    border-radius: clamp(3px, 0.5vw, 5px);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--vscode-scrollbarSlider-hoverBackground);
 }
 
  
+
  

@@ -17,13 +17,17 @@ function createWebviewPanel(context) {
     const panel = vscode.window.createWebviewPanel(
         'accuExtensionView',
         'AccuExtension',
-        vscode.ViewColumn.Beside, // Cambiar a panel lateral a la derecha
+        {
+            viewColumn: vscode.ViewColumn.Beside,
+            preserveFocus: true
+        },
         {
             enableScripts: true,
             localResourceRoots: [
                 vscode.Uri.file(path.join(context.extensionPath, 'media')),
                 vscode.Uri.file(path.join(context.extensionPath, 'src', 'webview'))
-            ]
+            ],
+            retainContextWhenHidden: true
         }
     );
     
