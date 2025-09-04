@@ -25,6 +25,7 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 - **Helpers para imágenes** - Código más limpio y reutilizable para recursos
 - **Gestión de errores mejorada** - Mensajes consistentes y manejo centralizado
 - **Diseño de panel lateral** - La extensión ahora se abre en un panel lateral derecho (`ViewColumn.Beside`) con diseño responsive optimizado para diferentes tamaños de pantalla
+- **Editor SQL integrado** - Nueva sección con editor de consultas SQL, conexiones configurables (SYSBRV1, SYSBRV2, FACEDESA), ejecución mediante ISQL, historial de consultas y exportación de resultados (TXT, CSV, JSON)
 
 ### ✨ Agregado: 
 - **Accesos Directos Personalizados** - 5 botones “+” para agregar accesos directos. - Modal: Selección de emoji predefinido, campos para URL y nombre. Botones: Guardar, Cancelar y ⚙️ (abre `accuextension.shortcuts`).

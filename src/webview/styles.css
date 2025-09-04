@@ -507,11 +507,11 @@ select:disabled {
 }
 
 .save-button {
-    background: linear-gradient(135deg, #28a745, #20c997);
+    background: linear-gradient(135deg, var(--accusys-blue), #17a2b8);
 }
 
 .save-button:hover {
-    background: linear-gradient(135deg, #218838, #1ea471);
+    background: linear-gradient(135deg, var(--accusys-blue-hover), #138496);
 }
 
 /* Secciones de búsqueda responsive */
@@ -710,6 +710,7 @@ select:disabled {
 .button-secondary {
     background: var(--vscode-button-secondaryBackground);
     color: var(--vscode-button-secondaryForeground);
+    flex: 1;
 }
 
 .button-secondary:hover {
@@ -962,6 +963,294 @@ select:disabled {
 
 ::-webkit-scrollbar-thumb:hover {
     background: var(--vscode-scrollbarSlider-hoverBackground);
+}
+
+/* Estilos para SQL Editor */
+.sql-section {
+    margin-top: var(--gap-large);
+}
+
+.sql-title {
+    background: linear-gradient(135deg, var(--accusys-blue), var(--accusys-blue-active));
+    color: white;
+    padding: clamp(6px, 1vw, 10px);
+    margin: calc(var(--section-padding) * -1);
+    margin-bottom: var(--gap-small);
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
+    text-align: center;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--gap-tiny);
+}
+
+.sql-icon {
+    font-size: 1.2em;
+}
+
+.sql-container {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-medium);
+}
+
+.sql-connection-group {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--gap-small);
+    align-items: end;
+}
+
+.sql-connection-group label {
+    grid-column: span 2;
+}
+
+.sql-connection-group select {
+    min-width: 0;
+}
+
+.sql-editor-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--gap-small);
+}
+
+.sql-editor-container {
+    position: relative;
+    background: var(--vscode-editor-background);
+    border: 1px solid var(--vscode-input-border);
+    border-radius: var(--border-radius-small);
+}
+
+#sqlEditor {
+    width: 100%;
+    min-height: clamp(120px, 15vw, 200px);
+    max-height: 400px;
+    padding: clamp(8px, 1.2vw, 12px);
+    border: none;
+    border-radius: var(--border-radius-small);
+    background: var(--vscode-editor-background);
+    color: var(--vscode-editor-foreground);
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: clamp(11px, 1vw, 13px);
+    line-height: 1.4;
+    resize: vertical;
+    outline: none;
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow-x: auto;
+}
+
+#sqlEditor:focus {
+    border-color: var(--vscode-focusBorder);
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.1);
+}
+
+.sql-editor-toolbar {
+    position: absolute;
+    top: var(--gap-tiny);
+    right: var(--gap-tiny);
+    display: flex;
+    gap: var(--gap-tiny);
+    background: rgba(0, 0, 0, 0.1);
+    padding: var(--gap-tiny);
+    border-radius: var(--border-radius-small);
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.sql-editor-container:hover .sql-editor-toolbar {
+    opacity: 1;
+}
+
+.button-small {
+    padding: clamp(4px, 0.6vw, 6px) clamp(6px, 0.8vw, 8px);
+    font-size: clamp(10px, 0.9vw, 12px);
+    min-height: clamp(24px, 2.8vw, 28px);
+    background: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-button-secondaryForeground);
+    border: 1px solid var(--vscode-widget-border);
+    border-radius: var(--border-radius-small);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.button-small:hover {
+    background: var(--vscode-button-secondaryHoverBackground);
+}
+
+.sql-actions {
+    display: flex;
+    gap: var(--gap-small);
+    justify-content: center;
+}
+
+.sql-execute-button {
+    background: linear-gradient(135deg, var(--accusys-blue), #17a2b8);
+    flex: 0 0 auto;
+    min-width: clamp(120px, 20vw, 160px);
+    font-weight: 700;
+}
+
+.sql-execute-button:hover:not(:disabled) {
+    background: linear-gradient(135deg, var(--accusys-blue-hover), #138496);
+}
+
+.sql-execute-button:disabled {
+    background: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-descriptionForeground);
+    opacity: 0.6;
+}
+
+/* Botón de historial con estilo corporativo sutil */
+.sql-actions .button-secondary {
+    background: var(--vscode-button-secondaryBackground);
+    color: var(--vscode-foreground);
+    border: 1px solid var(--accusys-blue);
+    font-weight: 500;
+}
+
+.sql-actions .button-secondary:hover {
+    background: var(--accusys-blue);
+    color: white;
+    border-color: var(--accusys-blue-hover);
+}
+
+.sql-results {
+    background: var(--vscode-editor-background);
+    border: 1px solid var(--vscode-widget-border);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+.sql-results-header {
+    background: var(--vscode-editor-inactiveSelectionBackground);
+    padding: var(--gap-small) var(--section-padding);
+    border-bottom: 1px solid var(--vscode-widget-border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: var(--gap-small);
+}
+
+.sql-results-header h4 {
+    margin: 0;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--vscode-foreground);
+}
+
+.sql-results-toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--gap-tiny);
+    flex-wrap: wrap;
+}
+
+.sql-execution-time {
+    font-size: var(--font-size-small);
+    color: var(--vscode-descriptionForeground);
+    margin-right: var(--gap-small);
+}
+
+.sql-results-content {
+    max-height: 300px;
+    overflow: auto;
+    padding: 0;
+}
+
+#sqlResultsOutput {
+    margin: 0;
+    padding: var(--section-padding);
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: clamp(10px, 0.9vw, 12px);
+    line-height: 1.3;
+    white-space: pre;
+    overflow-x: auto;
+    word-wrap: normal;
+    background: transparent;
+    color: var(--vscode-editor-foreground);
+    border: none;
+    outline: none;
+}
+
+/* Estados de resultados */
+.sql-results.success {
+    background: rgba(40, 167, 69, 0.05);
+    border-color: rgba(40, 167, 69, 0.2);
+}
+
+.sql-results.success #sqlResultsOutput {
+    color: var(--vscode-terminal-ansiGreen);
+}
+
+.sql-results.error {
+    background: rgba(220, 53, 69, 0.05);
+    border-color: rgba(220, 53, 69, 0.2);
+}
+
+.sql-results.error #sqlResultsOutput {
+    color: var(--vscode-errorForeground);
+}
+
+.sql-results.warning {
+    background: rgba(255, 193, 7, 0.05);
+    border-color: rgba(255, 193, 7, 0.2);
+}
+
+.sql-results.warning #sqlResultsOutput {
+    color: var(--vscode-terminal-ansiYellow);
+}
+
+/* Responsive para SQL Editor */
+@media (max-width: 400px) {
+    .sql-connection-group {
+        grid-template-columns: 1fr;
+        gap: var(--gap-tiny);
+    }
+    
+    .sql-connection-group select {
+        grid-column: span 1;
+    }
+    
+    .sql-connection-group .button-small {
+        width: 100%;
+        justify-self: stretch;
+    }
+    
+    .sql-actions {
+        flex-direction: column;
+    }
+    
+    .sql-results-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .sql-results-toolbar {
+        justify-content: center;
+    }
+    
+    #sqlEditor {
+        min-height: clamp(100px, 12vw, 150px);
+        font-size: clamp(10px, 1vw, 12px);
+    }
+}
+
+@media (min-width: 400px) and (max-width: 600px) {
+    .sql-actions {
+        justify-content: space-between;
+    }
+    
+    .sql-execute-button {
+        flex: 2;
+    }
 }
 
  

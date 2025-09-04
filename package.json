@@ -167,6 +167,43 @@
             "Sin recordatorios"
           ],
           "description": "Intervalo entre recordatorios para cargar horas de trabajo"
+        },
+        "accuextension.sql.connections": {
+          "type": "object",
+          "default": {
+            "SYSBRV1": {
+              "name": "SYSBRV1 - Desarrollo",
+              "server": "SYSBRV1",
+              "user": "",
+              "password": "",
+              "enabled": true
+            },
+            "SYSBRV2": {
+              "name": "SYSBRV2 - Testing",
+              "server": "SYSBRV2",
+              "user": "",
+              "password": "",
+              "enabled": true
+            },
+            "FACEDESA": {
+              "name": "FACEDESA - Desarrollo Facturas",
+              "server": "FACEDESA",
+              "user": "",
+              "password": "",
+              "enabled": true
+            }
+          },
+          "description": "Configuraciones de conexiones SQL guardadas"
+        },
+        "accuextension.sql.isqlPath": {
+          "type": "string",
+          "default": "C:/ISQL/MSSQL/BINN/ISQL.EXE",
+          "description": "Ruta al ejecutable de ISQL"
+        },
+        "accuextension.sql.outputWidth": {
+          "type": "number",
+          "default": 5000,
+          "description": "Ancho de salida para ISQL (-w parameter)"
         }
       }
     }

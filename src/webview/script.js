@@ -15,7 +15,13 @@ const COMMANDS = {
     OPEN_CUSTOM_URL: 'openCustomUrl',
     OPEN_SHORTCUTS_SETTINGS: 'openShortcutsSettings',
     SAVE_TFS_SELECTION: 'saveTFSSelection',
-    GET_TFS_SELECTION: 'getTFSSelection'
+    GET_TFS_SELECTION: 'getTFSSelection',
+    EXECUTE_SQL_QUERY: 'executeSqlQuery',
+    GET_SQL_CONNECTIONS: 'getSqlConnections',
+    SAVE_SQL_CONNECTION: 'saveSqlConnection',
+    GET_SQL_HISTORY: 'getSqlHistory',
+    EXPORT_SQL_RESULTS: 'exportSqlResults',
+    OPEN_SQL_SETTINGS: 'openSqlSpecificSettings'
 };
 
 // Constantes para URLs
@@ -43,6 +49,12 @@ const EQUIPOS_POR_AREA = {
 // Variables para accesos directos
 let currentShortcutIndex = -1;
 let shortcuts = [{}, {}, {}, {}, {}];
+
+// Variables para SQL Editor
+let sqlConnections = {};
+let currentConnection = null;
+let sqlHistory = [];
+let lastQueryResult = null;
 
 // Función para abrir la configuración de temas
 function openThemeSettings() {
@@ -555,11 +567,458 @@ window.addEventListener('message', event => {
             // Aplicar la selección guardada de TFS
             applyTFSSelection(message.area, message.equipo);
             break;
+            
+        case 'sqlConnectionsLoaded':
+            loadSqlConnectionsToUI(message.connections);
+            break;
+            
+        case 'sqlQueryExecuted':
+            displaySqlResults(message.result);
+            break;
+            
+        case 'sqlHistoryLoaded':
+            sqlHistory = message.history || [];
+            break;
+    }
+});
+
+// ==========================================
+// FUNCIONES SQL EDITOR
+// ==========================================
+
+/**
+ * Carga las conexiones SQL disponibles
+ */
+function loadSqlConnections() {
+    vscode.postMessage({
+        command: COMMANDS.GET_SQL_CONNECTIONS
+    });
+}
+
+/**
+ * Carga las conexiones en el selector UI
+ */
+function loadSqlConnectionsToUI(connections) {
+    sqlConnections = connections;
+    const select = document.getElementById('sqlConnection');
+    
+    // Limpiar opciones existentes excepto la primera
+    while (select.children.length > 1) {
+        select.removeChild(select.lastChild);
+    }
+    
+    // Agregar conexiones disponibles
+    Object.keys(connections).forEach(key => {
+        const option = document.createElement('option');
+        option.value = key;
+        option.textContent = connections[key].name;
+        
+        // Marcar si no tiene contraseña configurada
+        if (!connections[key].hasPassword) {
+            option.textContent += ' (⚠️ Sin contraseña)';
+            option.style.color = 'var(--vscode-terminal-ansiYellow)';
+        }
+        
+        select.appendChild(option);
+    });
+    
+    checkSqlExecuteButton();
+}
+
+/**
+ * Maneja el cambio de conexión
+ */
+function handleConnectionChange() {
+    const select = document.getElementById('sqlConnection');
+    currentConnection = select.value || null;
+    checkSqlExecuteButton();
+}
+
+/**
+ * Verifica si se puede habilitar el botón ejecutar
+ */
+function checkSqlExecuteButton() {
+    const executeButton = document.getElementById('sqlExecuteButton');
+    const sqlEditor = document.getElementById('sqlEditor');
+    const connectionSelect = document.getElementById('sqlConnection');
+    
+    const hasConnection = connectionSelect.value;
+    const hasQuery = sqlEditor.value.trim().length > 0;
+    
+    executeButton.disabled = !hasConnection || !hasQuery;
+}
+
+/**
+ * Ejecuta la consulta SQL
+ */
+async function executeSqlQuery() {
+    const connectionKey = document.getElementById('sqlConnection').value;
+    const query = document.getElementById('sqlEditor').value.trim();
+    
+    if (!connectionKey || !query) {
+        alert('Selecciona una conexión e ingresa una consulta');
+        return;
+    }
+    
+    // Deshabilitar botón y mostrar estado de carga
+    const executeButton = document.getElementById('sqlExecuteButton');
+    const originalText = executeButton.innerHTML;
+    executeButton.disabled = true;
+    executeButton.innerHTML = '⏳ Ejecutando...';
+    
+    // Ocultar resultados anteriores
+    document.getElementById('sqlResults').style.display = 'none';
+    
+    try {
+        // Enviar consulta al backend
+        const result = await sendSqlQueryToBackend(connectionKey, query);
+        displaySqlResults(result);
+    } catch (error) {
+        displaySqlError(error.message);
+    } finally {
+        // Restaurar botón
+        executeButton.disabled = false;
+        executeButton.innerHTML = originalText;
+        checkSqlExecuteButton();
+    }
+}
+
+/**
+ * Envía la consulta al backend y retorna una promesa
+ */
+function sendSqlQueryToBackend(connectionKey, query) {
+    return new Promise((resolve, reject) => {
+        const messageId = Date.now();
+        
+        // Listener temporal para esta consulta específica
+        const messageListener = (event) => {
+            const message = event.data;
+            if (message.command === 'sqlQueryResult' && message.messageId === messageId) {
+                window.removeEventListener('message', messageListener);
+                
+                if (message.success) {
+                    resolve(message.result);
+                } else {
+                    reject(new Error(message.error));
+                }
+            }
+        };
+        
+        window.addEventListener('message', messageListener);
+        
+        // Enviar consulta
+        vscode.postMessage({
+            command: COMMANDS.EXECUTE_SQL_QUERY,
+            messageId: messageId,
+            connectionKey: connectionKey,
+            query: query
+        });
+        
+        // Timeout después de 60 segundos
+        setTimeout(() => {
+            window.removeEventListener('message', messageListener);
+            reject(new Error('Timeout: La consulta tardó más de 60 segundos'));
+        }, 60000);
+    });
+}
+
+/**
+ * Muestra los resultados de la consulta
+ */
+function displaySqlResults(result) {
+    lastQueryResult = result;
+    
+    const resultsContainer = document.getElementById('sqlResults');
+    const resultsOutput = document.getElementById('sqlResultsOutput');
+    const executionTime = document.getElementById('sqlExecutionTime');
+    
+    // Mostrar tiempo de ejecución
+    executionTime.textContent = `Ejecutado en ${result.executionTime}ms`;
+    
+    // Limpiar clases de estado previas
+    resultsContainer.classList.remove('success', 'error', 'warning');
+    
+    if (result.success) {
+        resultsContainer.classList.add('success');
+        resultsOutput.textContent = result.output || 'Consulta ejecutada exitosamente (sin resultados)';
+    } else {
+        resultsContainer.classList.add('error');
+        resultsOutput.textContent = result.error || 'Error desconocido';
+    }
+    
+    // Mostrar contenedor de resultados
+    resultsContainer.style.display = 'block';
+    
+    // Scroll hacia los resultados
+    resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+/**
+ * Muestra error de SQL
+ */
+function displaySqlError(errorMessage) {
+    const resultsContainer = document.getElementById('sqlResults');
+    const resultsOutput = document.getElementById('sqlResultsOutput');
+    const executionTime = document.getElementById('sqlExecutionTime');
+    
+    executionTime.textContent = 'Error en ejecución';
+    resultsContainer.classList.remove('success', 'warning');
+    resultsContainer.classList.add('error');
+    resultsOutput.textContent = errorMessage;
+    resultsContainer.style.display = 'block';
+}
+
+/**
+ * Formatea la consulta SQL (básico)
+ */
+function formatQuery() {
+    const editor = document.getElementById('sqlEditor');
+    let query = editor.value;
+    
+    // Formateo básico de SQL en minúsculas
+    query = query
+        .replace(/\bSELECT\b/gi, '\nselect')
+        .replace(/\bFROM\b/gi, '\nfrom')
+        .replace(/\bWHERE\b/gi, '\nwhere')
+        .replace(/\bAND\b/gi, '\n  and')
+        .replace(/\bOR\b/gi, '\n  or')
+        .replace(/\bORDER BY\b/gi, '\norder by')
+        .replace(/\bGROUP BY\b/gi, '\ngroup by')
+        .replace(/\bHAVING\b/gi, '\nhaving')
+        .replace(/\bINSERT INTO\b/gi, '\ninsert into')
+        .replace(/\bVALUES\b/gi, '\nvalues')
+        .replace(/\bUPDATE\b/gi, '\nupdate')
+        .replace(/\bSET\b/gi, '\nset')
+        .replace(/\bDELETE FROM\b/gi, '\ndelete from')
+        .replace(/\bINNER JOIN\b/gi, '\n  inner join')
+        .replace(/\bLEFT JOIN\b/gi, '\n  left join')
+        .replace(/\bRIGHT JOIN\b/gi, '\n  right join')
+        .replace(/\bFULL JOIN\b/gi, '\n  full join')
+        .replace(/\bON\b/gi, '\n    on')
+        .replace(/,/g, ',\n  ')
+        .replace(/^\s+/gm, '') // Remover espacios al inicio
+        .replace(/\n\s*\n/g, '\n') // Remover líneas vacías múltiples
+        .trim();
+    
+    editor.value = query;
+    checkSqlExecuteButton();
+}
+
+/**
+ * Limpia la consulta
+ */
+function clearQuery() {
+    try {
+        const editor = document.getElementById('sqlEditor');
+        if (!editor) {
+            alert('Error: No se encontró el editor SQL');
+            return;
+        }
+        
+        // Simplificar: limpiar directamente sin preguntar si hay poco texto
+        const currentValue = editor.value.trim();
+        
+        if (currentValue.length === 0) {
+            // Si ya está vacío, solo hacer focus
+            editor.focus();
+            return;
+        }
+        
+        // Si hay menos de 50 caracteres, limpiar directamente
+        if (currentValue.length < 50) {
+            editor.value = '';
+            editor.focus();
+            checkSqlExecuteButton();
+            return;
+        }
+        
+        // Si hay mucho texto, preguntar
+        if (confirm('¿Estás seguro de que quieres limpiar la consulta?')) {
+            editor.value = '';
+            editor.focus();
+            checkSqlExecuteButton();
+        }
+    } catch (error) {
+        alert('Error al limpiar la consulta: ' + error.message);
+    }
+}
+
+/**
+ * Muestra el historial de consultas
+ */
+function showQueryHistory() {
+    // Cargar historial desde el backend
+    vscode.postMessage({
+        command: COMMANDS.GET_SQL_HISTORY
+    });
+    
+    // Esperar un momento para que se cargue el historial
+    setTimeout(() => {
+        if (sqlHistory.length === 0) {
+            alert('No hay consultas en el historial.\n\nEjecuta algunas consultas SQL para ver el historial aquí.');
+            return;
+        }
+        
+        const historyText = sqlHistory
+            .slice(0, 15) // Mostrar las últimas 15 consultas
+            .map((item, index) => {
+                const date = new Date(item.timestamp).toLocaleString('es-ES');
+                const status = item.success ? '✅ Exitosa' : '❌ Error';
+                const query = item.query.length > 60 ? item.query.substring(0, 60) + '...' : item.query;
+                return `${index + 1}. ${date}\n   Conexión: ${item.connection}\n   ${status} (${item.executionTime}ms)\n   Consulta: ${query}\n`;
+            })
+            .join('\n');
+        
+        const action = confirm(`📋 HISTORIAL DE CONSULTAS SQL\n\nÚltimas ${Math.min(sqlHistory.length, 15)} consultas:\n\n${historyText}\n\n¿Quieres abrir la configuración de SQL para gestionar el historial?`);
+        
+        if (action) {
+            openSqlSettings();
+        }
+    }, 200); // Pequeño delay para asegurar que el historial se haya cargado
+}
+
+
+
+/**
+ * Exporta resultados
+ */
+function exportResults(format) {
+    if (!lastQueryResult || !lastQueryResult.output) {
+        alert('No hay resultados para exportar');
+        return;
+    }
+    
+    vscode.postMessage({
+        command: COMMANDS.EXPORT_SQL_RESULTS,
+        data: lastQueryResult.output,
+        format: format
+    });
+}
+
+/**
+ * Copia los resultados al portapapeles
+ */
+function copyResults() {
+    if (!lastQueryResult || !lastQueryResult.output) {
+        alert('No hay resultados para copiar');
+        return;
+    }
+    
+    try {
+        // Usar la API del navegador para copiar al portapapeles
+        navigator.clipboard.writeText(lastQueryResult.output).then(() => {
+            // Mostrar feedback visual
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '✅';
+            button.style.background = '#28a745';
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.style.background = '';
+            }, 1500);
+        }).catch(() => {
+            // Fallback para navegadores que no soportan clipboard API
+            fallbackCopyToClipboard(lastQueryResult.output);
+        });
+    } catch (error) {
+        // Fallback para navegadores que no soportan clipboard API
+        fallbackCopyToClipboard(lastQueryResult.output);
+    }
+}
+
+/**
+ * Fallback para copiar al portapapeles
+ */
+function fallbackCopyToClipboard(text) {
+    try {
+        // Crear un elemento temporal
+        const textArea = document.createElement('textarea');
+        textArea.value = text;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        textArea.style.top = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        
+        // Intentar copiar
+        const successful = document.execCommand('copy');
+        document.body.removeChild(textArea);
+        
+        if (successful) {
+            alert('Resultado copiado al portapapeles');
+        } else {
+            alert('No se pudo copiar al portapapeles. Selecciona y copia manualmente el texto.');
+        }
+    } catch (error) {
+        alert('No se pudo copiar al portapapeles. Selecciona y copia manualmente el texto.');
+    }
+}
+
+/**
+ * Limpia los resultados
+ */
+function clearResults() {
+    document.getElementById('sqlResults').style.display = 'none';
+    document.getElementById('sqlResultsOutput').textContent = '';
+    document.getElementById('sqlExecutionTime').textContent = '';
+    lastQueryResult = null;
+}
+
+/**
+ * Abre configuración de SQL
+ */
+function openSqlSettings() {
+    vscode.postMessage({
+        command: COMMANDS.OPEN_SQL_SETTINGS
+    });
+}
+
+
+
+// Event listeners para SQL Editor
+document.addEventListener('DOMContentLoaded', function() {
+    const sqlEditor = document.getElementById('sqlEditor');
+    if (sqlEditor) {
+        sqlEditor.addEventListener('input', checkSqlExecuteButton);
+        
+        // Cargar conexiones al inicializar
+        loadSqlConnections();
+        
+        // Atajos de teclado
+        sqlEditor.addEventListener('keydown', function(e) {
+            // Ctrl+Enter para ejecutar
+            if (e.ctrlKey && e.key === 'Enter') {
+                e.preventDefault();
+                executeSqlQuery();
+            }
+            
+            // Tab para indentación
+            if (e.key === 'Tab') {
+                e.preventDefault();
+                const start = this.selectionStart;
+                const end = this.selectionEnd;
+                
+                this.value = this.value.substring(0, start) + '  ' + this.value.substring(end);
+                this.selectionStart = this.selectionEnd = start + 2;
+            }
+        });
+    }
+    
+    // Verificar que los botones de la toolbar estén funcionando
+    const clearButton = document.querySelector('button[onclick="clearQuery()"]');
+    if (clearButton) {
+        // Agregar event listener adicional por si el onclick no funciona
+        clearButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            clearQuery();
+        });
     }
 });
 
 
 
 
-
+ 
  

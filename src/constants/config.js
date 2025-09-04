@@ -63,7 +63,15 @@ module.exports = {
         OPEN_SHORTCUTS_SETTINGS: 'openShortcutsSettings',
         OPEN_TIME_REPORT: 'openTimeReport',
         SAVE_TFS_SELECTION: 'saveTFSSelection',
-        GET_TFS_SELECTION: 'getTFSSelection'
+        GET_TFS_SELECTION: 'getTFSSelection',
+        EXECUTE_SQL_QUERY: 'executeSqlQuery',
+        GET_SQL_CONNECTIONS: 'getSqlConnections',
+        SAVE_SQL_CONNECTION: 'saveSqlConnection',
+        GET_SQL_HISTORY: 'getSqlHistory',
+        EXPORT_SQL_RESULTS: 'exportSqlResults',
+        OPEN_SQL_SETTINGS: 'openSqlSpecificSettings',
+        DIAGNOSE_SQL: 'diagnoseSqlConfiguration',
+        TEST_SQL_CONNECTION: 'testSqlConnection'
     },
     
     // URLs del sistema
@@ -93,5 +101,24 @@ module.exports = {
     TFS_CONFIG_KEYS: {
         SELECTED_AREA: 'accuextension.tfs.selectedArea',
         SELECTED_EQUIPO: 'accuextension.tfs.selectedEquipo'
+    },
+    
+    // Configuración SQL
+    SQL_CONFIG_KEYS: {
+        CONNECTIONS: 'accuextension.sql.connections',
+        ISQL_PATH: 'accuextension.sql.isqlPath',
+        OUTPUT_WIDTH: 'accuextension.sql.outputWidth'
+    },
+    
+    // Comandos SQL
+    SQL_COMMANDS: {
+        EXECUTE_QUERY: 'executeQuery',
+        GET_CONNECTIONS: 'getConnections',
+        SAVE_CONNECTION: 'saveConnection',
+        DELETE_CONNECTION: 'deleteConnection',
+        GET_QUERY_HISTORY: 'getQueryHistory',
+        SAVE_QUERY_HISTORY: 'saveQueryHistory',
+        EXPORT_RESULTS: 'exportResults',
+        CLEAR_RESULTS: 'clearResults'
     }
 }; 

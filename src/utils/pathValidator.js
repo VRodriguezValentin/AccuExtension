@@ -1,5 +1,5 @@
 /**
- * Utilidades de validaciÛn para AccuExtension
+ * Utilidades de validaci√≥n para AccuExtension
  * @module utils/pathValidator
  */
 
@@ -9,15 +9,21 @@ const fs = require('fs');
 /**
  * Valida una ruta de archivo
  * @param {string} path - Ruta a validar
- * @returns {boolean} - True si la ruta es v·lida
+ * @returns {boolean} - True si la ruta es v√°lida
  */
 function isValidPath(path) {
     if (!path || typeof path !== 'string') {
         return false;
     }
     
-    // Verificar que sea una ruta absoluta en Windows
-    if (!path.match(/^[A-Za-z]:\\/)) {
+    // Verificar que sea una ruta absoluta en Windows (acepta tanto \ como /)
+    if (!path.match(/^[A-Za-z]:[\\\/]/)) {
+        return false;
+    }
+    
+    // Verificar que no contenga caracteres peligrosos
+    const dangerousChars = /[<>"|*?]/;
+    if (dangerousChars.test(path)) {
         return false;
     }
     
@@ -27,7 +33,7 @@ function isValidPath(path) {
 /**
  * Valida una URL
  * @param {string} url - URL a validar
- * @returns {boolean} - True si la URL es v·lida
+ * @returns {boolean} - True si la URL es v√°lida
  */
 function isValidUrl(url) {
     if (!url || typeof url !== 'string') {
@@ -60,11 +66,11 @@ function fileExists(path) {
 }
 
 /**
- * Valida entrada seg˙n el tipo especificado
+ * Valida entrada seg√∫n el tipo especificado
  * @param {*} input - Entrada a validar
- * @param {string} type - Tipo de validaciÛn ('url', 'path', 'file')
+ * @param {string} type - Tipo de validaci√≥n ('url', 'path', 'file')
  * @param {Object} options - Opciones adicionales
- * @returns {Object} - Resultado de la validaciÛn
+ * @returns {Object} - Resultado de la validaci√≥n
  */
 function validateInput(input, type, options = {}) {
     const result = {
@@ -77,14 +83,14 @@ function validateInput(input, type, options = {}) {
         case 'url':
             result.isValid = isValidUrl(input);
             if (!result.isValid) {
-                result.error = 'URL inv·lida proporcionada';
+                result.error = 'URL inv√°lida proporcionada';
             }
             break;
             
         case 'path':
             result.isValid = isValidPath(input);
             if (!result.isValid) {
-                result.error = 'Ruta inv·lida proporcionada';
+                result.error = 'Ruta inv√°lida proporcionada';
             }
             break;
             

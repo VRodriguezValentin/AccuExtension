@@ -215,6 +215,64 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Sección SQL Editor -->
+        <div class="section sql-section">
+            <div class="sql-title">
+                <span class="sql-icon">💾</span>
+                <span>Editor SQL</span>
+            </div>
+            
+            <div class="sql-container">
+                <!-- Selector de conexión -->
+                <div class="sql-connection-group">
+                    <label for="sqlConnection">Conexión</label>
+                    <select id="sqlConnection" onchange="handleConnectionChange()">
+                        <option value="">Selecciona una conexión</option>
+                    </select>
+                    <button class="button-small" onclick="openSqlSettings()" title="Configurar conexiones SQL">⚙️</button>
+                </div>
+                
+                <!-- Editor de consulta -->
+                <div class="sql-editor-group">
+                    <label for="sqlEditor">Consulta SQL</label>
+                    <div class="sql-editor-container">
+                        <textarea id="sqlEditor" placeholder="-- Escribe tu consulta SQL aquí
+SELECT * FROM tu_tabla
+WHERE condicion = 'valor'"></textarea>
+                        <div class="sql-editor-toolbar">
+                            <button class="button-small" onclick="formatQuery()" title="Formatear consulta">📝</button>
+                            <button class="button-small" onclick="clearQuery()" title="Limpiar">🗑️</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Botones de acción -->
+                <div class="sql-actions">
+                    <button class="button sql-execute-button" onclick="executeSqlQuery()" id="sqlExecuteButton" disabled>
+                        ▶️ Ejecutar
+                    </button>
+                    <button class="button button-secondary" onclick="showQueryHistory()" title="Ver historial de consultas">📋 Historial</button>
+                </div>
+                
+                <!-- Resultados -->
+                <div class="sql-results" id="sqlResults" style="display: none;">
+                    <div class="sql-results-header">
+                        <h4>Resultados</h4>
+                        <div class="sql-results-toolbar">
+                            <span class="sql-execution-time" id="sqlExecutionTime"></span>
+                            <button class="button-small" onclick="exportResults('txt')" title="Exportar como TXT">📄</button>
+                            <button class="button-small" onclick="exportResults('csv')" title="Exportar como CSV">📊</button>
+                            <button class="button-small" onclick="copyResults()" title="Copiar resultado">📋</button>
+                            <button class="button-small" onclick="clearResults()" title="Limpiar resultados">✖️</button>
+                        </div>
+                    </div>
+                    <div class="sql-results-content">
+                        <pre id="sqlResultsOutput"></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
     <!-- Modal para editar accesos directos -->

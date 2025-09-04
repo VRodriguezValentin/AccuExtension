@@ -1,5 +1,5 @@
-/**
- * GestiÛn de herramientas externas para AccuExtension
+Ôªø/**
+ * Gesti√≥n de herramientas externas para AccuExtension
  * @module utils/toolManager
  */
 
@@ -9,13 +9,13 @@ const { validateInput } = require('./pathValidator');
 const config = require('../constants/config');
 
 /**
- * Abre una herramienta externa con validaciÛn completa
+ * Abre una herramienta externa con validaci√≥n completa
  * @param {string} path - Ruta al ejecutable
  * @param {string} name - Nombre de la herramienta para mostrar en mensajes
  * @param {boolean} checkExistence - Si debe verificar que el archivo existe
  */
 function openTool(path, name, checkExistence = false) {
-    // Validar que la ruta estÈ configurada
+    // Validar que la ruta est√© configurada
     if (!path) {
         vscode.window.showErrorMessage(
             `${config.ERROR_MESSAGES.TOOL_NOT_CONFIGURED} ${name}`
@@ -37,7 +37,7 @@ function openTool(path, name, checkExistence = false) {
         const fileValidation = validateInput(path, 'file');
         if (!fileValidation.isValid) {
             vscode.window.showErrorMessage(
-                `${config.ERROR_MESSAGES.FILE_NOT_FOUND} ${name} en: ${path}. Verifica la ruta en ConfiguraciÛn > AccuExtension.`
+                `${config.ERROR_MESSAGES.FILE_NOT_FOUND} ${name} en: ${path}. Verifica la ruta en Configuraci√≥n > AccuExtension.`
             );
             return;
         }
@@ -48,7 +48,7 @@ function openTool(path, name, checkExistence = false) {
     exec(`"${path}"`, (error) => {
         if (error) {
             vscode.window.showErrorMessage(
-                `${config.ERROR_MESSAGES.TOOL_OPEN_ERROR} ${name}: ${error.message}. Verifica la ruta en ConfiguraciÛn > AccuExtension.`
+                `${config.ERROR_MESSAGES.TOOL_OPEN_ERROR} ${name}: ${error.message}. Verifica la ruta en Configuraci√≥n > AccuExtension.`
             );
         }
     });
@@ -67,17 +67,17 @@ function openASTManager() {
     
     if (!astPath) {
         vscode.window.showErrorMessage(
-            `${config.ERROR_MESSAGES.TOOL_NOT_CONFIGURED} AST. Ve a ConfiguraciÛn > AccuExtension para configurar la ruta.`
+            `${config.ERROR_MESSAGES.TOOL_NOT_CONFIGURED} AST. Ve a Configuraci√≥n > AccuExtension para configurar la ruta.`
         );
         return;
     }
     
-    // Usar la funciÛn unificada openTool para consistencia
+    // Usar la funci√≥n unificada openTool para consistencia
     openTool(astPath, config.TOOL_NAMES.ast, true);
 }
 
 /**
- * FunciÛn de compatibilidad para mantener la API existente
+ * Funci√≥n de compatibilidad para mantener la API existente
  * @param {string} path - Ruta al ejecutable
  * @param {string} name - Nombre de la herramienta
  * @param {string} toolName - Nombre de la herramienta (no usado, mantenido por compatibilidad)
@@ -87,17 +87,17 @@ function checkAndOpenTool(path, name, toolName) {
 }
 
 /**
- * Abre una URL en el navegador predeterminado con validaciÛn
+ * Abre una URL en el navegador predeterminado con validaci√≥n
  * @param {string} url - URL a abrir
  */
 function openTFS(url) {
-    // Validar que la URL no estÈ vacÌa
+    // Validar que la URL no est√© vac√≠a
     if (!url || typeof url !== 'string') {
         vscode.window.showErrorMessage(config.ERROR_MESSAGES.INVALID_URL);
         return;
     }
     
-    // Validar formato b·sico de URL
+    // Validar formato b√°sico de URL
     const urlValidation = validateInput(url, 'url');
     if (!urlValidation.isValid) {
         vscode.window.showErrorMessage(`${config.ERROR_MESSAGES.INVALID_URL}: ${url}`);

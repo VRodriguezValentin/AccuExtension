@@ -1,5 +1,5 @@
 /**
- * Manejo de mensajes entre webview y extensi�n para AccuExtension
+ * Manejo de mensajes entre webview y extensión para AccuExtension
  * @module utils/messageHandler
  */
 
@@ -7,6 +7,7 @@ const vscode = require('vscode');
 const config = require('../constants/config');
 const toolManager = require('./toolManager');
 const configManager = require('./configManager');
+const sqlConnectionManager = require('./sqlConnectionManager');
 const { getAllShortcutConfigs, updateShortcutConfig } = require('./configManager');
 
 /**
@@ -83,6 +84,79 @@ const messageHandlers = {
         } catch (error) {
             // Error silencioso para mantener la consola limpia
         }
+    },
+    
+    [config.MESSAGE_COMMANDS.EXECUTE_SQL_QUERY]: async (connectionKey, query) => {
+        try {
+            const result = await sqlConnectionManager.executeSqlQuery(connectionKey, query);
+            return result;
+        } catch (error) {
+            throw error;
+        }
+    },
+    
+    [config.MESSAGE_COMMANDS.GET_SQL_CONNECTIONS]: () => {
+        return sqlConnectionManager.getSqlConnections();
+    },
+    
+    [config.MESSAGE_COMMANDS.SAVE_SQL_CONNECTION]: async (connectionKey, connectionData) => {
+        await sqlConnectionManager.saveSqlConnection(connectionKey, connectionData);
+    },
+    
+    [config.MESSAGE_COMMANDS.GET_SQL_HISTORY]: () => {
+        return sqlConnectionManager.getQueryHistory();
+    },
+    
+    [config.MESSAGE_COMMANDS.EXPORT_SQL_RESULTS]: async (data, format) => {
+        return await sqlConnectionManager.exportResults(data, format);
+    },
+    
+    [config.MESSAGE_COMMANDS.OPEN_SQL_SETTINGS]: () => {
+        vscode.commands.executeCommand('workbench.action.openSettings', 'accuextension.sql');
+    },
+    
+    [config.MESSAGE_COMMANDS.DIAGNOSE_SQL]: () => {
+        const diagnosis = sqlConnectionManager.diagnoseSqlConfiguration();
+        let message = 'DIAGNÓSTICO SQL:\n\n';
+        message += `ISQL Path: ${diagnosis.isqlPath}\n`;
+        message += `ISQL Existe: ${diagnosis.isqlExists ? '✅' : '❌'}\n`;
+        message += `Directorio Temporal: ${diagnosis.tempDir}\n`;
+        message += `Dir Temp Existe: ${diagnosis.tempDirExists ? '✅' : '❌'}\n`;
+        message += `Dir Temp Escribible: ${diagnosis.tempDirWritable ? '✅' : '❌'}\n`;
+        if (diagnosis.tempDirWritableError) {
+            message += `Error Escritura: ${diagnosis.tempDirWritableError}\n`;
+        }
+        message += `Home Directory: ${diagnosis.homeDir}\n`;
+        message += `Plataforma: ${diagnosis.platform}\n`;
+        message += `Conexiones configuradas: ${diagnosis.connections}\n`;
+        message += `Ancho de salida: ${diagnosis.outputWidth}`;
+        
+        vscode.window.showInformationMessage(message, { modal: true });
+    },
+    
+    [config.MESSAGE_COMMANDS.TEST_SQL_CONNECTION]: async (connectionKey) => {
+        try {
+            const result = await sqlConnectionManager.testSqlConnection(connectionKey);
+            let message = `PRUEBA DE CONEXIÓN: ${connectionKey}\n\n`;
+            
+            if (result.success) {
+                message += `✅ CONEXIÓN EXITOSA\n\n`;
+                message += `Resultado:\n${result.output || 'Sin salida'}`;
+            } else {
+                message += `❌ CONEXIÓN FALLIDA\n\n`;
+                message += `Error: ${result.error}\n`;
+                if (result.stderr) {
+                    message += `STDERR: ${result.stderr}\n`;
+                }
+                if (result.exitCode) {
+                    message += `Código de salida: ${result.exitCode}`;
+                }
+            }
+            
+            vscode.window.showInformationMessage(message, { modal: true });
+        } catch (error) {
+            vscode.window.showErrorMessage(`Error en prueba de conexión: ${error.message}`);
+        }
     }
 };
 
@@ -90,14 +164,59 @@ const messageHandlers = {
  * Maneja un mensaje recibido del webview
  * @param {Object} message - Mensaje recibido
  * @param {vscode.WebviewPanel} panel - Panel del webview
- * @param {vscode.ExtensionContext} context - Contexto de la extensi�n
+ * @param {vscode.ExtensionContext} context - Contexto de la extensión
  */
-function handleMessage(message, panel, context) {
+async function handleMessage(message, panel, context) {
     const handler = messageHandlers[message.command];
     
     if (handler) {
         try {
-            // Extraer los par�metros del mensaje (excluyendo 'command')
+            // Manejar comandos SQL especiales
+            if (message.command === config.MESSAGE_COMMANDS.EXECUTE_SQL_QUERY) {
+                const result = await handler(message.connectionKey, message.query);
+                
+                // Enviar resultado de vuelta al webview
+                if (panel && panel.webview) {
+                    panel.webview.postMessage({
+                        command: 'sqlQueryResult',
+                        messageId: message.messageId,
+                        success: true,
+                        result: result
+                    });
+                }
+                return;
+            }
+            
+            if (message.command === config.MESSAGE_COMMANDS.GET_SQL_CONNECTIONS) {
+                const connections = handler();
+                
+                if (panel && panel.webview) {
+                    panel.webview.postMessage({
+                        command: 'sqlConnectionsLoaded',
+                        connections: connections
+                    });
+                }
+                return;
+            }
+            
+            if (message.command === config.MESSAGE_COMMANDS.GET_SQL_HISTORY) {
+                const history = handler();
+                
+                if (panel && panel.webview) {
+                    panel.webview.postMessage({
+                        command: 'sqlHistoryLoaded',
+                        history: history
+                    });
+                }
+                return;
+            }
+            
+            if (message.command === config.MESSAGE_COMMANDS.TEST_SQL_CONNECTION) {
+                await handler(message.connectionKey);
+                return;
+            }
+            
+            // Extraer los parámetros del mensaje (excluyendo 'command')
             const params = Object.values(message).slice(1);
             
             // Agregar panel y context si son necesarios
@@ -108,10 +227,26 @@ function handleMessage(message, panel, context) {
             } else if (message.command === config.MESSAGE_COMMANDS.GET_TFS_SELECTION) {
                 handler(panel);
             } else {
-                handler(...params);
+                const result = await handler(...params);
+                
+                // Si hay resultado y es una operación SQL, enviarlo de vuelta
+                if (result && message.command.includes('SQL')) {
+                    panel.webview.postMessage({
+                        command: 'sqlOperationResult',
+                        result: result
+                    });
+                }
             }
         } catch (error) {
-            // Error silencioso para mantener la consola limpia
+            // Enviar error de SQL de vuelta al webview si es necesario
+            if (message.command === config.MESSAGE_COMMANDS.EXECUTE_SQL_QUERY && panel && panel.webview) {
+                panel.webview.postMessage({
+                    command: 'sqlQueryResult',
+                    messageId: message.messageId,
+                    success: false,
+                    error: error.message
+                });
+            }
         }
     } else {
         // Comando desconocido, continuar sin mostrar warning
@@ -142,7 +277,7 @@ function handleGetToolPath(panel, toolName) {
 /**
  * Actualiza el logo del webview basado en el tema actual
  * @param {vscode.WebviewPanel} panel - Panel del webview
- * @param {vscode.ExtensionContext} context - Contexto de la extensi�n
+ * @param {vscode.ExtensionContext} context - Contexto de la extensión
  */
 function updateLogoForTheme(panel, context) {
     const { getCurrentTheme } = require('./configManager');
@@ -163,7 +298,7 @@ function updateLogoForTheme(panel, context) {
 /**
  * Configura el listener de mensajes para un panel webview
  * @param {vscode.WebviewPanel} panel - Panel del webview
- * @param {vscode.ExtensionContext} context - Contexto de la extensi�n
+ * @param {vscode.ExtensionContext} context - Contexto de la extensión
  */
 function setupMessageListener(panel, context) {
     panel.webview.onDidReceiveMessage(
@@ -211,7 +346,7 @@ function setupMessageListener(panel, context) {
         // Error silencioso para mantener la consola limpia
     }
 
-    // Escuchar cambios en configuraci�n para sincronizar hacia el webview
+    // Escuchar cambios en configuración para sincronizar hacia el webview
     const configChangeDisposable = vscode.workspace.onDidChangeConfiguration((e) => {
         if (e.affectsConfiguration('accuextension.shortcuts')) {
             try {
