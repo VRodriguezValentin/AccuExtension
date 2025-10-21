@@ -2,7 +2,7 @@
 
 **AccuExtension** es una extensión personalizada para desarrolladores de **Accusys Technology**, diseñada específicamente para **Cursor** para mejorar tu flujo de trabajo diario.
 
-[![Version](https://img.shields.io/badge/version-1.0.6-blue.svg)](https://open-vsx.org/extension/accusys-technology/accuextension)
+[![Version](https://img.shields.io/badge/version-1.0.7-blue.svg)](https://open-vsx.org/extension/accusys-technology/accuextension)
 [![Cursor](https://img.shields.io/badge/Cursor-1.3.9+-black.svg)](https://cursor.com/?from=home)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
@@ -27,6 +27,14 @@
 - **Autocompletado inteligente** en archivos .sql y .sp
 - **Estructuras estándar** para stored procedures, tablas, vistas, catálogos, cursores y manejo de errores
 
+### 💾 **Editor SQL Integrado**
+- **Conexiones configurables** a múltiples entornos (SYSBRV1, SYSBRV2, FACEDESA)
+- **Ejecución de consultas** mediante ISQL con visualización de resultados en tiempo real
+- **Historial de consultas** con detalles de ejecución (In progress)
+- **Exportación de resultados** en formatos TXT y CSV
+- **Copiar resultados** al portapapeles con un solo clic
+- **Formateo automático** de consultas SQL a minúsculas
+
 ---
 
 
@@ -49,6 +57,26 @@
 - Usa ext: para definir el tipo de archivo
 - Usa "Literal" para búsquedas exactas
 - Escribe por ejemplo nombres de archivos, tablas o líneas de código → "Buscar"
+
+### Editor SQL Integrado
+Ejecuta consultas SQL directamente desde la extensión:
+
+1. **Configurar conexión**:
+   - Abre la extensión
+   - Selecciona una conexión (SYSBRV1, SYSBRV2, FACEDESA)
+   - Haz clic en ⚙️ para configurar credenciales en Settings
+
+2. **Ejecutar consultas**:
+   - Escribe tu consulta SQL en el editor
+   - Presiona `▶️ Ejecutar` o `Ctrl+Enter`
+   - Los resultados aparecen con scroll horizontal para tablas anchas
+
+3. **Funciones adicionales**:
+   - **📝 Formatear**: Convierte SQL a minúsculas
+   - **🗑️ Limpiar**: Vacía el editor (In progress)
+   - **📋 Historial**: Muestra las últimas 15 consultas ejecutadas (In progress)
+   - **📄 Exportar**: Guarda resultados en TXT o CSV
+   - **📋 Copiar**: Copia resultados al portapapeles
 
 ### Snippets SQL
 Los snippets están disponibles automáticamente en archivos `.sql` y `.sp`. Escribe el prefijo y presiona `Tab`:
@@ -150,6 +178,30 @@ Los recordatorios se configuran desde Settings en el apartado `AccuExtension > R
   "accuextension.tools.isqlw": "C:\\Program Files (x86)\\ISQL\\MSSQL\\BINN\\ISQLW.EXE",
   "accuextension.tools.cobis": "C:\\ProgramData\\COBIS\\COBISExplorer\\COBISCorp.eCOBIS.COBISExplorer.Shell.exe",
   "accuextension.tools.ast": "C:\\Accusys Technology\\AST-Activities Manager\\ejecutable\\Administrador.exe"
+}
+```
+
+### Configuración del Editor SQL
+```json
+{
+  "accuextension.sql.isqlPath": "C:/ISQL/MSSQL/BINN/ISQL.EXE",
+  "accuextension.sql.outputWidth": 5000,
+  "accuextension.sql.connections": {
+    "SYSBRV1": {
+      "name": "SYSBRV1",
+      "server": "SYSBRV1",
+      "user": "tu_usuario",
+      "password": "tu_contraseña",
+      "enabled": true
+    },
+    "SYSBRV2": {
+      "name": "SYSBRV2",
+      "server": "SYSBRV2",
+      "user": "tu_usuario",
+      "password": "tu_contraseña",
+      "enabled": true
+    }
+  }
 }
 ```
 

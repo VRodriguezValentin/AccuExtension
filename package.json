@@ -2,7 +2,7 @@
   "name": "accuextension",
   "displayName": "AccuExtension",
   "description": "Extension personalizada para desarrolladores de Accusys Technology en Cursor",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "engines": {
     "vscode": "^1.74.0",
     "cursor": "^1.10.0"

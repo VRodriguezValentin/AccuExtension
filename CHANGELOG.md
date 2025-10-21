@@ -4,6 +4,33 @@ Todos los cambios notables de este proyecto serán documentados en este archivo.
 
 ---
 
+## [1.0.7] - 2025-10-21
+
+### 🎨 **Mejoras Visuales y UX**
+- **Colores corporativos** - Botones y títulos actualizados con la paleta celeste/azul de Accusys
+- **Resultados SQL con estados visuales** - Fondos verde tenue para éxito, rojo tenue para errores
+- **Scroll horizontal en resultados** - Preservación del formato tabular con desplazamiento lateral
+- **Botón de copiar resultados** - Copia instantánea al portapapeles con feedback visual (✅)
+
+### 🔧 **Editor SQL - Mejoras de Funcionalidad**
+- **Exportación CSV mejorada** - Excluye líneas de separación (----) y mensajes "rows affected"
+- **Historial reorganizado** - Botón movido a la barra de acciones con formato mejorado (últimas 15 consultas)
+- **Botón "Ejecutar"** - Tamaño optimizado con colores corporativos
+- **Eliminación de funcionalidad innecesaria** - Removidos botones de diagnóstico y "Guardar como Template"
+
+### 🐛 **Correcciones**
+- **Rutas de archivos temporales** - Consultas SQL ahora se guardan en `%AppData%\Roaming\Cursor\User\temp`
+- **Validación de rutas mejorada** - Soporte para rutas Windows con barras diagonales (`/`) y barras invertidas (`\`)
+- **Botón "Limpiar consulta"** - Corregido para vaciar correctamente el editor SQL
+- **Exportación JSON eliminada** - Removida para simplificar opciones de exportación
+
+### ⚙️ **Mejoras Técnicas**
+- **Manejo robusto de errores ISQL** - Mensajes detallados con código de salida y STDERR
+- **Limpieza automática de archivos temporales** - Gestión eficiente de recursos del sistema
+- **Fallback para portapapeles** - Compatibilidad con navegadores que no soportan Clipboard API
+
+---
+
 ## [1.0.6] - 2025-08-13
 
 ### 🏗️ **Refactorización Mayor**
